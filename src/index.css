@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Remove focus/active ring and flicker for password eye buttons */
+.password-toggle,
+button.password-toggle,
+.btn.password-toggle {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  transition: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.password-toggle:focus,
+.password-toggle:focus-visible,
+.password-toggle:active,
+.password-toggle:focus:active,
+button.password-toggle:focus,
+button.password-toggle:active,
+.btn.password-toggle:focus,
+.btn.password-toggle:active,
+.btn.password-toggle:focus:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
