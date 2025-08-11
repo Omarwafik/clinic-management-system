@@ -1,0 +1,18 @@
+:root{
+   --primary-color: #3366ff;
+  --secondary-color: #5588ff;
+  --hover-color: #77aaff;
+  --text-color: #fff;
+  
+   /* الخطوط */
+  --font-title: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* خط للعناوين */
+  --font-body: 'Open Sans', Arial, sans-serif; /* خط للنصوص العادية */
+
+  /* حجم الخط */
+  --font-size-title: 2rem; /* حجم الخط للعناوين */
+  --font-size-body: 1rem;  /* حجم الخط للنصوص */
+
+  /* وزن الخط */
+  --font-weight-title: 700; /* ثقيل للعناوين */
+  --font-weight-body: 400;  /* عادي للنصوص */
+}
