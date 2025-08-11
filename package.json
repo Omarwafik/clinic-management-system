@@ -7,7 +7,9 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.11.0",
     "bootstrap": "^5.3.7",
+    "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.1",
@@ -16,8 +18,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "json":"json-server --watch data.json --port 4004",
-    "start": "react-scripts start",
+    "json": "json-server --watch data.json --port 4004",
+    "start": "set PORT=4004 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -39,5 +41,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3"
   }
 }

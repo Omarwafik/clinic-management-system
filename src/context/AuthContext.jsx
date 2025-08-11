@@ -31,12 +31,15 @@ export const AuthProvider = ({ children }) => {
     else localStorage.removeItem('auth_user');
   };
 
-  const login = async (email, password, role) => {
+  const login = async (email, password) => {
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    if ((role === 'admin' || role === 'patient') && String(email).trim() && String(password).trim()) {
+    if (String(email).trim() && String(password).trim()) {
+      // Determine role based on email domain
+      const role = email.endsWith('@clinic.com') || email.endsWith('@doctor.com') ? 'admin' : 'patient';
       const nameFromEmail = String(email).split('@')[0] || (role === 'admin' ? 'Admin' : 'Patient');
+      
       persist({
         id: `${role}-${Date.now()}`,
         name: role === 'admin' ? `Dr. ${nameFromEmail}` : nameFromEmail,
