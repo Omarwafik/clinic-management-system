@@ -1,0 +1,340 @@
+{
+    "users":[
+      {
+        "email":"admin@example.com",
+        "password":"admin123"
+      }
+    ],
+   "doctors": [
+      {
+        "id": 1,
+        "name": "Dr. Ahmed Ali",
+        "jobTitle": "Consultant Cardiologist",
+        "specialization": "Cardiology",
+        "image": "https://i.ibb.co/W2p0C8Q/dr-ahmed.jpg",
+        "qualifications": "M.B.B.Ch, MSc Cardiology",
+        "experienceYears": 15,
+        "bio": "Expert in diagnosing and treating heart and vascular diseases with extensive experience in interventional procedures.",
+        "phone": "+201234567890",
+        "email": "dr.ahmed@example.com",
+        "workingHours": "Saturday - Thursday: 9:00 AM - 5:00 PM",
+        "location": "Cairo, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.0444,31.2357",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Cardiology Consultation",
+          "Heart Ultrasound (Echocardiogram)",
+          "Stress Test (ECG)"
+        ],
+        "rating": 4.8
+      },
+      {
+        "id": 2,
+        "name": "Dr. Salma Hassan",
+        "jobTitle": "Dermatologist",
+        "specialization": "Dermatology",
+        "image": "https://i.ibb.co/3yGfR2P/dr-salma.jpg",
+        "qualifications": "M.B.B.Ch, Diploma in Dermatology",
+        "experienceYears": 10,
+        "bio": "Specialist in skin treatments, cosmetic dermatology, and laser therapy.",
+        "phone": "+201112223334",
+        "email": "dr.salma@example.com",
+        "workingHours": "Saturday - Thursday: 10:00 AM - 6:00 PM",
+        "location": "Alexandria, Egypt",
+        "googleMaps": "https://maps.google.com/?q=31.2001,29.9187",
+        "languages": ["Arabic", "English", "French"],
+        "services": [
+          "Acne Treatment",
+          "Laser Hair Removal",
+          "Skin Rejuvenation"
+        ],
+        "rating": 4.6
+      },
+      {
+        "id": 3,
+        "name": "Dr. Youssef Mansour",
+        "jobTitle": "Orthopedic Surgeon",
+        "specialization": "Orthopedics",
+        "image": "https://i.ibb.co/f8xGVLZ/dr-youssef.jpg",
+        "qualifications": "M.B.B.Ch, MSc Orthopedic Surgery",
+        "experienceYears": 18,
+        "bio": "Expert in bone, joint, and spine surgeries with advanced minimally invasive techniques.",
+        "phone": "+201334455667",
+        "email": "dr.youssef@example.com",
+        "workingHours": "Sunday - Thursday: 8:00 AM - 4:00 PM",
+        "location": "Giza, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.0131,31.2089",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Joint Replacement",
+          "Arthroscopy",
+          "Fracture Treatment"
+        ],
+        "rating": 4.9
+      },
+      {
+        "id": 4,
+        "name": "Dr. Mariam El-Sayed",
+        "jobTitle": "Pediatrician",
+        "specialization": "Pediatrics",
+        "image": "https://i.ibb.co/k3bSGKY/dr-mariam.jpg",
+        "qualifications": "M.B.B.Ch, MSc Pediatrics",
+        "experienceYears": 12,
+        "bio": "Dedicated to providing exceptional care for infants, children, and adolescents.",
+        "phone": "+201556677889",
+        "email": "dr.mariam@example.com",
+        "workingHours": "Saturday - Thursday: 9:00 AM - 5:00 PM",
+        "location": "Mansoura, Egypt",
+        "googleMaps": "https://maps.google.com/?q=31.0364,31.3807",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Child Health Checkups",
+          "Vaccinations",
+          "Nutritional Counseling"
+        ],
+        "rating": 4.7
+      },
+      {
+        "id": 5,
+        "name": "Dr. Omar Khaled",
+        "jobTitle": "Dentist",
+        "specialization": "Dentistry",
+        "image": "https://i.ibb.co/0mZBGLk/dr-omar.jpg",
+        "qualifications": "BDS, MSc Restorative Dentistry",
+        "experienceYears": 8,
+        "bio": "Specialist in cosmetic dentistry, implants, and oral surgery.",
+        "phone": "+201998877665",
+        "email": "dr.omar@example.com",
+        "workingHours": "Saturday - Thursday: 1:00 PM - 9:00 PM",
+        "location": "Cairo, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.0561,31.2394",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Teeth Whitening",
+          "Dental Implants",
+          "Braces & Aligners"
+        ],
+        "rating": 4.5
+      },
+      {
+        "id": 6,
+        "name": "Dr. Rana Mostafa",
+        "jobTitle": "Gynecologist",
+        "specialization": "Gynecology",
+        "image": "https://i.ibb.co/1ZjVvJz/dr-rana.jpg",
+        "qualifications": "M.B.B.Ch, MSc Obstetrics and Gynecology",
+        "experienceYears": 14,
+        "bio": "Expert in women's health, prenatal care, and minimally invasive gynecologic surgery.",
+        "phone": "+201443322110",
+        "email": "dr.rana@example.com",
+        "workingHours": "Sunday - Thursday: 9:00 AM - 4:00 PM",
+        "location": "Alexandria, Egypt",
+        "googleMaps": "https://maps.google.com/?q=31.1972,29.902",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Prenatal Care",
+          "Fertility Counseling",
+          "Gynecologic Surgery"
+        ],
+        "rating": 4.8
+      },
+      {
+        "id": 7,
+        "name": "Dr. Karim Hassan",
+        "jobTitle": "ENT Specialist",
+        "specialization": "Otolaryngology",
+        "image": "https://i.ibb.co/wLwsJjS/dr-karim.jpg",
+        "qualifications": "M.B.B.Ch, MSc ENT",
+        "experienceYears": 11,
+        "bio": "Specialist in ear, nose, and throat disorders, including endoscopic sinus surgery.",
+        "phone": "+201776655443",
+        "email": "dr.karim@example.com",
+        "workingHours": "Saturday - Thursday: 10:00 AM - 6:00 PM",
+        "location": "Cairo, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.0505,31.2331",
+        "languages": ["Arabic", "English", "German"],
+        "services": [
+          "Hearing Tests",
+          "Sinus Surgery",
+          "Tonsillectomy"
+        ],
+        "rating": 4.6
+      },
+      {
+        "id": 8,
+        "name": "Dr. Layla Fathi",
+        "jobTitle": "Neurologist",
+        "specialization": "Neurology",
+        "image": "https://i.ibb.co/5h4n6Qw/dr-layla.jpg",
+        "qualifications": "M.B.B.Ch, MSc Neurology",
+        "experienceYears": 16,
+        "bio": "Expert in diagnosing and treating disorders of the brain, spinal cord, and nerves.",
+        "phone": "+201122334455",
+        "email": "dr.layla@example.com",
+        "workingHours": "Sunday - Thursday: 9:00 AM - 5:00 PM",
+        "location": "Tanta, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.7865,31.0004",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Migraine Management",
+          "Epilepsy Treatment",
+          "Stroke Rehabilitation"
+        ],
+        "rating": 4.9
+      },
+      {
+        "id": 9,
+        "name": "Dr. Hany Nabil",
+        "jobTitle": "Psychiatrist",
+        "specialization": "Psychiatry",
+        "image": "https://i.ibb.co/pPtFZFX/dr-hany.jpg",
+        "qualifications": "M.B.B.Ch, MSc Psychiatry",
+        "experienceYears": 13,
+        "bio": "Specialist in mental health disorders, psychotherapy, and counseling.",
+        "phone": "+201665544332",
+        "email": "dr.hany@example.com",
+        "workingHours": "Saturday - Thursday: 11:00 AM - 7:00 PM",
+        "location": "Cairo, Egypt",
+        "googleMaps": "https://maps.google.com/?q=30.0331,31.2336",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "Depression Counseling",
+          "Anxiety Management",
+          "Cognitive Behavioral Therapy"
+        ],
+        "rating": 4.7
+      },
+      {
+        "id": 10,
+        "name": "Dr. Nour Adel",
+        "jobTitle": "General Practitioner",
+        "specialization": "General Medicine",
+        "image": "https://i.ibb.co/qJNffrS/dr-nour.jpg",
+        "qualifications": "M.B.B.Ch",
+        "experienceYears": 7,
+        "bio": "Providing comprehensive primary care and preventive health services.",
+        "phone": "+201998844221",
+        "email": "dr.nour@example.com",
+        "workingHours": "Saturday - Thursday: 9:00 AM - 5:00 PM",
+        "location": "Fayoum, Egypt",
+        "googleMaps": "https://maps.google.com/?q=29.3084,30.8418",
+        "languages": ["Arabic", "English"],
+        "services": [
+          "General Health Checkups",
+          "Chronic Disease Management",
+          "Minor Surgical Procedures"
+        ],
+        "rating": 4.5
+      },
+      {
+      "id": 11,
+      "name": "Dr. Mariam Saad",
+      "jobTitle": "Dermatologist",
+      "specialization": "Dermatology",
+      "image": "https://randomuser.me/api/portraits/women/65.jpg",
+      "qualifications": "M.B.B.Ch, MD Dermatology",
+      "experienceYears": 9,
+      "bio": "Specialist in treating skin conditions, cosmetic dermatology, and laser treatments.",
+      "phone": "+201225678901",
+      "email": "dr.mariam@example.com",
+      "workingHours": "Sunday - Thursday: 10:00 AM - 6:00 PM",
+      "location": "Alexandria, Egypt",
+      "googleMaps": "https://maps.google.com/?q=31.2001,29.9187",
+      "languages": ["Arabic", "English"],
+      "services": [
+        "Acne Treatment",
+        "Laser Hair Removal",
+        "Skin Rejuvenation"
+      ],
+      "rating": 4.7
+    },
+    {
+      "id": 12,
+      "name": "Dr. Youssef Gamal",
+      "jobTitle": "Orthopedic Surgeon",
+      "specialization": "Orthopedics",
+      "image": "https://randomuser.me/api/portraits/men/52.jpg",
+      "qualifications": "M.B.B.Ch, MSc Orthopedics",
+      "experienceYears": 14,
+      "bio": "Expert in joint replacement, sports injuries, and fracture management.",
+      "phone": "+201114567890",
+      "email": "dr.youssef@example.com",
+      "workingHours": "Saturday - Wednesday: 8:30 AM - 4:30 PM",
+      "location": "Cairo, Egypt",
+      "googleMaps": "https://maps.google.com/?q=30.0444,31.2357",
+      "languages": ["Arabic", "English", "French"],
+      "services": [
+        "Knee Replacement",
+        "Fracture Surgery",
+        "Sports Injury Treatment"
+      ],
+      "rating": 4.9
+    },
+    {
+      "id": 13,
+      "name": "Dr. Sarah Mahmoud",
+      "jobTitle": "Pediatrician",
+      "specialization": "Pediatrics",
+      "image": "https://randomuser.me/api/portraits/women/68.jpg",
+      "qualifications": "M.B.B.Ch, MSc Pediatrics",
+      "experienceYears": 8,
+      "bio": "Dedicated to child health, growth, and development with a gentle approach.",
+      "phone": "+201033456789",
+      "email": "dr.sarah@example.com",
+      "workingHours": "Saturday - Thursday: 9:00 AM - 3:00 PM",
+      "location": "Giza, Egypt",
+      "googleMaps": "https://maps.google.com/?q=29.9870,31.2118",
+      "languages": ["Arabic", "English"],
+      "services": [
+        "Child Checkups",
+        "Vaccinations",
+        "Nutritional Advice for Children"
+      ],
+      "rating": 4.6
+    },
+    {
+      "id": 14,
+      "name": "Dr. Omar Fathy",
+      "jobTitle": "Dentist",
+      "specialization": "Dentistry",
+      "image": "https://randomuser.me/api/portraits/men/77.jpg",
+      "qualifications": "BDS, MSc Cosmetic Dentistry",
+      "experienceYears": 11,
+      "bio": "Specializes in dental implants, smile makeovers, and oral health care.",
+      "phone": "+201245678912",
+      "email": "dr.omar@example.com",
+      "workingHours": "Sunday - Thursday: 10:00 AM - 8:00 PM",
+      "location": "Mansoura, Egypt",
+      "googleMaps": "https://maps.google.com/?q=31.0409,31.3785",
+      "languages": ["Arabic", "English"],
+      "services": [
+        "Dental Implants",
+        "Teeth Whitening",
+        "Root Canal Treatment"
+      ],
+      "rating": 4.8
+    },
+    {
+      "id": 15,
+      "name": "Dr. Layla Hassan",
+      "jobTitle": "Psychiatrist",
+      "specialization": "Psychiatry",
+      "image": "https://randomuser.me/api/portraits/women/71.jpg",
+      "qualifications": "M.B.B.Ch, MD Psychiatry",
+      "experienceYears": 13,
+      "bio": "Experienced in mental health therapy, anxiety, depression, and stress management.",
+      "phone": "+201278945612",
+      "email": "dr.layla@example.com",
+      "workingHours": "Saturday - Wednesday: 1:00 PM - 7:00 PM",
+      "location": "Cairo, Egypt",
+      "googleMaps": "https://maps.google.com/?q=30.0619,31.2197",
+      "languages": ["Arabic", "English", "German"],
+      "services": [
+        "Cognitive Behavioral Therapy",
+        "Anxiety and Depression Treatment",
+        "Couples Therapy"
+      ],
+      "rating": 4.7
+    }
+    ]
+  }
