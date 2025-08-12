@@ -1,130 +1,128 @@
-{ 
-    "users":[
-      {
-        "name":"Omar Mohamed",
-        "email":"admin@example.com",
-        "password":"admin123",
-        "role":"admin"
-      },
-      {
-        "name":"ahmed Mohamed",
-        "email":"omar@example.com",
-        "password":"omar123"
-      }
-    ],
-   "doctors": [
-      {
-    "id": 1,
-    "name": "Dr. kamal Hassan",
-    "jobTitle": "Pet Specialist",
-    "specialization": "General Pet Care",
-    "image": "https://randomuser.me/api/portraits/men/71.jpg",
-    "qualifications": "DVM, Diploma in Veterinary Medicine",
-    "experienceYears": 13,
-    "bio": "Experienced in comprehensive pet care including cats, dogs, and small mammals.",
-    "phone": "+201278945612",
-    "email": "dr.layth@example.com",
-    "workingHours": "Saturday - Wednesday: 1:00 PM - 7:00 PM",
-    "location": "Cairo, Egypt",
-    "googleMaps": "https://maps.google.com/?q=30.0619,31.2197",
-    "languages": ["Arabic", "English", "German"],
-    "services": [
-      "Pet Health Checkups",
-      "Vaccinations",
-      "Pet Nutrition Consultation"
-    ],
-    "rating": 4.7
-  },
-  {
-    "id": 2,
-    "name": "Dr. Omar El Sayed",
-    "jobTitle": "Pet Specialist",
-    "specialization": "Pet Surgery",
-    "image": "https://randomuser.me/api/portraits/men/52.jpg",
-    "qualifications": "DVM, MSc Veterinary Surgery",
-    "experienceYears": 10,
-    "bio": "Specialist in pet surgery and emergency care for cats and dogs.",
-    "phone": "+201123456789",
-    "email": "dr.omar@example.com",
-    "workingHours": "Sunday - Thursday: 10:00 AM - 6:00 PM",
-    "location": "Alexandria, Egypt",
-    "googleMaps": "https://maps.google.com/?q=31.2001,29.9187",
-    "languages": ["Arabic", "English"],
-    "services": [
-      "Pet Surgery",
-      "Emergency Pet Care",
-      "Post-Operative Care"
-    ],
-    "rating": 4.8
-  },
-  {
-    "id": 3,
-    "name": "Dr. Samir Nabil",
-    "jobTitle": "Pet Specialist",
-    "specialization": "Pet Nutrition",
-    "image": "https://randomuser.me/api/portraits/men/40.jpg",
-    "qualifications": "DVM, Diploma in Pet Nutrition",
-    "experienceYears": 8,
-    "bio": "Expert in pet nutrition and creating healthy diet plans for pets.",
-    "phone": "+201234567890",
-    "email": "dr.samir@example.com",
-    "workingHours": "Monday - Friday: 9:00 AM - 5:00 PM",
-    "location": "Giza, Egypt",
-    "googleMaps": "https://maps.google.com/?q=29.987,31.2118",
-    "languages": ["Arabic", "English", "French"],
-    "services": [
-      "Pet Nutrition Consultation",
-      "Weight Management for Pets",
-      "Diet Plans for Special Needs Pets"
-    ],
-    "rating": 4.6
-  },
-  {
-    "id": 4,
-    "name": "Dr. Ahmed Samir",
-    "jobTitle": "Pet Specialist",
-    "specialization": "Pet Dentistry",
-    "image": "https://randomuser.me/api/portraits/men/33.jpg",
-    "qualifications": "DVM, Certificate in Veterinary Dentistry",
-    "experienceYears": 12,
-    "bio": "Specialized in dental care for pets including cleaning, surgery, and disease prevention.",
-    "phone": "+201345678901",
-    "email": "dr.ahmed@example.com",
-    "workingHours": "Saturday - Thursday: 11:00 AM - 7:00 PM",
-    "location": "Mansoura, Egypt",
-    "googleMaps": "https://maps.google.com/?q=31.0409,31.3785",
-    "languages": ["Arabic", "English"],
-    "services": [
-      "Pet Dental Cleaning",
-      "Oral Surgery for Pets",
-      "Dental Disease Prevention"
-    ],
-    "rating": 4.9
-  },
-  {
-    "id": 5,
-    "name": "Dr. Abbas Adel",
-    "jobTitle": "Pet Specialist",
-    "specialization": "Exotic Pet Care",
-    "image": "https://randomuser.me/api/portraits/men/55.jpg",
-    "qualifications": "DVM, Diploma in Exotic Animal Care",
-    "experienceYears": 9,
-    "bio": "Experienced in caring for exotic pets including birds, reptiles, and small mammals.",
-    "phone": "+201456789012",
-    "email": "dr.mariam@example.com",
-    "workingHours": "Sunday - Thursday: 12:00 PM - 8:00 PM",
-    "location": "Hurghada, Egypt",
-    "googleMaps": "https://maps.google.com/?q=27.2579,33.8116",
-    "languages": ["Arabic", "English", "Italian"],
-    "services": [
-      "Exotic Pet Health Checkups",
-      "Nutritional Guidance for Exotic Pets",
-      "Exotic Pet Surgery"
-    ],
-    "rating": 4.7
-  },
+{
+  "users": [
     {
-      "id": 6,
+      "name": "Omar Mohamed",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin",
+      "id": "e602"
+    },
+    {
+      "name": "ahmed Mohamed",
+      "email": "omar@example.com",
+      "password": "omar123",
+      "id": "df46"
+    }
+  ],
+  "doctors": [
+    {
+      "id": "1",
+      "name": "Dr. kamal Hassan",
+      "jobTitle": "Pet Specialist",
+      "specialization": "General Pet Care",
+      "image": "https://randomuser.me/api/portraits/men/71.jpg",
+      "qualifications": "DVM, Diploma in Veterinary Medicine",
+      "experienceYears": 13,
+      "bio": "Experienced in comprehensive pet care including cats, dogs, and small mammals.",
+      "phone": "+201278945612",
+      "email": "dr.layth@example.com",
+      "workingHours": "Saturday - Wednesday: 1:00 PM - 7:00 PM",
+      "location": "Cairo, Egypt",
+      "googleMaps": "https://maps.google.com/?q=30.0619,31.2197",
+      "languages": ["Arabic", "English", "German"],
+      "services": [
+        "Pet Health Checkups",
+        "Vaccinations",
+        "Pet Nutrition Consultation"
+      ],
+      "rating": 4.7
+    },
+    {
+      "id": "2",
+      "name": "Dr. Omar El Sayed",
+      "jobTitle": "Pet Specialist",
+      "specialization": "Pet Surgery",
+      "image": "https://randomuser.me/api/portraits/men/52.jpg",
+      "qualifications": "DVM, MSc Veterinary Surgery",
+      "experienceYears": 10,
+      "bio": "Specialist in pet surgery and emergency care for cats and dogs.",
+      "phone": "+201123456789",
+      "email": "dr.omar@example.com",
+      "workingHours": "Sunday - Thursday: 10:00 AM - 6:00 PM",
+      "location": "Alexandria, Egypt",
+      "googleMaps": "https://maps.google.com/?q=31.2001,29.9187",
+      "languages": ["Arabic", "English"],
+      "services": ["Pet Surgery", "Emergency Pet Care", "Post-Operative Care"],
+      "rating": 4.8
+    },
+    {
+      "id": "3",
+      "name": "Dr. Samir Nabil",
+      "jobTitle": "Pet Specialist",
+      "specialization": "Pet Nutrition",
+      "image": "https://randomuser.me/api/portraits/men/40.jpg",
+      "qualifications": "DVM, Diploma in Pet Nutrition",
+      "experienceYears": 8,
+      "bio": "Expert in pet nutrition and creating healthy diet plans for pets.",
+      "phone": "+201234567890",
+      "email": "dr.samir@example.com",
+      "workingHours": "Monday - Friday: 9:00 AM - 5:00 PM",
+      "location": "Giza, Egypt",
+      "googleMaps": "https://maps.google.com/?q=29.987,31.2118",
+      "languages": ["Arabic", "English", "French"],
+      "services": [
+        "Pet Nutrition Consultation",
+        "Weight Management for Pets",
+        "Diet Plans for Special Needs Pets"
+      ],
+      "rating": 4.6
+    },
+    {
+      "id": "4",
+      "name": "Dr. Ahmed Samir",
+      "jobTitle": "Pet Specialist",
+      "specialization": "Pet Dentistry",
+      "image": "https://randomuser.me/api/portraits/men/33.jpg",
+      "qualifications": "DVM, Certificate in Veterinary Dentistry",
+      "experienceYears": 12,
+      "bio": "Specialized in dental care for pets including cleaning, surgery, and disease prevention.",
+      "phone": "+201345678901",
+      "email": "dr.ahmed@example.com",
+      "workingHours": "Saturday - Thursday: 11:00 AM - 7:00 PM",
+      "location": "Mansoura, Egypt",
+      "googleMaps": "https://maps.google.com/?q=31.0409,31.3785",
+      "languages": ["Arabic", "English"],
+      "services": [
+        "Pet Dental Cleaning",
+        "Oral Surgery for Pets",
+        "Dental Disease Prevention"
+      ],
+      "rating": 4.9
+    },
+    {
+      "id": "5",
+      "name": "Dr. Abbas Adel",
+      "jobTitle": "Pet Specialist",
+      "specialization": "Exotic Pet Care",
+      "image": "https://randomuser.me/api/portraits/men/55.jpg",
+      "qualifications": "DVM, Diploma in Exotic Animal Care",
+      "experienceYears": 9,
+      "bio": "Experienced in caring for exotic pets including birds, reptiles, and small mammals.",
+      "phone": "+201456789012",
+      "email": "dr.mariam@example.com",
+      "workingHours": "Sunday - Thursday: 12:00 PM - 8:00 PM",
+      "location": "Hurghada, Egypt",
+      "googleMaps": "https://maps.google.com/?q=27.2579,33.8116",
+      "languages": ["Arabic", "English", "Italian"],
+      "services": [
+        "Exotic Pet Health Checkups",
+        "Nutritional Guidance for Exotic Pets",
+        "Exotic Pet Surgery"
+      ],
+      "rating": 4.7
+    },
+    {
+      "id": "6",
       "name": "Dr. Omar Hassan",
       "jobTitle": "Veterinarian",
       "specialization": "Small Animal Care",
@@ -146,7 +144,7 @@
       "rating": 4.8
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Dr. Ahmed Nabil",
       "jobTitle": "Veterinary Surgeon",
       "specialization": "Surgery & Trauma Care",
@@ -168,7 +166,7 @@
       "rating": 4.9
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Dr. Khaled Fathy",
       "jobTitle": "Veterinarian",
       "specialization": "Dermatology",
@@ -190,7 +188,7 @@
       "rating": 4.6
     },
     {
-      "id": 9,
+      "id": "9",
       "name": "Dr. Yasser Samir",
       "jobTitle": "Veterinarian",
       "specialization": "Dentistry",
@@ -204,15 +202,11 @@
       "location": "Mansoura, Egypt",
       "googleMaps": "https://maps.google.com/?q=31.0409,31.3785",
       "languages": ["Arabic", "English"],
-      "services": [
-        "Dental Cleaning",
-        "Oral Surgery",
-        "Preventive Dental Care"
-      ],
+      "services": ["Dental Cleaning", "Oral Surgery", "Preventive Dental Care"],
       "rating": 4.5
     },
     {
-      "id": 10,
+      "id": "10",
       "name": "Dr. Youssef Adel",
       "jobTitle": "Veterinarian",
       "specialization": "Internal Medicine",
@@ -234,7 +228,7 @@
       "rating": 4.7
     },
     {
-      "id": 11,
+      "id": "11",
       "name": "Dr. Mohamed Sherif",
       "jobTitle": "Veterinarian",
       "specialization": "Behavioral Medicine",
@@ -256,7 +250,7 @@
       "rating": 4.4
     },
     {
-      "id": 12,
+      "id": "12",
       "name": "Dr. Mahmoud Said",
       "jobTitle": "Veterinarian",
       "specialization": "Emergency & Critical Care",
@@ -278,7 +272,7 @@
       "rating": 4.9
     },
     {
-      "id": 13,
+      "id": "13",
       "name": "Dr. Nour El-Din",
       "jobTitle": "Veterinarian",
       "specialization": "Nutrition Specialist",
@@ -300,7 +294,7 @@
       "rating": 4.6
     },
     {
-      "id": 14,
+      "id": "14",
       "name": "Dr. Tamer Fawzy",
       "jobTitle": "Veterinarian",
       "specialization": "Reproductive Medicine",
@@ -322,7 +316,7 @@
       "rating": 4.7
     },
     {
-      "id": 15,
+      "id": "15",
       "name": "Dr. Gaber Ahmed",
       "jobTitle": "Veterinarian",
       "specialization": "Geriatric Care",
@@ -343,9 +337,6 @@
       ],
       "rating": 4.8
     }
-    ]
-  }
-
-
-
-
+  ],
+  "reservations": []
+}
