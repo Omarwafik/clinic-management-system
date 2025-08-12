@@ -12,27 +12,24 @@ export default function Dashboard() {
         id="accordionSidebar"
       >
         {/* Sidebar - Brand */}
-        <a
-          className="sidebar-brand d-flex align-items-center justify-content-center"
-          href=""
-        >
+        <div className="sidebar-brand d-flex align-items-center justify-content-center" style={{ cursor: 'pointer' }}>
           <div className="sidebar-brand-icon rotate-n-15">
             <i className="fas fa-laugh-wink"></i>
           </div>
           <div className="sidebar-brand-text mx-3">
             Clinic <sup>System</sup>
           </div>
-        </a>
+        </div>
 
         {/* Divider */}
         <hr className="sidebar-divider my-0" />
 
         {/* Nav Item - Dashboard */}
         <li className="nav-item active">
-          <a className="nav-link btn" onClick={()=>navigate('/dashboard')}>
+          <button className="nav-link btn w-100 text-left" onClick={()=>navigate('/dashboard')}>
             <i className="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
-          </a>
+          </button>
         </li>
 
         {/* Divider */}
@@ -43,24 +40,21 @@ export default function Dashboard() {
 
         {/* Nav Item - Pages Collapse Menu */}
         <li className="nav-item">
-          <a
-            className="nav-link collapsed btn"
-            // href=""
+          <button
+            className="nav-link collapsed btn w-100 text-left"
             data-toggle="collapse"
             data-target="#collapseTwo"
             aria-expanded="true"
             aria-controls="collapseTwo"
             onClick={()=>navigate('/dashboard/users')}
           >
-        
             <i className="fas fa-fw fa-cog"></i>
             <span>Manage Users</span>
-          </a>
+          </button>
         </li>
         <li className="nav-item">
-          <a
-            className="nav-link collapsed btn"
-            // href=""
+          <button
+            className="nav-link collapsed btn w-100 text-left"
             data-toggle="collapse"
             data-target="#collapseTwo"
             aria-expanded="true"
@@ -69,7 +63,7 @@ export default function Dashboard() {
           >
             <i className="fas fa-fw fa-cog"></i>
             <span>Manage Doctors</span>
-          </a>
+          </button>
         </li>
       </ul>
       {/* End of Sidebar */}

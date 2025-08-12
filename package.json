@@ -8,9 +8,10 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
+    "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.7",
-    "lucide-react": "^0.539.0",
     "chart.js": "^4.5.0",
+    "lucide-react": "^0.539.0",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.3.0",
@@ -21,7 +22,7 @@
   },
   "scripts": {
     "json": "json-server --watch data.json --port 4004",
-    "start": "set PORT=4004 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
