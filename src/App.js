@@ -1,3 +1,5 @@
+import './App.css';
+import Login from './Components/Login';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./Components/Dashboard/Dashboard";
@@ -10,6 +12,7 @@ import ServiceDetails from "./Components/ServiceDetails/ServiceDetails";
 function App() {
   return (
     <>
+      <Login />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<h1>Hello</h1>} />
