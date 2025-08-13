@@ -71,6 +71,21 @@ export default function Dashboard() {
             <span>Manage Doctors</span>
           </a>
         </li>
+         {/* hena el user reservation Table */}
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed btn"
+            // href=""
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+            onClick={()=>navigate('/dashboard/reservations')}
+          >
+            <i className="fas fa-fw fa-cog"></i>
+            <span>Reservations</span>
+          </a>
+        </li>
       </ul>
       {/* End of Sidebar */}
 
@@ -80,30 +95,30 @@ export default function Dashboard() {
         <div id="content">
           {/* Topbar */}
           <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-            <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 className="h3 ps-2 mb-0 text-gray-800">Dashboard</h1>
           </nav>
           {/* End of Topbar */}
 
           {/* Begin Page Content */}
           <div className="container-fluid">
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Cards</h1>
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                        {/* <h1 className="h3 mb-0 text-gray-800">Cards</h1> */}
                     </div>
 
-                    <div class="row">
+                    <div className="row">
 
                         {/* <!-- Earnings (Monthly) Card Example --> */}
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                        <div className="col-xl-3 col-md-6 mb-4">
+                            <div className="card border-left-primary shadow h-100 py-2">
+                                <div className="card-body">
+                                    <div className="row no-gutters align-items-center px-2">
+                                        <div className="col mr-2">
+                                            <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        <div className="col-auto">
+                                            <i className="fas fa-calendar fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -111,17 +126,17 @@ export default function Dashboard() {
                         </div>
 
                         {/* <!-- Earnings (Annual) Card Example --> */}
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                        <div className="col-xl-3 col-md-6 mb-4">
+                            <div className="card border-left-success shadow h-100 py-2">
+                                <div className="card-body">
+                                    <div className="row no-gutters align-items-center px-2">
+                                        <div className="col mr-2">
+                                            <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Earnings (Annual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        <div className="col-auto">
+                                            <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -129,46 +144,46 @@ export default function Dashboard() {
                         </div>
 
                         {/* <!-- Tasks Card Example --> */}
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                        <div className="col-xl-3 col-md-6 mb-4">
+                            <div className="card border-left-info shadow h-100 py-2">
+                                <div className="card-body">
+                                    <div className="row no-gutters align-items-center px-4">
+                                        <div className="col mr-2">
+                                            <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
                                             </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                            <div className="row no-gutters align-items-center">
+                                                <div className="col-auto">
+                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
                                                 </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
+                                                <div className="col">
+                                                    <div className="progress progress-sm mr-2">
+                                                        <div className="progress-bar bg-info" role="progressbar"
                                                             style={{width:"50%"}} aria-valuenow="50" aria-valuemin="0"
                                                             aria-valuemax="100"></div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
+                                        {/* <div className="col-auto">
+                                            <i className="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* <!-- Pending Requests Card Example --> */}
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                        <div className="col-xl-3 col-md-6 mb-4">
+                            <div className="card border-left-warning shadow h-100 py-2">
+                                <div className="card-body">
+                                    <div className="row no-gutters align-items-center px-2">
+                                        <div className="col mr-2">
+                                            <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">18</div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                        <div className="col-auto">
+                                            <i className="fas fa-comments fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -176,12 +191,6 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <Outlet/>
-                    {/* <Charts /> */}
-                    {/* <TableDoctors/>
-                    <TableUsers/> */}
-                    
-
-  
           </div>
           {/* /.container-fluid */}
         </div>

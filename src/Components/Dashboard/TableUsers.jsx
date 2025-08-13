@@ -30,6 +30,8 @@ export default function TableUsers() {
             <tbody>
               {users.map((user, index) => (
                 <tr key={index}>
+                  {/* user id m3 aya */}
+                  <td>{user.id}</td> 
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.password}</td>
