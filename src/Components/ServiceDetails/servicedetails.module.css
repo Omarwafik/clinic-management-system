@@ -1,0 +1,208 @@
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 36px 16px;
+  background: #f7f8fa;
+  display: flex;
+  justify-content: center;
+}
+
+.flexRow {
+  display: flex;
+  gap: 2em;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.leftColumn {
+  flex: 1.2;
+  min-width: 350px;
+}
+
+.rightColumn {
+  flex: 1;
+  min-width: 320px;
+}
+
+@media (max-width: 900px) {
+  .flexRow {
+    flex-direction: column;
+  }
+  .leftColumn,
+  .rightColumn {
+    min-width: 100%;
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 3px 18px rgba(32, 117, 238, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.img {
+  width: 150px;
+  height: 150px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #f3f6f9;
+  box-shadow: 0 2px 8px rgba(80, 80, 80, 0.04);
+  margin-bottom: 16px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+}
+
+.serviceTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #20262e;
+}
+
+.doctorName {
+  font-size: 1.08rem;
+  color: #2075ee;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.meta {
+  color: #68717b;
+  font-size: 0.99rem;
+  margin-bottom: 4px;
+}
+
+.languages {
+  color: #23ab68;
+  margin-bottom: 5px;
+  font-size: 0.97rem;
+}
+
+.rating {
+  font-size: 1rem;
+  color: #f8b144;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  margin-bottom: 7px;
+}
+
+.mapLink {
+  display: inline-block;
+  margin: 8px 0;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: #2075ee;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.mapLink:hover {
+  background: #1456a6;
+}
+
+.servicesSection {
+  margin-top: 16px;
+}
+.servicesSection h3 {
+  color: #2075ee;
+  margin-bottom: 8px;
+}
+.serviceList {
+  padding-left: 18px;
+}
+
+.btn,
+.backBtn {
+  display: inline-block;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: #2075ee;
+  color: #fff;
+  padding: 9px 24px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  font-size: 1.07rem;
+  text-align: center;
+  transition: background-color 0.18s;
+  box-shadow: 0 1px 5px rgba(32, 117, 238, 0.08);
+  text-decoration: none;
+}
+.btn:hover,
+.btn:focus,
+.backBtn:hover,
+.backBtn:focus {
+  background: #1456a6;
+  color: #77aaff;
+  outline: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  color: #2075ee;
+}
+
+.reservationContainer {
+  border: 1px solid #e0e0e0;
+  padding: 1.5em;
+  border-radius: 10px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 10px rgba(50, 50, 93, 0.05);
+}
+
+.reservationTitle {
+  font-size: 1.3em;
+  margin-bottom: 1em;
+  color: #2d689b;
+}
+
+.reservationForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.reservationInput {
+  padding: 0.7em;
+  border: 1px solid #b0b3b8;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.reservationButton {
+  background-color: #2d689b;
+  color: white;
+  padding: 0.8em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.reservationButton:hover {
+  background-color: #175184;
+}
+
+.reservationSuccess {
+  color: green;
+  font-weight: bold;
+  margin-top: 1em;
+}
+
+@media (max-width: 500px) {
+  .serviceTitle {
+    font-size: 1.04rem;
+  }
+  .doctorName {
+    font-size: 1rem;
+  }
+}

@@ -8,16 +8,16 @@ ChartJS.register(
   Title, Tooltip, Legend, ArcElement
 );
 
-const areaData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-  datasets: [{
-    label: 'Earnings',
-    data: [0, 10000, 5000, 15000, 10000, 20000],
-    borderColor: 'rgb(78, 115, 223)',
-    backgroundColor: 'rgba(78, 115, 223, 0.05)',
-    fill: true,
-  }]
-};
+// const areaData = {
+//   labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+//   datasets: [{
+//     label: 'Earnings',
+//     data: [0, 10000, 5000, 15000, 10000, 20000],
+//     borderColor: 'rgb(78, 115, 223)',
+//     backgroundColor: 'rgba(78, 115, 223, 0.05)',
+//     fill: true,
+//   }]
+// };
 
 const pieData = {
   labels: ['Direct', 'Referral', 'Social'],
@@ -54,13 +54,42 @@ export default function Charts() {
           backgroundColor: 'rgb(78, 115, 223)',
         }]
       };
-      console.log(barData); 
+      const CreateTime =res.data.map(item => item.createdAt)
+       const formattedDates = CreateTime.map(date => 
+        new Date(date).toLocaleString("default", { month: "short", year: "numeric" })
+      );
+      const uniqueCreateTime = [...new Set(formattedDates)];
+       const counts = uniqueCreateTime.map(date => 
+        formattedDates.filter(d => d === date).length
+      );
+      // console.log(barData); 
+      const LineData = {
+        labels: uniqueCreateTime,
+        datasets: [{
+          label: 'New Doctors per Month',
+          data: counts,
+          borderColor: 'rgb(78, 115, 223)',
+          backgroundColor: 'rgba(78, 115, 223, 0.05)',
+          fill: true,
+        }]
+      };
       setBarData(barData)
+      setLineData(LineData)
+
     })
     .catch(err => console.log(err));
 }, []);
 
-
+const [LineData , setLineData]=useState({  
+  labels:[],
+  datasets: [{
+    label: 'New Doctors per Month',
+    data: [],
+    borderColor: 'rgb(78, 115, 223)',
+    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+    fill: true,
+  }]
+})
   
   return (
     <div className="row">
@@ -70,7 +99,7 @@ export default function Charts() {
             <h6 className="m-0 font-weight-bold text-primary">Area Chart</h6>
           </div>
           <div className="card-body">
-            <Line data={areaData} />
+            <Line data={LineData} />
           </div>
         </div>
 

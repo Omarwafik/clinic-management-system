@@ -49,7 +49,8 @@ export default function CreateModal({show , onClose , onDoctorAdded}) {
       const newDoctor ={
         ...Values,
         id: String(Number(MaxId) + 1),
-        name : `Dr. ${Values.name}`
+        name : `Dr. ${Values.name}`,
+        createdAt: new Date().toISOString().split("T")[0],
       }
       axios.post('http://localhost:4004/doctors' ,newDoctor)
       onDoctorAdded(AllDoctors)

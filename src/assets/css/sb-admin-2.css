@@ -2322,8 +2322,9 @@ textarea.form-control {
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  border-radius: 0.35rem;
+  border-radius: 39.375rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  margin:auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -11278,4 +11279,100 @@ footer.sticky-footer .copyright {
 
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
+}
+
+/* -------------- */
+
+
+/* Contact Page Styles */
+.contact-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.contact-sections {
+  display: flex;
+  gap: 40px;
+  margin: 30px 0;
+}
+
+.contact-info, .services-section {
+  flex: 1;
+}
+
+.info-item {
+  margin-bottom: 20px;
+}
+
+.services-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.services-list li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.services-list li::before {
+  content: "•";
+  color: #4CAF50;
+  position: absolute;
+  left: 0;
+}
+
+.contact-form-section {
+  margin-top: 40px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+/* خلفية أحمر فاتح */
+.bg-light-danger {
+  background-color: #f8d7da; /* أحمر فاتح مائل للأبيض */
+}
+
+/* أزرار بيضاء بنص أحمر */
+.emergency-btn {
+  color: #dc3545 !important; /* أحمر للنص */
+  background-color: #ffffff !important; /* أبيض للخلفية */
+  border: 1px solid #dc3545 !important; /* حد أحمر */
+}
+
+.emergency-btn:hover {
+  background-color: #dc3545 !important; /* أحمر داكن */
+  color: #ffffff !important; /* نص أبيض */
 }
