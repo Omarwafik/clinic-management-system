@@ -39,21 +39,26 @@ function AppContent() {
     return user.role === 'admin' ? '/dashboard' : '/';
   };
 
+  const isGuest = user?.role === 'guest';
+
   return (
     <Routes>
-      {/* Login route */}
+      {/* Login route:
+          - يظهر لغير المسجلين OR للـ guest
+          - يحوَّل فقط لو المستخدم Admin أو Patient (أي دور غير guest) */}
       <Route
         path="/login"
         element={
-          !user ? (
-            <Login />
-          ) : (
-            <Navigate to={getAfterLoginPath()} replace />
-          )
+          (!user || isGuest)
+            ? <Login />
+            : <Navigate to={getAfterLoginPath()} replace />
         }
       />
 
-      {/* Home route - only for non-admin users */}
+      {/* Home:
+          - متاح للـ guest والمستخدمين العاديين
+          - Admin يتحوّل للدashboard
+          - غير المسجلين يتحوّلوا للـ login */}
       <Route
         path="/"
         element={
@@ -71,13 +76,15 @@ function AppContent() {
         }
       />
 
-      {/* Services routes - not accessible to admin */}
+      {/* Services:
+          - ممنوع على الـ guest وعلى الـ admin
+          - مسموح لباقي المستخدمين */}
       <Route
         path="/services"
         element={
           user ? (
-            user.role === 'admin' ? (
-              <Navigate to="/dashboard" replace />
+            (user.role === 'admin' || isGuest) ? (
+              <Navigate to="/login" replace />
             ) : (
               <PageLayout>
                 <Services />
@@ -93,8 +100,8 @@ function AppContent() {
         path="/services/:doctorId"
         element={
           user ? (
-            user.role === 'admin' ? (
-              <Navigate to="/dashboard" replace />
+            (user.role === 'admin' || isGuest) ? (
+              <Navigate to="/login" replace />
             ) : (
               <PageLayout>
                 <ServiceDetails />
@@ -106,7 +113,7 @@ function AppContent() {
         }
       />
 
-      {/* Admin dashboard routes */}
+      {/* Admin dashboard */}
       <Route
         path="/dashboard"
         element={
@@ -124,7 +131,7 @@ function AppContent() {
         <Route path="doctors" element={<TableDoctors />} />
       </Route>
 
-      {/* Catch all other routes */}
+      {/* Catch-all */}
       <Route
         path="*"
         element={
@@ -141,8 +148,6 @@ function AppContent() {
     </Routes>
   );
 }
-
-// ... (keep the existing global styles and style element code)
 
 function App() {
   return (

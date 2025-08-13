@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isGuest = !user || user.email === 'guest@example.com';
+  const isGuest = !!user && user.role === 'guest';
 
   const handleGuestClick = (e) => {
     e.preventDefault();
@@ -15,8 +15,9 @@ const Home = () => {
 
   return (
     <div className="container" style={{ position: 'relative' }}>
+      {/* Overlay اختياري: يوجّه أي ضغطة عامة للـ login لو حابة تثبتيه */}
       {isGuest && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             top: 0,
@@ -29,6 +30,7 @@ const Home = () => {
           onClick={handleGuestClick}
         />
       )}
+
       <section className="hero-section py-5">
         <div className="row align-items-center">
           <div className="col-lg-6">
@@ -37,30 +39,36 @@ const Home = () => {
               <span className="d-block h4 text-muted mt-2">Hello there!</span>
             </h1>
             <p className="lead mb-4">
-              Your trusted partner in pet healthcare. We provide comprehensive veterinary 
+              Your trusted partner in pet healthcare. We provide comprehensive veterinary
               services to keep your furry friends happy and healthy.
             </p>
             <div className="d-flex gap-3">
-              <Link to="/appointments" className="btn btn-primary">
+              <Link
+                to={isGuest ? '/login' : '/appointments'}
+                className="btn btn-primary"
+              >
                 Book an Appointment
               </Link>
-              <Link to="/services" className="btn btn-outline">
+              <Link
+                to={isGuest ? '/login' : '/services'}
+                className="btn btn-outline"
+              >
                 Our Services
               </Link>
             </div>
           </div>
           <div className="col-lg-6 d-none d-lg-block">
-            <img 
-              src="/pet-hero.jpg" 
-              alt="Happy pets" 
+            <img
+              src="/pet-hero.jpg"
+              alt="Happy pets"
               className="img-fluid rounded shadow"
               style={{ maxHeight: '400px' }}
+              onClick={isGuest ? handleGuestClick : undefined}
             />
           </div>
         </div>
       </section>
-
-      <section className="services-section py-5 my-5">
+    <section className="services-section py-5 my-5">
         <h2 className="text-center mb-5">Our Services</h2>
         <div className="row g-4">
           {[
@@ -90,10 +98,22 @@ const Home = () => {
             }
           ].map((service, index) => (
             <div key={index} className="col-md-6 col-lg-4">
-              <div className="card h-100 border-0 shadow-sm">
+              <div
+                className="card h-100 border-0 shadow-sm"
+                onClick={isGuest ? handleGuestClick : undefined}
+                style={{ cursor: isGuest ? 'pointer' : 'default' }}
+              >
                 <div className="card-body">
                   <h5 className="card-title">{service.title}</h5>
                   <p className="card-text text-muted">{service.description}</p>
+                  <div className="mt-2">
+                    <Link
+                      to={isGuest ? '/login' : '/services'}
+                      className="btn btn-sm btn-primary"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

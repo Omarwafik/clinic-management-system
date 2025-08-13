@@ -6,12 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 const Navbar = () => {
-  const { user, logout, updateAvatar } = useAuth();
+  const { user, logout, updateAvatar, removeAvatar } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+  const isGuest = !!user && user.role === 'guest';
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -26,14 +27,12 @@ const Navbar = () => {
   const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
-    // Check if file is an image
+
     if (!file.type.startsWith('image/')) {
       alert('Please upload an image file');
       return;
     }
 
-    // Check file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
       alert('Image size should be less than 2MB');
       return;
@@ -55,7 +54,12 @@ const Navbar = () => {
     <header className="sticky-top shadow-sm bg-white">
       <nav className="navbar navbar-expand-md navbar-light bg-white" aria-label="Main navigation">
         <div className="container">
-          <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
+          {/* Brand → لو Guest يروح /login غير كده Home */}
+          <Link
+            to={isGuest ? '/login' : '/'}
+            className="navbar-brand d-flex align-items-center gap-2"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
             <Heart className="text-primary" size={28} />
             <span className="fw-bold text-dark">PawCare Clinic</span>
           </Link>
@@ -77,8 +81,9 @@ const Navbar = () => {
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
               {navItems.map((item) => (
                 <li key={item.path} className="nav-item">
+                  {/* أي لينك (ماعدا Home) يروح login لو Guest */}
                   <Link
-                    to={item.path}
+                    to={isGuest && item.path !== '/' ? '/login' : item.path}
                     className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -87,7 +92,6 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
-
             <div className="d-flex align-items-center gap-3">
               {user ? (
                 user.role === 'guest' ? (
@@ -101,44 +105,83 @@ const Navbar = () => {
                 ) : (
                   <div className="d-flex align-items-center gap-2">
                     <div className="d-flex align-items-center">
-                      {user.avatar ? (
-                        <img 
-                          src={user.avatar} 
-                          alt={user.name} 
-                          className="rounded-circle me-2" 
-                          style={{ width: 28, height: 28, objectFit: 'cover' }} 
+                      <div className="position-relative">
+                        {user.avatar ? (
+                          <div className="position-relative">
+                            <img
+                              src={user.avatar}
+                              alt={user.name}
+                              className="rounded-circle me-2"
+                              style={{ 
+                                width: 32, 
+                                height: 32, 
+                                objectFit: 'cover',
+                                border: '1px solid #dee2e6'
+                              }}
+                            />
+                            <button
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                const result = await removeAvatar();
+                                if (!result.success) {
+                                  alert(result.message || 'Failed to remove avatar');
+                                }
+                              }}
+                              className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center"
+                              style={{
+                                width: '16px',
+                                height: '16px',
+                                fontSize: '10px',
+                                lineHeight: '1',
+                                border: '1px solid white',
+                              }}
+                              title="Remove avatar"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
+                               style={{ 
+                                 width: 32, 
+                                 height: 32, 
+                                 fontSize: '0.9rem',
+                                 border: '1px solid #dee2e6'
+                               }}>
+                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-muted small ms-2 me-3">{user.name}</span>
+                      
+                      <div className="position-relative">
+                        <input
+                          id="avatarUpload"
+                          type="file"
+                          accept="image/*"
+                          className="d-none"
+                          onChange={handleAvatarUpload}
                         />
-                      ) : (
-                        <div className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2" 
-                             style={{ width: 28, height: 28, fontSize: '0.8rem' }}>
-                          {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                        </div>
-                      )}
-                      <span className="text-muted small me-2">{user.name}</span>
+                        <label
+                          htmlFor="avatarUpload"
+                          className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+                          style={{ 
+                            whiteSpace: 'nowrap',
+                            padding: '0.25rem 0.5rem',
+                            fontSize: '0.8rem'
+                          }}
+                          title={user.avatar ? 'Change avatar' : 'Upload avatar'}
+                        >
+                          <Camera size={14} />
+                          <span>{user.avatar ? 'Change' : 'Upload'}</span>
+                        </label>
+                      </div>
                     </div>
-                    <div className="position-relative">
-                      <input
-                        id="avatarUpload"
-                        type="file"
-                        accept="image/*"
-                        className="d-none"
-                        onChange={handleAvatarUpload}
-                      />
-                      <label 
-                        htmlFor="avatarUpload" 
-                        className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
-                        style={{ whiteSpace: 'nowrap' }}
-                        title="Change avatar"
-                      >
-                        <Camera size={16} />
-                        <span>Photo</span>
-                      </label>
-                    </div>
-                    <button 
+                    <button
                       onClick={async () => {
                         await logout();
                         navigate('/login', { replace: true });
-                      }} 
+                      }}
                       className="btn btn-link text-danger p-0"
                     >
                       Logout

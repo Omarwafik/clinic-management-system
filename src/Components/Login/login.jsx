@@ -4,73 +4,65 @@ import { Eye, EyeOff, LogIn, UserPlus, PawPrint } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 
+// لو Bootstrap مش متستورد جلوبال، استورده هنا عشان ستايل invalid-feedback يشتغل
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 const Login = () => {
   const { login, register, loginAsGuest, isLoading, user } = useAuth();
   const navigate = useNavigate();
+
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formError, setFormError] = useState('');
+
+  // هنا هنخزن أخطاء الحقول (سواء Validation أو Auth) بنفس المفتاح
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState(''); // رسالة عامة اختيارية
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
-  const [errors, setErrors] = useState({});
 
-  // Redirect if user is already logged in
+  // لو المستخدم مش ضيف، رجعيه لصفحة مناسبة
   useEffect(() => {
-    if (user) {
+    if (user && user.role !== 'guest') {
       const targetRoute = user.role === 'admin' ? '/dashboard' : '/';
       if (window.location.pathname !== targetRoute) {
-        navigate(targetRoute);
+        navigate(targetRoute, { replace: true });
       }
     }
   }, [user, navigate]);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateForm = () => {
     const newErrors = {};
+    if (!formData.email) newErrors.email = 'Email is required';
+    else if (!validateEmail(formData.email)) newErrors.email = 'Please enter a valid email';
 
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
 
     if (!isLogin) {
-      if (!formData.name) {
-        newErrors.name = 'Name is required';
-      }
-
-      if (!formData.confirmPassword) {
-        newErrors.confirmPassword = 'Please confirm your password';
-      } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match';
-      }
+      if (!formData.name) newErrors.name = 'Name is required';
+      if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password';
+      else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
     }
-
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // امسح بس الأخطاء القديمة، من غير ما أمسح قيم الحقول
     setFormError('');
     setErrors({});
+
+    // Validation العادي الأول
     const validationErrors = validateForm();
-    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
@@ -78,48 +70,47 @@ const Login = () => {
 
     try {
       if (isLogin) {
-        // Handle login
         const result = await login(formData.email, formData.password);
-        
-        if (!result.success) {
-          // Handle error based on error code
-          if (result.message === 'EMAIL_NOT_FOUND') {
-            setErrors({ email: 'Email not found' });
-          } else if (result.message === 'INVALID_PASSWORD') {
-            setErrors({ password: 'Incorrect password' });
+        // console.log('login result:', result);
+
+        if (!result?.success) {
+          const code = result?.code?.toUpperCase?.() || '';
+          const msg = (result?.message || '').toLowerCase();
+
+          // ↓↓↓ نفس مكان الـ validation: تحت الـ input
+          if (
+            code === 'EMAIL_NOT_FOUND' ||
+            msg.includes('email not exist') ||
+            msg.includes('email is not exist')
+          ) {
+            setErrors(prev => ({ ...prev, email: 'email is not exist' }));
+          } else if (
+            code === 'INVALID_PASSWORD' ||
+            msg.includes('password is incorrect')
+          ) {
+            setErrors(prev => ({ ...prev, password: 'password is incorrect' }));
           } else {
-            setFormError('An error occurred during login');
+            setFormError(result?.message || 'An error occurred during login');
           }
-          return;
+          return; // لا تنقّل
         }
-        
-        // Handle successful login
-        console.log('Login successful, user role:', result.role);
+
+        // نجاح — نوجّه حسب الدور
         const redirectPath = result.role === 'admin' ? '/dashboard' : '/';
-        navigate(redirectPath);
+        navigate(redirectPath, { replace: true });
       } else {
-        // Handle registration
         const { success, message } = await register(
           formData.name,
           formData.email,
           formData.password
         );
-
         if (!success) {
           setFormError(message || 'Registration failed. Please try again.');
         } else {
-          // Show success message and switch to login form
-          setFormError('');
-          setFormData({
-            name: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
-          });
-          // Switch to login form
-          setIsLogin(true);
-          // Show success message
           setFormError('Registration successful! Please sign in.');
+          setIsLogin(true);
+          setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+          setErrors({});
         }
       }
     } catch (error) {
@@ -130,17 +121,13 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Clear error when user types
+
+    // حدّث القيمة
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // امسح خطأ الحقل دا فقط عشان يظهر/يختفي بنفس سلوك الـ validation
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
@@ -148,11 +135,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const result = await loginAsGuest();
-      if (result?.success) {
-        navigate('/');
-      } else {
-        setFormError('Failed to log in as guest. Please try again.');
-      }
+      if (result?.success) navigate('/', { replace: true });
+      else setFormError('Failed to log in as guest. Please try again.');
     } catch (error) {
       console.error('Guest login error:', error);
       setFormError('An error occurred during guest login.');
@@ -169,21 +153,19 @@ const Login = () => {
             <span>PawCare Clinic</span>
           </div>
           <p className={styles.subtitle}>
-            {isLogin 
-              ? 'Sign in to access your account' 
-              : 'Create a new account to get started'}
+            {isLogin ? 'Sign in to access your account' : 'Create a new account to get started'}
           </p>
         </div>
 
         {/* Form */}
         <div className={styles.formContainer}>
-          <h2 className={styles.formTitle}>
-            {isLogin ? 'Sign In' : 'Create Account'}
-          </h2>
-          
-          {formError && <div className={styles.errorMessage}>{formError}</div>}
+          <h2 className={styles.formTitle}>{isLogin ? 'Sign In' : 'Create Account'}</h2>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
+          {/* رسالة عامة اختيارية */}
+          {formError && <div className={styles.errorMessage} role="alert">{formError}</div>}
+
+          {/* noValidate علشان مانستعملش رسائل المتصفح */}
+          <form onSubmit={handleSubmit} className={styles.form} noValidate>
             {!isLogin && (
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">Full Name</label>
@@ -197,9 +179,7 @@ const Login = () => {
                     className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                     placeholder="Enter your full name"
                   />
-                  {errors.name && (
-                    <div className="invalid-feedback d-block">{errors.name}</div>
-                  )}
+                  {errors.name && <div className="invalid-feedback d-block">{errors.name}</div>}
                 </div>
               </div>
             )}
@@ -215,13 +195,12 @@ const Login = () => {
                   onChange={handleInputChange}
                   className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                   placeholder="Enter your email"
+                  autoComplete="username"
                 />
-                {errors.email && (
-                  <div className="invalid-feedback d-block">{errors.email}</div>
-                )}
+                {/* نفس المكان بتاع الـ validation */}
+                {errors.email && <div className="invalid-feedback d-block">{errors.email}</div>}
               </div>
             </div>
-
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Password</label>
               <div className="position-relative">
@@ -233,31 +212,25 @@ const Login = () => {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
+                  autoComplete="current-password"
                 />
                 {!errors.password && (
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowPassword(!showPassword);
-                    }}
+                    onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }}
                     className="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none shadow-none"
-                    style={{ transform: 'translateY(-50%)', outline: 'none', boxShadow: 'none' }}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 )}
-                {errors.password && (
-                  <div className="invalid-feedback d-block">{errors.password}</div>
-                )}
+                {/* نفس المكان بتاع الـ validation */}
+                {errors.password && <div className="invalid-feedback d-block">{errors.password}</div>}
               </div>
             </div>
 
             {!isLogin && (
               <div className="mb-3">
-                <label htmlFor="confirmPassword" className="form-label">
-                  Confirm Password
-                </label>
+                <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                 <div className="position-relative">
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
@@ -267,24 +240,19 @@ const Login = () => {
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     placeholder="Confirm your password"
+                    autoComplete="new-password"
                   />
                   {!errors.confirmPassword && (
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setShowConfirmPassword(!showConfirmPassword);
-                      }}
+                      onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }}
                       className="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none shadow-none"
-                      style={{ transform: 'translateY(-50%)', outline: 'none', boxShadow: 'none' }}
                     >
                       {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   )}
                   {errors.confirmPassword && (
-                    <div className="invalid-feedback d-block">
-                      {errors.confirmPassword}
-                    </div>
+                    <div className="invalid-feedback d-block">{errors.confirmPassword}</div>
                   )}
                 </div>
               </div>
@@ -292,8 +260,9 @@ const Login = () => {
 
             <button
               type="submit"
-              className="btn btn-primary w-100 py-2 mb-3"
+              className="btn btn-primary w-100 py-2 mb-3 border-0"
               disabled={isLoading}
+              style={{ outline: 'none', boxShadow: 'none' }}
             >
               {isLoading ? (
                 <>
@@ -302,11 +271,7 @@ const Login = () => {
                 </>
               ) : (
                 <>
-                  {isLogin ? (
-                    <LogIn size={18} className="me-2" />
-                  ) : (
-                    <UserPlus size={18} className="me-2" />
-                  )}
+                  {isLogin ? <LogIn size={18} className="me-2" /> : <UserPlus size={18} className="me-2" />}
                   {isLogin ? 'Sign In' : 'Sign Up'}
                 </>
               )}
@@ -315,14 +280,24 @@ const Login = () => {
             {isLogin && (
               <button
                 type="button"
-                className="btn btn-outline-secondary w-100 mb-3"
+                className="btn w-100 mb-3"
                 onClick={handleGuestLogin}
                 disabled={isLoading}
+                style={{
+                  outline: 'none',
+                  boxShadow: 'none',
+                  backgroundColor: '#e9ecef',
+                  color: '#212529',
+                  border: '1px solid #ced4da',
+                  transition: 'background-color 0.2s ease-in-out',
+                  fontWeight: '500'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ced4da'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#e9ecef'}
               >
                 Continue as Guest
               </button>
             )}
-
             <div className="text-center mt-3">
               <span className="text-muted">
                 {isLogin ? "Don't have an account? " : 'Already have an account? '}
@@ -332,14 +307,15 @@ const Login = () => {
                 onClick={() => {
                   setIsLogin(!isLogin);
                   setErrors({});
-                  setFormData({
-                    name: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: ''
-                  });
+                  if (isLogin) {
+                    setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
+                  } else {
+                    setFormData({ name: '', email: '', password: '', confirmPassword: '' });
+                  }
+                  setFormError('');
                 }}
-                className="btn btn-link p-0 text-decoration-underline"
+                className="btn btn-link p-0 text-decoration-underline border-0 shadow-none"
+                style={{ outline: 'none', boxShadow: 'none' }}
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
