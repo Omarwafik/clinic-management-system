@@ -9,6 +9,7 @@ import ServiceDetails from "./Components/ServiceDetails/ServiceDetails";
 import Login from './Components/Login/login';
 import Home from './Components/Home';
 import Navbar from './Components/Navbar/Navbar';
+import Contact from './Components/Contact/index'; 
 import { useEffect, useState } from 'react';
 import './App.css';
 
@@ -113,7 +114,26 @@ function AppContent() {
         }
       />
 
-      {/* Admin dashboard */}
+
+      {/* Contact Us route - not accessible to admin */}
+      <Route
+        path="/contact"
+        element={
+          user ? (
+            user.role === 'admin' ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <PageLayout>
+                <Contact />
+              </PageLayout>
+            )
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      {/* Admin dashboard routes */}
       <Route
         path="/dashboard"
         element={
