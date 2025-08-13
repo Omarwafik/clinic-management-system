@@ -11,15 +11,72 @@ export const useAuth = () => {
   return context;
 };
 
+/* ===================== إعدادات ===================== */
+const SESSION_KEY = 'auth_user';
+const USERS_CACHE_KEY = 'users';
+// لو عندك .env استخدمي REACT_APP_USERS_URL، وإلا fallback للـ 4004 اللي عندك:
+const API_USERS_URL = process.env.REACT_APP_USERS_URL || 'http://localhost:4004/users';
+
+/* ===================== Helpers ===================== */
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) { return null; }
+}
+function saveSession(userObj) {
+  try {
+    if (userObj) localStorage.setItem(SESSION_KEY, JSON.stringify(userObj));
+    else localStorage.removeItem(SESSION_KEY);
+  } catch (_) {}
+}
+
+function loadUsersCache() {
+  try {
+    const raw = localStorage.getItem(USERS_CACHE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && Array.isArray(parsed.users)) return parsed.users;
+    return [];
+  } catch (_) { return []; }
+}
+function saveUsersCache(list) {
+  try {
+    localStorage.setItem(USERS_CACHE_KEY, JSON.stringify(Array.isArray(list) ? list : []));
+  } catch (_) {}
+}
+
+async function fetchUsersFromServer() {
+  const resp = await axios.get(API_USERS_URL, { headers: { 'Cache-Control': 'no-cache' } });
+  const data = resp && resp.data ? resp.data : [];
+  return Array.isArray(data) ? data : (data && Array.isArray(data.users) ? data.users : []);
+}
+
+function mergeByEmail(serverList, localList) {
+  const map = {};
+  for (let i = 0; i < serverList.length; i++) {
+    const u = serverList[i] || {};
+    const k = u.email ? String(u.email).toLowerCase() : '';
+    if (k) map[k] = u;
+  }
+  for (let j = 0; j < localList.length; j++) {
+    const u = localList[j] || {};
+    const k = u.email ? String(u.email).toLowerCase() : '';
+    if (k && !map[k]) map[k] = u;
+  }
+  return Object.values(map);
+}
+
+/* ===================== AuthProvider ===================== */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Start false
 
-  // تنظيف أي جلسة قديمة عند أول تحميل
+  // حمّلي الجلسة من localStorage (بدل ما كنا بنعمل clear)
   useEffect(() => {
-    setUser(null);
-    localStorage.removeItem('auth_user');
-    setIsLoading(false);
+    const u = loadSession();
+    if (u) setUser(u);
   }, []);
 
   const persist = useCallback((userData) => {
@@ -30,95 +87,140 @@ export const AuthProvider = ({ children }) => {
           id: userData.id,
           name: userData.name,
           email: userData.email,
-          role: userData.role || 'patient',
-          avatar: userData.avatar || null
+          role: userData.role ? userData.role : 'patient',
+          avatar: userData.avatar ? userData.avatar : null
         };
-        localStorage.setItem('auth_user', JSON.stringify(userToStore));
+        saveSession(userToStore);
       } else {
-        localStorage.removeItem('auth_user');
+        saveSession(null);
       }
     } catch (error) {
       console.error('Error persisting user data:', error);
     }
   }, []);
 
+  /* ============ Avatar APIs ============ */
   const updateAvatar = async (avatarUrl) => {
-    if (!user) return;
+    if (!user) return { success: false, message: 'No active user' };
     try {
-      await axios.patch(`http://localhost:4004/users/${user.id}`, { avatar: avatarUrl });
-      const updatedUser = { ...user, avatar: avatarUrl };
-      persist(updatedUser);
-      return { success: true };
-    } catch (error) {
-      console.error('Error updating avatar:', error);
-      return { success: false, message: 'Failed to update avatar' };
+      // PATCH للسيرفر
+      await axios.patch(`${API_USERS_URL}/${encodeURIComponent(String(user.id))}`, { avatar: avatarUrl });
+    } catch (e) {
+      // لو السيرفر مش شغّال هنكمل محلي
+      console.warn('updateAvatar server patch failed:', e && e.message ? e.message : e);
     }
+
+    // حدّث الجلسة
+    const updatedUser = Object.assign({}, user, { avatar: avatarUrl });
+    persist(updatedUser);
+    // حدّث الكاش المحلي للمستخدمين
+    const cache = loadUsersCache();
+    const meEmail = updatedUser.email ? String(updatedUser.email).toLowerCase() : '';
+    for (let i = 0; i < cache.length; i++) {
+      const u = cache[i] || {};
+      const k = u.email ? String(u.email).toLowerCase() : '';
+      if (k === meEmail) {
+        cache[i] = Object.assign({}, u, { avatar: avatarUrl });
+        break;
+      }
+    }
+    saveUsersCache(cache);
+
+    return { success: true };
   };
 
   const removeAvatar = async () => {
-    if (!user) return { success: false, message: 'No user logged in' };
+    if (!user) return { success: false, message: 'No active user' };
     try {
-      // Update the user's avatar to null in the database
-      await axios.patch(`http://localhost:4004/users/${user.id}`, { avatar: null });
-
-      // Update the local user state
-      const updatedUser = { ...user, avatar: null };
-      persist(updatedUser);
-
-      return { success: true };
-    } catch (error) {
-      console.error('Error removing avatar:', error);
-      return { success: false, message: 'Failed to remove avatar' };
+      await axios.patch(`${API_USERS_URL}/${encodeURIComponent(String(user.id))}`, { avatar: null });
+    } catch (e) {
+      console.warn('removeAvatar server patch failed:', e && e.message ? e.message : e);
     }
+
+    const updatedUser = Object.assign({}, user, { avatar: null });
+    persist(updatedUser);
+
+    const cache = loadUsersCache();
+    const meEmail = updatedUser.email ? String(updatedUser.email).toLowerCase() : '';
+    for (let i = 0; i < cache.length; i++) {
+      const u = cache[i] || {};
+      const k = u.email ? String(u.email).toLowerCase() : '';
+      if (k === meEmail) {
+        cache[i] = Object.assign({}, u, { avatar: null });
+        break;
+      }
+    }
+    saveUsersCache(cache);
+
+    return { success: true };
   };
 
-  // ======= LOGIN برسائل أخطاء ثابتة =======
+  /* ============ Auth APIs ============ */
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      const response = await axios.get('http://localhost:4004/users');
-      const found = response.data.find(u => u.email === email);
+      let serverUsers = [];
+      try {
+        serverUsers = await fetchUsersFromServer();
+      } catch (e) {
+        console.warn('GET /users failed. Falling back to local cache.', e && e.message ? e.message : e);
+      }
+
+      const localUsers = loadUsersCache();
+      // دمج القوائم علشان لو السيرفر أقدم من الكاش
+      let usersList = mergeByEmail(serverUsers, localUsers);
+      if (usersList.length === 0) {
+        // آخر محاولة: استخدم اللي جاي من السيرفر لو كان موجود
+        usersList = serverUsers;
+      }
+      saveUsersCache(usersList); // مزامنة الكاش
+
+      const inEmail = email ? String(email).toLowerCase() : '';
+      const found = usersList.find((u) => {
+        const uEmail = u && u.email ? String(u.email).toLowerCase() : '';
+        return uEmail === inEmail;
+      });
 
       if (!found) {
         setIsLoading(false);
         return { success: false, code: 'EMAIL_NOT_FOUND', message: 'email is not exist' };
       }
 
-      if (found.password !== password) {
+      const storedPwd = found.password ? String(found.password) : '';
+      const inputPwd = password ? String(password) : '';
+      if (storedPwd !== inputPwd) {
         setIsLoading(false);
         return { success: false, code: 'INVALID_PASSWORD', message: 'password is incorrect' };
       }
 
-      const userRole = found.role || 'patient';
+      const role = found.role ? found.role : 'patient';
       const userData = {
         id: found.id,
         name: found.name,
         email: found.email,
-        role: userRole,
-        avatar: found.avatar
+        role: role,
+        avatar: found.avatar ? found.avatar : null
       };
 
-      if (userRole === 'admin') {
-        persist(userData); // نحفظ الـ admin
-      } else {
-        setUser(userData); // غير كده في الذاكرة فقط
-      }
+      // Persist لكل الأدوار علشان يفضل مسجّل وهو بيتنقل
+      persist(userData);
 
       setIsLoading(false);
       return {
         success: true,
-        role: userRole,
-        redirectTo: userRole === 'admin' ? '/dashboard' : '/'
+        role: role,
+        redirectTo: role === 'admin' ? '/dashboard' : '/'
       };
     } catch (error) {
       console.error('Login failed:', error);
       setIsLoading(false);
-      return { success: false, code: 'LOGIN_FAILED', message: 'Login failed. Please try again.' };
+      return { success: false, message: 'Login failed. Please try again.' };
     }
   };
 
   const loginAsGuest = () => {
-    const guestUser = { id: 'guest', name: 'Guest', email: '', role: 'guest' };
+    const guestUser = { id: 'guest', name: 'Guest', email: '', role: 'guest', avatar: null };
+    // ضيف: ما نعملش persist علشان يخرج بتحديث الصفحة
     setUser(guestUser);
     return { success: true, role: 'guest', redirectTo: '/' };
   };
@@ -130,27 +232,47 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     setIsLoading(true);
     try {
-      const checkResponse = await axios.get('http://localhost:4004/users');
-      const existingUser = checkResponse.data.find(u => u.email === email);
-      if (existingUser) {
+      // اتأكد مفيش يوزر بنفس الإيميل (من السيرفر أو الكاش)
+      let serverUsers = [];
+      try { serverUsers = await fetchUsersFromServer(); } catch (_) {}
+      const localUsers = loadUsersCache();
+      const existing = mergeByEmail(serverUsers, localUsers);
+      const emailLower = email ? String(email).trim().toLowerCase() : '';
+      const exists = existing.some((u) => {
+        const uEmail = u && u.email ? String(u.email).toLowerCase() : '';
+        return uEmail === emailLower;
+      });
+      if (exists) {
         setIsLoading(false);
         return { success: false, message: 'Email already registered' };
       }
 
       const newUser = {
-        name: name.trim(),
-        email: email.trim(),
-        password: password,
-        role: 'patient'
+        name: name ? String(name).trim() : '',
+        email: email ? String(email).trim() : '',
+        password: password ? String(password) : '',
+        role: 'patient',
+        avatar: null
       };
-      const created = await axios.post('http://localhost:4004/users', newUser);
-      console.log('New user saved to data.json:', created.data);
+
+      // اكتب في data.json عبر json-server
+      const response = await axios.post(API_USERS_URL, newUser, { headers: { 'Content-Type': 'application/json' } });
+      const saved = response && response.data ? response.data : newUser;
+      if (!saved.id) saved.id = String(Date.now());
+
+      // حدّث الكاش المحلي
+      const updatedCache = mergeByEmail([saved], existing);
+      saveUsersCache(updatedCache);
+
       setIsLoading(false);
       return { success: true, message: 'Registration successful! Please log in to continue.' };
     } catch (error) {
       console.error('Registration failed:', error);
       setIsLoading(false);
-      return { success: false, message: error.response?.data?.message || 'Registration failed. Please try again.' };
+      const msg = (error && error.response && error.response.data && error.response.data.message)
+        ? error.response.data.message
+        : 'Registration failed. Please try again.';
+      return { success: false, message: msg };
     }
   };
 

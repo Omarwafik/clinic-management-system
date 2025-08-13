@@ -1,5 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+// src/App.js
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+
 import Dashboard from "./Components/Dashboard/Dashboard";
 import TableUsers from "./Components/Dashboard/TableUsers";
 import TableDoctors from "./Components/Dashboard/TableDoctors";
@@ -9,16 +12,42 @@ import ServiceDetails from "./Components/ServiceDetails/ServiceDetails";
 import Login from './Components/Login/login';
 import Home from './Components/Home';
 import Navbar from './Components/Navbar/Navbar';
-import Contact from './Components/Contact/index'; 
-import { useEffect, useState } from 'react';
+import Contact from './Components/Contact/index';
+
 import './App.css';
 
-// Simple layout wrapper for pages that need the Navbar
+// Wrapper بسيط للصفحات اللي فيها Navbar
 const PageLayout = ({ children }) => {
   return (
     <div className="app-container">
       <Navbar />
       <main className="main-content">{children}</main>
+    </div>
+  );
+};
+
+/**
+ * GuestClickCatcher:
+ * بيمنع أي كليك داخل الـ Home لو اليوزر ضيف، وبيحوّله على /login
+ * (بنستخدم onClickCapture علشان نضمن إن أي كليك جوّه الـ Home يتلقط،
+ *  ومن غير ما نغطي الـ Navbar أو نغيّر أي ستايل).
+ */
+const GuestClickCatcher = ({ children }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const isGuest = user?.role === 'guest';
+
+  const handleClickCapture = (e) => {
+    if (!isGuest) return;
+    // امنع أي أكشن جوّه الهوم، وودّي على اللوجين
+    e.preventDefault();
+    e.stopPropagation();
+    navigate('/login');
+  };
+
+  return (
+    <div onClickCapture={handleClickCapture}>
+      {children}
     </div>
   );
 };
@@ -44,9 +73,7 @@ function AppContent() {
 
   return (
     <Routes>
-      {/* Login route:
-          - يظهر لغير المسجلين OR للـ guest
-          - يحوَّل فقط لو المستخدم Admin أو Patient (أي دور غير guest) */}
+      {/* Login: يظهر لغير المسجلين أو الجيست؛ لو مستخدم فعلي يحوّل حسب دوره */}
       <Route
         path="/login"
         element={
@@ -57,9 +84,10 @@ function AppContent() {
       />
 
       {/* Home:
-          - متاح للـ guest والمستخدمين العاديين
-          - Admin يتحوّل للدashboard
-          - غير المسجلين يتحوّلوا للـ login */}
+          - مسموح للجيست (يشوف الصفحة)، لكن أي كليك جوّهها يودّي للّوجين
+          - المستخدم العادي يشوفها طبيعي
+          - الأدمن يتحوّل للدashboard
+          - غير المسجلين يتحوّلوا للّوجين */}
       <Route
         path="/"
         element={
@@ -68,7 +96,10 @@ function AppContent() {
               <Navigate to="/dashboard" replace />
             ) : (
               <PageLayout>
-                <Home />
+                {/* هنا بنطبق الـ GuestClickCatcher على الـ Home بس */}
+                <GuestClickCatcher>
+                  <Home />
+                </GuestClickCatcher>
               </PageLayout>
             )
           ) : (
@@ -78,7 +109,7 @@ function AppContent() {
       />
 
       {/* Services:
-          - ممنوع على الـ guest وعلى الـ admin
+          - ممنوع على الجيست وعلى الأدمن
           - مسموح لباقي المستخدمين */}
       <Route
         path="/services"
@@ -113,9 +144,7 @@ function AppContent() {
           )
         }
       />
-
-
-      {/* Contact Us route - not accessible to admin */}
+      {/* Contact: الأدمن مايشوفهاش */}
       <Route
         path="/contact"
         element={
@@ -133,7 +162,7 @@ function AppContent() {
         }
       />
 
-      {/* Admin dashboard routes */}
+      {/* Dashboard للأدمن فقط */}
       <Route
         path="/dashboard"
         element={
@@ -151,15 +180,12 @@ function AppContent() {
         <Route path="doctors" element={<TableDoctors />} />
       </Route>
 
-      {/* Catch-all */}
+      {/* أي Route تاني */}
       <Route
         path="*"
         element={
           user ? (
-            <Navigate
-              to={user.role === 'admin' ? '/dashboard' : '/'}
-              replace
-            />
+            <Navigate to={user.role === 'admin' ? '/dashboard' : '/'} replace />
           ) : (
             <Navigate to="/login" replace />
           )
@@ -169,12 +195,10 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
       <AppContent />
     </BrowserRouter>
   );
 }
-
-export default App;

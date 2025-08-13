@@ -4,8 +4,14 @@ import { Eye, EyeOff, LogIn, UserPlus, PawPrint } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 
-// لو Bootstrap مش متستورد جلوبال، استورده هنا عشان ستايل invalid-feedback يشتغل
-import 'bootstrap/dist/css/bootstrap.min.css';
+/* ====== قواعد التحقق ====== */
+// Email: يمنع تتابع نقط ".."، ويتأكد من TLD بطول 2+.
+const EMAIL_REGEX = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+// Password: 8+، حرف كبير وصغير ورقم ورمز، بدون مسافات.
+const STRONG_PWD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,}$/;
+// Name length bounds
+const MIN_NAME_LEN = 3;
+const MAX_NAME_LEN = 50;
 
 const Login = () => {
   const { login, register, loginAsGuest, isLoading, user } = useAuth();
@@ -15,9 +21,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // هنا هنخزن أخطاء الحقول (سواء Validation أو Auth) بنفس المفتاح
   const [errors, setErrors] = useState({});
-  const [formError, setFormError] = useState(''); // رسالة عامة اختيارية
+  const [formError, setFormError] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -26,7 +31,7 @@ const Login = () => {
     confirmPassword: ''
   });
 
-  // لو المستخدم مش ضيف، رجعيه لصفحة مناسبة
+  // لو المستخدم مسجّل (ومش guest) رجّعيه على صفحته المناسبة
   useEffect(() => {
     if (user && user.role !== 'guest') {
       const targetRoute = user.role === 'admin' ? '/dashboard' : '/';
@@ -36,32 +41,59 @@ const Login = () => {
     }
   }, [user, navigate]);
 
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const validateForm = () => {
+  function validateForm() {
     const newErrors = {};
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!validateEmail(formData.email)) newErrors.email = 'Please enter a valid email';
 
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-
-    if (!isLogin) {
-      if (!formData.name) newErrors.name = 'Name is required';
-      if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password';
-      else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+    // Email
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!EMAIL_REGEX.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
+
+    // Password
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else {
+      if (isLogin) {
+        if (formData.password.length < 6) {
+          newErrors.password = 'Password must be at least 6 characters';
+        }
+      } else {
+        if (!STRONG_PWD.test(formData.password)) {
+          newErrors.password =
+            'Password must be 8+ chars & include upper, lower, number, and symbol (no spaces)';
+        }
+      }
+    }
+
+    // شروط إضافية في وضع Sign Up فقط
+    if (!isLogin) {
+      // Name length validation
+      var nameLen = formData.name ? formData.name.trim().length : 0;
+      if (!nameLen) {
+        newErrors.name = 'Name is required';
+      } else if (nameLen < MIN_NAME_LEN) {
+        newErrors.name = 'Name must be at least ' + MIN_NAME_LEN + ' characters';
+      } else if (nameLen > MAX_NAME_LEN) {
+        newErrors.name = 'Name must be at most ' + MAX_NAME_LEN + ' characters';
+      }
+
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+    }
+
     return newErrors;
-  };
+  }
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-
-    // امسح بس الأخطاء القديمة، من غير ما أمسح قيم الحقول
     setFormError('');
     setErrors({});
 
-    // Validation العادي الأول
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -71,41 +103,41 @@ const Login = () => {
     try {
       if (isLogin) {
         const result = await login(formData.email, formData.password);
-        // console.log('login result:', result);
 
-        if (!result?.success) {
-          const code = result?.code?.toUpperCase?.() || '';
-          const msg = (result?.message || '').toLowerCase();
+        const ok = result && result.success ? true : false;
+        if (!ok) {
+          const code = result && result.code ? String(result.code).toUpperCase() : '';
+          const msg = result && result.message ? String(result.message).toLowerCase() : '';
 
-          // ↓↓↓ نفس مكان الـ validation: تحت الـ input
-          if (
-            code === 'EMAIL_NOT_FOUND' ||
-            msg.includes('email not exist') ||
-            msg.includes('email is not exist')
-          ) {
-            setErrors(prev => ({ ...prev, email: 'email is not exist' }));
-          } else if (
-            code === 'INVALID_PASSWORD' ||
-            msg.includes('password is incorrect')
-          ) {
-            setErrors(prev => ({ ...prev, password: 'password is incorrect' }));
+          // ✅ بدلاً من if طويلة معرضة لفقدان ||
+          const isEmailNotExist =
+            (code === 'EMAIL_NOT_FOUND') ||
+            (msg.indexOf('email not exist') !== -1) ||
+            (msg.indexOf('email is not exist') !== -1);
+
+          const isPwdIncorrect =
+            (code === 'INVALID_PASSWORD') ||
+            (msg.indexOf('password is incorrect') !== -1);
+            if (isEmailNotExist) {
+            setErrors(function (prev) { return Object.assign({}, prev, { email: 'email is not exist' }); });
+          } else if (isPwdIncorrect) {
+            setErrors(function (prev) { return Object.assign({}, prev, { password: 'password is incorrect' }); });
           } else {
-            setFormError(result?.message || 'An error occurred during login');
+            setFormError(result && result.message ? result.message : 'An error occurred during login');
           }
-          return; // لا تنقّل
+          return;
         }
 
-        // نجاح — نوجّه حسب الدور
-        const redirectPath = result.role === 'admin' ? '/dashboard' : '/';
+        const role = result && result.role ? result.role : 'patient';
+        const redirectPath = role === 'admin' ? '/dashboard' : '/';
         navigate(redirectPath, { replace: true });
       } else {
-        const { success, message } = await register(
-          formData.name,
-          formData.email,
-          formData.password
-        );
-        if (!success) {
-          setFormError(message || 'Registration failed. Please try again.');
+        const reg = await register(formData.name, formData.email, formData.password);
+        const ok = reg && reg.success ? true : false;
+
+        if (!ok) {
+          const msg = reg && reg.message ? reg.message : 'Registration failed. Please try again.';
+          setFormError(msg);
         } else {
           setFormError('Registration successful! Please sign in.');
           setIsLogin(true);
@@ -113,35 +145,42 @@ const Login = () => {
           setErrors({});
         }
       }
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (err) {
+      console.error('Error:', err);
       setFormError('An unexpected error occurred. Please try again.');
     }
-  };
+  }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // حدّث القيمة
-    setFormData(prev => ({ ...prev, [name]: value }));
-
-    // امسح خطأ الحقل دا فقط عشان يظهر/يختفي بنفس سلوك الـ validation
+  function handleInputChange(e) {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData(function (prev) { return Object.assign({}, prev, { [name]: value }); });
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors(function (prev) {
+        const next = Object.assign({}, prev);
+        next[name] = '';
+        return next;
+      });
     }
-  };
+  }
 
-  const handleGuestLogin = async (e) => {
+  function onToggleShowPassword(e) {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  }
+
+  function onToggleShowConfirm(e) {
+    e.preventDefault();
+    setShowConfirmPassword(!showConfirmPassword);
+  }
+
+  async function handleGuestLogin(e) {
     e.preventDefault();
     try {
       const result = await loginAsGuest();
-      if (result?.success) navigate('/', { replace: true });
-      else setFormError('Failed to log in as guest. Please try again.');
-    } catch (error) {
-      console.error('Guest login error:', error);
-      setFormError('An error occurred during guest login.');
-    }
-  };
+      if (result && result.success) navigate('/', { replace: true });
+    } catch (_) {}
+  }
 
   return (
     <div className={styles.container}>
@@ -161,12 +200,10 @@ const Login = () => {
         <div className={styles.formContainer}>
           <h2 className={styles.formTitle}>{isLogin ? 'Sign In' : 'Create Account'}</h2>
 
-          {/* رسالة عامة اختيارية */}
-          {formError && <div className={styles.errorMessage} role="alert">{formError}</div>}
+          {formError ? <div className={styles.errorMessage} role="alert">{formError}</div> : null}
 
-          {/* noValidate علشان مانستعملش رسائل المتصفح */}
           <form onSubmit={handleSubmit} className={styles.form} noValidate>
-            {!isLogin && (
+            {!isLogin ? (
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">Full Name</label>
                 <div className="position-relative">
@@ -176,14 +213,13 @@ const Login = () => {
                     type="text"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                    className={'form-control ' + (errors.name ? 'is-invalid' : '')}
                     placeholder="Enter your full name"
                   />
-                  {errors.name && <div className="invalid-feedback d-block">{errors.name}</div>}
+                  {errors.name ? <div className="invalid-feedback d-block">{errors.name}</div> : null}
                 </div>
               </div>
-            )}
-
+            ) : null}
             <div className="mb-3">
               <label htmlFor="email" className="form-label">Email Address</label>
               <div className="position-relative">
@@ -193,48 +229,47 @@ const Login = () => {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                  className={'form-control ' + (errors.email ? 'is-invalid' : '')}
                   placeholder="Enter your email"
                   autoComplete="username"
                 />
-                {/* نفس المكان بتاع الـ validation */}
-                {errors.email && <div className="invalid-feedback d-block">{errors.email}</div>}
+                {errors.email ? <div className="invalid-feedback d-block">{errors.email}</div> : null}
               </div>
             </div>
+
             <div className="mb-3">
               <label htmlFor="password" className="form-label">Password</label>
               <div className="position-relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className={`form-control ${errors.password ? 'is-invalid pe-5' : ''}`}
+                  className={'form-control ' + (errors.password ? 'is-invalid pe-5' : '')}
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
-                  autoComplete="current-password"
+                  autoComplete={isLogin ? 'current-password' : 'new-password'}
                 />
-                {!errors.password && (
+                {!errors.password ? (
                   <button
                     type="button"
-                    onClick={(e) => { e.preventDefault(); setShowPassword(!showPassword); }}
+                    onClick={onToggleShowPassword}
                     className="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none shadow-none"
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
-                )}
-                {/* نفس المكان بتاع الـ validation */}
-                {errors.password && <div className="invalid-feedback d-block">{errors.password}</div>}
+                ) : null}
+                {errors.password ? <div className="invalid-feedback d-block">{errors.password}</div> : null}
               </div>
             </div>
 
-            {!isLogin && (
+            {!isLogin ? (
               <div className="mb-3">
                 <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
                 <div className="position-relative">
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
-                    className={`form-control ${errors.confirmPassword ? 'is-invalid pe-5' : ''}`}
+                    className={'form-control ' + (errors.confirmPassword ? 'is-invalid pe-5' : '')}
                     id="confirmPassword"
                     name="confirmPassword"
                     value={formData.confirmPassword}
@@ -242,28 +277,21 @@ const Login = () => {
                     placeholder="Confirm your password"
                     autoComplete="new-password"
                   />
-                  {!errors.confirmPassword && (
+                  {!errors.confirmPassword ? (
                     <button
                       type="button"
-                      onClick={(e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); }}
+                      onClick={onToggleShowConfirm}
                       className="btn btn-link position-absolute end-0 top-50 translate-middle-y text-decoration-none shadow-none"
                     >
                       {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
-                  )}
-                  {errors.confirmPassword && (
-                    <div className="invalid-feedback d-block">{errors.confirmPassword}</div>
-                  )}
+                  ) : null}
+                  {errors.confirmPassword ? <div className="invalid-feedback d-block">{errors.confirmPassword}</div> : null}
                 </div>
               </div>
-            )}
+            ) : null}
 
-            <button
-              type="submit"
-              className="btn btn-primary w-100 py-2 mb-3 border-0"
-              disabled={isLoading}
-              style={{ outline: 'none', boxShadow: 'none' }}
-            >
+            <button type="submit" className="btn btn-primary w-100 py-2 mb-3" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status"></span>
@@ -276,46 +304,36 @@ const Login = () => {
                 </>
               )}
             </button>
-
-            {isLogin && (
+            {isLogin ? (
               <button
                 type="button"
-                className="btn w-100 mb-3"
+                className="btn btn-outline-secondary w-100 mb-3"
                 onClick={handleGuestLogin}
                 disabled={isLoading}
-                style={{
-                  outline: 'none',
-                  boxShadow: 'none',
-                  backgroundColor: '#e9ecef',
-                  color: '#212529',
-                  border: '1px solid #ced4da',
-                  transition: 'background-color 0.2s ease-in-out',
-                  fontWeight: '500'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ced4da'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#e9ecef'}
               >
                 Continue as Guest
               </button>
-            )}
+            ) : null}
+
             <div className="text-center mt-3">
               <span className="text-muted">
                 {isLogin ? "Don't have an account? " : 'Already have an account? '}
               </span>
               <button
                 type="button"
-                onClick={() => {
+                onClick={function () {
                   setIsLogin(!isLogin);
                   setErrors({});
                   if (isLogin) {
-                    setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
+                    setFormData(function (prev) {
+                      return Object.assign({}, prev, { password: '', confirmPassword: '' });
+                    });
                   } else {
                     setFormData({ name: '', email: '', password: '', confirmPassword: '' });
                   }
                   setFormError('');
                 }}
-                className="btn btn-link p-0 text-decoration-underline border-0 shadow-none"
-                style={{ outline: 'none', boxShadow: 'none' }}
+                className="btn btn-link p-0 text-decoration-underline"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>
