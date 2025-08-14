@@ -128,7 +128,7 @@ export default function Dashboard() {
           <button
             className="btn btn-danger d-flex align-items-center"
             onClick={handleLogout}
-            style={{ gap: "0.5rem", padding: "0.375rem 0.75rem" , marginTop:"2rem" }} 
+            style={{ gap: "0.25rem", padding: "0.375rem 0.25rem" , marginTop:"2rem" }} 
           >
             <i className="fas fa-sign-out-alt"></i> 
             <span>Log Out</span>

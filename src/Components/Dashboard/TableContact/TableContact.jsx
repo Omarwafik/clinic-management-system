@@ -20,12 +20,27 @@ export default function TableContact() {
   };
 
   const columns = [
-    { name: 'Name', selector: row => row.name, sortable: true },
-    { name: 'Email', selector: row => row.email, sortable: true },
-    { name: 'Phone', selector: row => row.phone },
+    { name: 'Name'
+      , selector: row => row.name,
+      sortable: true,
+          minWidth: 'fit-content',
+
+     },
+    { name: 'Email', 
+      selector: row => row.email,
+      sortable: true 
+      ,    minWidth: 'fit-content',
+
+    },
+    { name: 'Phone',
+      selector: row => row.phone,
+          minWidth: 'fit-content',
+
+     },
     {
       name: 'Message',
       selector: row => row.message,
+      minWidth: 'fit-content',
       cell: row => (
         <div style={{ whiteSpace: 'pre-wrap', maxHeight: '80px', overflow: 'hidden' }}>
           {row.message.length > 25 ? (
