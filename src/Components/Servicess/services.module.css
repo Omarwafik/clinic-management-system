@@ -1,10 +1,8 @@
-/* Container background like old version */
 .container {
   background: #f7f8fa;
   padding: 36px 16px;
 }
 
-/* Card look from old CSS */
 .card {
   background: #fff;
   border-radius: 18px;
@@ -14,7 +12,6 @@
   min-height: 190px;
 }
 
-/* Doctor image */
 .img {
   width: 100px;
   height: 100px;
@@ -25,14 +22,12 @@
   box-shadow: 0 2px 8px rgba(80, 80, 80, 0.04);
 }
 
-/* Details section */
 .details {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-/* Title styling */
 .serviceTitle {
   font-size: 1.25rem;
   font-weight: bold;
@@ -40,7 +35,6 @@
   color: #20262e;
 }
 
-/* Doctor name styling */
 .doctorName {
   font-size: 1.08rem;
   color: #2075ee;
@@ -48,21 +42,18 @@
   margin-bottom: 7px;
 }
 
-/* Meta text */
 .meta {
   color: #68717b;
   font-size: 0.99rem;
   margin-bottom: 4px;
 }
 
-/* Languages text */
 .languages {
   color: #23ab68;
   margin-bottom: 5px;
   font-size: 0.97rem;
 }
 
-/* Rating text */
 .rating {
   font-size: 1rem;
   color: #f8b144;
@@ -71,7 +62,6 @@
   margin-bottom: 7px;
 }
 
-/* "View Details" button matching old style */
 .btn {
   display: inline-block;
   margin-top: 10px;
@@ -91,7 +81,6 @@
   align-self: flex-end;
 }
 
-/* Button hover effect */
 .btn:hover,
 .btn:focus {
   background: #1456a6;
@@ -99,12 +88,57 @@
   outline: none;
 }
 
-/* Responsive font sizes */
 @media (max-width: 500px) {
   .serviceTitle {
     font-size: 1.04rem;
   }
   .doctorName {
     font-size: 1rem;
+  }
+}
+
+.tabContainer {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+  justify-content: center;
+}
+
+.tabButton {
+  background: #fff;
+  color: #1456a6;
+  border: 1.5px solid #e2eaf6;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 1.04rem;
+  padding: 8px 24px;
+  cursor: pointer;
+  transition: background 0.16s, color 0.16s, border 0.16s, box-shadow 0.16s;
+  box-shadow: 0 1px 7px rgba(32, 117, 238, 0.05);
+}
+
+.tabButton:hover,
+.tabButton:focus {
+  background: #e3efff;
+  color: #2075ee;
+  border-color: #bcd3fa;
+  outline: none;
+}
+
+.activeTab {
+  background: #2075ee;
+  color: #fff;
+  border-color: #2075ee;
+  box-shadow: 0 2px 8px rgba(32, 117, 238, 0.1);
+}
+
+@media (max-width: 600px) {
+  .tabContainer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tabButton {
+    padding: 7px 16px;
+    font-size: 0.97rem;
   }
 }

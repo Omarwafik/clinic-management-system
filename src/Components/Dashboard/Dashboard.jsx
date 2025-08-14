@@ -1,9 +1,39 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import "../../assets/css/sb-admin-2.css";
 import { Outlet, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { useAuth } from "../../context/AuthContext"; // افترض عندك auth context
+import axios from "axios";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { logout } = useAuth(); // دالة logout من context
+
+  const handleLogout = async () => {
+    await logout(); // تمسح بيانات المستخدم
+    navigate('/login', { replace: true }); // يروح login
+  };
+
+  // const [Doctors, setDoctors] = useState([]);
+  const [Reservations, setReservations] = useState([]);
+  const [Users, setUsers] = useState([]);
+  const [Doctors, setDoctors] = useState([]);
+  const [Messages, setMessages] = useState([]);
+  useEffect(()=>{
+    axios.get('http://localhost:4004/reservations')
+    .then(res => setReservations(res.data))
+    .catch(err => console.log(err))
+    axios.get('http://localhost:4004/users')
+    .then( res => setUsers(res.data))
+    .catch(err => console.log(err))
+    axios.get('http://localhost:4004/doctors')
+    .then( res => setDoctors(res.data))
+    .catch(err => console.log(err))
+    axios.get('http://localhost:4004/ContactUs')
+    .then( res => setMessages(res.data))
+    .catch(err => console.log(err))
+  } , [])
+
   return (
     <div id="wrapper">
       {/* Sidebar */}
@@ -80,6 +110,30 @@ export default function Dashboard() {
             <span>Reservations</span>
           </a>
         </li>
+        <li className="nav-item">
+          <a
+            className="nav-link collapsed btn"
+            // href=""
+            data-toggle="collapse"
+            data-target="#collapseTwo"
+            aria-expanded="true"
+            aria-controls="collapseTwo"
+            onClick={()=>navigate('/dashboard/messages')}
+          >
+            <i className="fas fa-fw fa-cog"></i>
+            <span>Messages</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <button
+            className="btn btn-danger d-flex align-items-center"
+            onClick={handleLogout}
+            style={{ gap: "0.5rem", padding: "0.375rem 0.75rem" , marginTop:"2rem" }} 
+          >
+            <i className="fas fa-sign-out-alt"></i> 
+            <span>Log Out</span>
+          </button>
+        </li>
       </ul>
       {/* End of Sidebar */}
 
@@ -108,8 +162,8 @@ export default function Dashboard() {
                                     <div className="row no-gutters align-items-center px-2">
                                         <div className="col mr-2">
                                             <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                Total User</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Users.length}</div>
                                         </div>
                                         <div className="col-auto">
                                             <i className="fas fa-calendar fa-2x text-gray-300"></i>
@@ -126,11 +180,11 @@ export default function Dashboard() {
                                     <div className="row no-gutters align-items-center px-2">
                                         <div className="col mr-2">
                                             <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual)</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                Total Doctors</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Doctors.length}</div>
                                         </div>
                                         <div className="col-auto">
-                                            <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                          <i className="fas fa-user-md fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -138,29 +192,18 @@ export default function Dashboard() {
                         </div>
 
                         {/* <!-- Tasks Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
+                          <div className="col-xl-3 col-md-6 mb-4">
                             <div className="card border-left-info shadow h-100 py-2">
                                 <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-4">
+                                    <div className="row no-gutters align-items-center px-2">
                                         <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div className="row no-gutters align-items-center">
-                                                <div className="col-auto">
-                                                    <div className="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                </div>
-                                                <div className="col">
-                                                    <div className="progress progress-sm mr-2">
-                                                        <div className="progress-bar bg-info" role="progressbar"
-                                                            style={{width:"50%"}} aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Total Messages</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Messages.length}</div>
                                         </div>
-                                        {/* <div className="col-auto">
-                                            <i className="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div> */}
+                                        <div className="col-auto">
+                                            <i className="fas fa-comments fa-2x text-gray-300"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -173,11 +216,11 @@ export default function Dashboard() {
                                     <div className="row no-gutters align-items-center px-2">
                                         <div className="col mr-2">
                                             <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                Total Reservations</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Reservations.length}</div>
                                         </div>
                                         <div className="col-auto">
-                                            <i className="fas fa-comments fa-2x text-gray-300"></i>
+  <i className="fas fa-user-friends fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>

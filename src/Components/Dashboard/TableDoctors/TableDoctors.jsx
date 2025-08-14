@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
-import CreateModal from './CreateUser/CreateModal';
-import EditModal from './EditUser/EditModal';
+import CreateModal from '../CreateUser/CreateModal';
+import EditModal from '../EditUser/EditModal';
 
 
 export default function TableDoctors() {
@@ -82,6 +82,7 @@ const handleDelete=(row)=>{
         axios.delete(`http://localhost:4004/doctors/${row.id}`)
         .then(()=> {
             setDoctors(prev => prev.filter(doc => doc.id !== row.id))
+            setfilteredDoctors(prev => prev.filter(doc => doc.id !== row.id)); // تحديث filteredDoctors كمان
         }).catch(err => console.log(err))
     }
 }
@@ -134,7 +135,7 @@ return (
             </div>
             }
         />
-        <CreateModal  show={AddModal} onClose={()=>setAddModal(false)} onDoctorAdded={(doctor) => setDoctors([...doctors, doctor])}/>
+        <CreateModal  show={AddModal} onClose={()=>setAddModal(false)} onDoctorAdded={(doctor) => setDoctors([...doctor, doctor])}/>
         <EditModal
             show={ShowEditModal}
             onClose={handleCloseEdit}

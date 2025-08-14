@@ -7,7 +7,6 @@ import ReservationForm from "./ReservationForm";
 export default function ServiceDetails() {
   const { doctorId } = useParams();
   const [doctor, setDoctor] = useState(null);
-
   useEffect(() => {
     axios
       .get(`http://localhost:4004/doctors/${doctorId}`)

@@ -106,6 +106,7 @@
 }
 .mapLink:hover {
   background: #1456a6;
+  color: white;
 }
 
 .servicesSection {
@@ -179,7 +180,7 @@
 }
 
 .reservationButton {
-  background-color: #2d689b;
+  background-color: var( --primary-color);
   color: white;
   padding: 0.8em;
   border: none;
@@ -188,6 +189,7 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .reservationButton:hover {
   background-color: #175184;
 }

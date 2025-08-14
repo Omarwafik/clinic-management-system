@@ -1,19 +1,30 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Dashboard from "./Components/Dashboard/Dashboard";
-import TableUsers from "./Components/Dashboard/TableUsers";
-import TableDoctors from "./Components/Dashboard/TableDoctors";
-import Charts from "./Components/Dashboard/Charts";
+import TableUsers from "./Components/Dashboard/TableUsers/TableUsers";
+import TableDoctors from "./Components/Dashboard/TableDoctors/TableDoctors";
+import Charts from "./Components/Dashboard/Charts/Charts";
 import Services from "./Components/Servicess/Services";
 import ServiceDetails from "./Components/ServiceDetails/ServiceDetails";
-import Login from "./Components/Login/login";
+import Login from "./Components/Login/Login";
 import Home from "./Components/Home/Home";
 import Navbar from "./Components/Navbar/Navbar";
 import Contact from "./Components/Contact/Contact";
+import UserReservation from "./Components/UserReservation/UserReservation";
 import { useEffect, useState } from "react";
 import "./App.css";
+import { ReservationProvider } from "./context/ReservationContext";
+import { ToastProvider } from "./context/ToastContext";
+import ReservationTable from "./Components/Dashboard/ReservationTable/ReservationTable";
+import TableContact from "./Components/Dashboard/TableContact/TableContact";
 
-// Simple layout wrapper for pages that need the Navbar
+// Wrapper بسيط للصفحات اللي فيها Navbar
 const PageLayout = ({ children }) => {
   return (
     <div className="app-container">
@@ -21,6 +32,22 @@ const PageLayout = ({ children }) => {
       <main className="main-content">{children}</main>
     </div>
   );
+};
+
+// GuestClickCatcher
+const GuestClickCatcher = ({ children }) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const isGuest = user?.role === "guest";
+
+  const handleClickCapture = (e) => {
+    if (!isGuest) return;
+    e.preventDefault();
+    e.stopPropagation();
+    navigate("/login");
+  };
+
+  return <div onClickCapture={handleClickCapture}>{children}</div>;
 };
 
 function AppContent() {
@@ -44,9 +71,7 @@ function AppContent() {
 
   return (
     <Routes>
-      {/* Login route:
-          - يظهر لغير المسجلين OR للـ guest
-          - يحوَّل فقط لو المستخدم Admin أو Patient (أي دور غير guest) */}
+      {/* Login */}
       <Route
         path="/login"
         element={
@@ -58,10 +83,7 @@ function AppContent() {
         }
       />
 
-      {/* Home:
-          - متاح للـ guest والمستخدمين العاديين
-          - Admin يتحوّل للدashboard
-          - غير المسجلين يتحوّلوا للـ login */}
+      {/* Home */}
       <Route
         path="/"
         element={
@@ -70,7 +92,9 @@ function AppContent() {
               <Navigate to="/dashboard" replace />
             ) : (
               <PageLayout>
-                <Home />
+                <GuestClickCatcher>
+                  <Home />
+                </GuestClickCatcher>
               </PageLayout>
             )
           ) : (
@@ -79,9 +103,7 @@ function AppContent() {
         }
       />
 
-      {/* Services:
-          - ممنوع على الـ guest وعلى الـ admin
-          - مسموح لباقي المستخدمين */}
+      {/* Services */}
       <Route
         path="/services"
         element={
@@ -98,7 +120,6 @@ function AppContent() {
           )
         }
       />
-
       <Route
         path="/services/:doctorId"
         element={
@@ -116,7 +137,7 @@ function AppContent() {
         }
       />
 
-      {/* Contact Us route - not accessible to admin */}
+      {/* Contact */}
       <Route
         path="/contact"
         element={
@@ -134,14 +155,30 @@ function AppContent() {
         }
       />
 
-      {/* Admin dashboard routes */}
+      {/* User Reservation */}
+      <Route
+        path="/reservations"
+        element={
+          user ? (
+            user.role !== "admin" && user.role !== "guest" ? (
+              <PageLayout>
+                <UserReservation />
+              </PageLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          ) : (
+            <Navigate to="/login" replace />
+          )
+        }
+      />
+
+      {/* Dashboard */}
       <Route
         path="/dashboard"
         element={
           user?.role === "admin" ? (
-            <PageLayout>
-              <Dashboard />
-            </PageLayout>
+            <Dashboard />
           ) : (
             <Navigate to="/login" replace />
           )
@@ -150,9 +187,11 @@ function AppContent() {
         <Route index element={<Charts />} />
         <Route path="users" element={<TableUsers />} />
         <Route path="doctors" element={<TableDoctors />} />
+        <Route path="reservations" element={<ReservationTable />} />
+        <Route path="messages" element={<TableContact />} />
       </Route>
 
-      {/* Catch-all */}
+      {/* Any other path */}
       <Route
         path="*"
         element={
@@ -167,12 +206,14 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <ToastProvider>
+        <ReservationProvider>
+          <AppContent />
+        </ReservationProvider>
+      </ToastProvider>
     </BrowserRouter>
   );
 }
-
-export default App;

@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, User, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { useReservations } from '../../context/ReservationContext';
+import { useToast } from '../../context/ToastContext';
 
 const Navbar = () => {
+    const { toasts } = useToast();
+
+
   const { user, logout, updateAvatar, removeAvatar } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const { reservations } = useReservations(); // استخدم الـ Context مباشرة
+  const userReservationsCount = reservations.length;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   const isActive = (path) => location.pathname === path;
   const isGuest = !!user && user.role === 'guest';
@@ -17,44 +26,33 @@ const Navbar = () => {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/services', label: 'Services' },
-    { path: '/contact', label: 'Contact Us' }
+    { path: '/contact', label: 'Contact Us' },
   ];
 
-  if (user?.role === 'admin') {
-    navItems.push({ path: '/dashboard', label: 'Dashboard' });
-  }
+  if (user?.role === 'admin') navItems.push({ path: '/dashboard', label: 'Dashboard' });
 
   const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file');
-      return;
-    }
-
-    if (file.size > 2 * 1024 * 1024) {
-      alert('Image size should be less than 2MB');
-      return;
-    }
+    if (!file.type.startsWith('image/')) return alert('Please upload an image file');
+    if (file.size > 2 * 1024 * 1024) return alert('Image size should be less than 2MB');
 
     const reader = new FileReader();
     reader.onload = async () => {
       const dataUrl = reader.result;
       const result = await updateAvatar(dataUrl);
-      if (!result.success) {
-        alert('Failed to update avatar. Please try again.');
-      }
+      if (!result.success) alert('Failed to update avatar. Please try again.');
     };
     reader.readAsDataURL(file);
     e.target.value = '';
   };
 
   return (
+      <>
     <header className="sticky-top shadow-sm bg-white">
-      <nav className="navbar navbar-expand-md navbar-light bg-white" aria-label="Main navigation">
+      <nav className="navbar navbar-expand-md navbar-light bg-white">
         <div className="container">
-          {/* Brand → لو Guest يروح /login غير كده Home */}
           <Link
             to={isGuest ? '/login' : '/'}
             className="navbar-brand d-flex align-items-center gap-2"
@@ -67,11 +65,8 @@ const Navbar = () => {
           <button
             className="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#mainNavbar"
             aria-controls="mainNavbar"
             aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
-            aria-label="Toggle navigation"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <span className="navbar-toggler-icon"></span>
@@ -81,7 +76,6 @@ const Navbar = () => {
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
               {navItems.map((item) => (
                 <li key={item.path} className="nav-item">
-                  {/* أي لينك (ماعدا Home) يروح login لو Guest */}
                   <Link
                     to={isGuest && item.path !== '/' ? '/login' : item.path}
                     className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
@@ -92,6 +86,7 @@ const Navbar = () => {
                 </li>
               ))}
             </ul>
+
             <div className="d-flex align-items-center gap-3">
               {user ? (
                 user.role === 'guest' ? (
@@ -103,80 +98,90 @@ const Navbar = () => {
                     </Link>
                   </div>
                 ) : (
-                  <div className="d-flex align-items-center gap-2">
+                  <div className="d-flex align-items-center gap-2" ref={dropdownRef}>
+                    {/* Avatar */}
                     <div className="d-flex align-items-center">
-                      <div className="position-relative">
-                        {user.avatar ? (
-                          <div className="position-relative">
-                            <img
-                              src={user.avatar}
-                              alt={user.name}
-                              className="rounded-circle me-2"
-                              style={{ 
-                                width: 32, 
-                                height: 32, 
-                                objectFit: 'cover',
-                                border: '1px solid #dee2e6'
-                              }}
-                            />
-                            <button
-                              onClick={async (e) => {
-                                e.stopPropagation();
-                                const result = await removeAvatar();
-                                if (!result.success) {
-                                  alert(result.message || 'Failed to remove avatar');
-                                }
-                              }}
-                              className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-danger rounded-circle p-0 d-flex align-items-center justify-content-center"
-                              style={{
-                                width: '16px',
-                                height: '16px',
-                                fontSize: '10px',
-                                lineHeight: '1',
-                                border: '1px solid white',
-                              }}
-                              title="Remove avatar"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-2"
-                               style={{ 
-                                 width: 32, 
-                                 height: 32, 
-                                 fontSize: '0.9rem',
-                                 border: '1px solid #dee2e6'
-                               }}>
-                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
-                          </div>
-                        )}
-                      </div>
-                      <span className="text-muted small ms-2 me-3">{user.name}</span>
-                      
-                      <div className="position-relative">
-                        <input
-                          id="avatarUpload"
-                          type="file"
-                          accept="image/*"
-                          className="d-none"
-                          onChange={handleAvatarUpload}
-                        />
-                        <label
-                          htmlFor="avatarUpload"
-                          className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
-                          style={{ 
-                            whiteSpace: 'nowrap',
-                            padding: '0.25rem 0.5rem',
-                            fontSize: '0.8rem'
-                          }}
-                          title={user.avatar ? 'Change avatar' : 'Upload avatar'}
+                      {user.avatar ? (
+                        <div className="position-relative">
+                          <img
+                            src={user.avatar}
+                            alt={user.name}
+                            className="rounded-circle me-2"
+                            style={{ width: 32, height: 32, objectFit: 'cover', border: '1px solid #dee2e6' }}
+                          />
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              const result = await removeAvatar();
+                              if (!result.success) alert(result.message || 'Failed to remove avatar');
+                            }}
+                            aria-label="Remove avatar"
+                            className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-danger p-0 d-flex align-items-center justify-content-center"
+                            style={{ width: '16px', height: '16px', fontSize: '10px', border: '1px solid white' }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ) : (
+                        <div
+                          className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-0"
+                          style={{ width: 32, height: 32, fontSize: '0.9rem', border: '1px solid #dee2e6' }}
                         >
-                          <Camera size={14} />
-                          <span>{user.avatar ? 'Change' : 'Upload'}</span>
-                        </label>
+                          {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Dropdown */}
+                    <div className="nav-item dropdown">
+                      <a
+                        className="nav-link dropdown-toggle ms-0 me-1"
+                        href="#"
+                        role="button"
+                        aria-expanded={isDropdownOpen}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsDropdownOpen(!isDropdownOpen);
+                        }}
+                      >
+                        {user.name}
+                      </a>
+                      <div className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
+                        <Link
+                          className="dropdown-item d-flex justify-content-between align-items-center"
+                          to="/reservations"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          Your Reservation
+                          {userReservationsCount > 0 && (
+                            <span className="badge bg-danger ms-2">{userReservationsCount}</span>
+                          )}
+                        </Link>
+                        <div className="dropdown-divider"></div>
                       </div>
                     </div>
+
+                    {/* Upload Avatar */}
+                    <div className="position-relative">
+                      <input
+                        id="avatarUpload"
+                        type="file"
+                        accept="image/*"
+                        className="d-none"
+                        onChange={handleAvatarUpload}
+                      />
+                      <label
+                        htmlFor="avatarUpload"
+                        className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1"
+                        style={{ whiteSpace: 'nowrap', padding: '0.25rem 0.5rem', fontSize: '0.8rem' }}
+                        title={user.avatar ? 'Change avatar' : 'Upload avatar'}
+                      >
+                        <Camera size={14} />
+                        <span>{user.avatar ? 'Change' : 'Upload'}</span>
+                      </label>
+                    </div>
+
+                    {/* Logout */}
                     <button
                       onClick={async () => {
                         await logout();
@@ -199,6 +204,19 @@ const Navbar = () => {
         </div>
       </nav>
     </header>
+      <div style={{ position: "fixed", top: "70px", right: "20px", zIndex: 1050 }}>
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            className={`alert alert-${toast.type} alert-dismissible fade show`}
+            role="alert"
+            style={{ minWidth: "250px", marginBottom: "10px" }}
+          >
+            {toast.text}
+          </div>
+        ))}
+      </div>
+      </>
   );
 };
 

@@ -3,16 +3,18 @@
     {
       "name": "ITI Team",
       "email": "admin@example.com",
-      "password": "admin123",
+      "password": "Admin@123",
       "role": "admin",
       "id": "58a8"
     },
     {
-      "id": "2fa7",
+      "id": "2566",
       "name": "Omar Wafik",
       "email": "omarwafik168@gmail.com",
-      "password": "omar123",
-      "role": "patient"
+      "phone": "01094887785",
+      "password": "Omar@123",
+      "role": "patient",
+      "avatar": null
     }
   ],
   "doctors": [
@@ -41,7 +43,7 @@
         "Vaccinations",
         "Pet Nutrition Consultation"
       ],
-      "rating": 4.7
+      "rating": 2.5
     },
     {
       "id": "2",
@@ -67,7 +69,7 @@
         "Emergency Pet Care",
         "Post-Operative Care"
       ],
-      "rating": 4.8
+      "rating": 3.5
     },
     {
       "id": "3",
@@ -173,7 +175,7 @@
         "Vaccinations",
         "Minor Surgeries"
       ],
-      "rating": 4.8
+      "rating": 3.2
     },
     {
       "id": "7",
@@ -200,7 +202,7 @@
         "Emergency Trauma Care",
         "Post-Surgery Rehabilitation"
       ],
-      "rating": 4.9
+      "rating": 4
     },
     {
       "id": "8",
@@ -226,7 +228,7 @@
         "Treatment of Skin Infections",
         "Dermatological Consultations"
       ],
-      "rating": 4.6
+      "rating": 3.8
     },
     {
       "id": "9",
@@ -252,7 +254,7 @@
         "Oral Surgery",
         "Preventive Dental Care"
       ],
-      "rating": 4.5
+      "rating": 2.9
     },
     {
       "id": "10",
@@ -330,7 +332,7 @@
         "Critical Care Monitoring",
         "Trauma Treatment"
       ],
-      "rating": 4.9
+      "rating": 4.4
     },
     {
       "id": "13",
@@ -357,7 +359,7 @@
         "Weight Management",
         "Special Diet Plans"
       ],
-      "rating": 4.6
+      "rating": 4.1
     },
     {
       "id": "14",
@@ -383,7 +385,7 @@
         "Pregnancy Care",
         "Reproductive Health Exams"
       ],
-      "rating": 4.7
+      "rating": 3.3
     },
     {
       "id": "15",
@@ -414,42 +416,40 @@
     {
       "id": "16",
       "name": "Dr. Omar Wafik",
-      "email": "omarwafik168@gmail.com",
-      "jobTitle": "Behavioral Medicine",
-      "phone": "01094887785"
-    },
-    {
-      "id": "17",
-      "name": "Dr. Omar Wafik",
-      "email": "omarwafik168@gmail.com",
-      "jobTitle": "Pet",
+      "email": "omar@gmail.com",
+      "jobTitle": "Veterinary Specialist",
       "phone": "01094887785",
-      "createdAt": "2025-08-13"
+      "image": "/images/me.jpg",
+      "specialization": "General Pet Care",
+      "qualifications": "DVM, Diploma in Veterinary Medicine",
+      "experienceYears": 13,
+      "bio": "Experienced in comprehensive pet care including cats, dogs, and small mammals.",
+      "workingHours": "Saturday - Wednesday: 1:00 PM - 7:00 PM",
+      "location": "Cairo, Egypt",
+      "googleMaps": "https://maps.google.com/?q=30.0619,31.2197",
+      "languages": [
+        "Arabic",
+        "English",
+        "German"
+      ],
+      "services": [
+        "Pet Health Checkups",
+        "Vaccinations",
+        "Pet Nutrition Consultation"
+      ],
+      "rating": 4.7,
+      "createdAt": "2025-08-14"
     }
   ],
-  "reservations": [
+  "reservations": [],
+  "ContactUs": [
     {
-      "id": "aae6",
-      "patient": "Omar Zaki",
-      "email": "omarZaki@gmail.com",
-      "phone": "01094887785",
-      "date": "2025-08-06",
-      "time": "19:30",
-      "pet": "Dog",
-      "doctorId": "1",
-      "doctorName": "Dr. kamal Hassan"
-    },
-    {
-      "id": "1c9f",
-      "patient": "Omar Wafik",
+      "id": "1cf5",
+      "name": "Omar Wafik",
       "email": "omarwafik168@gmail.com",
       "phone": "01094887785",
-      "date": "2025-07-31",
-      "time": "22:29",
-      "pet": "Dog",
-      "doctorId": "1",
-      "doctorName": "Dr. kamal Hassan"
+      "message": "Hello From Omar sjabfy8egfcsdvcidvsdvubsvbdsyvbis",
+      "createdAt": "2025-08-14T12:11:22.047Z"
     }
-  ],
-  "ContactUS": []
+  ]
 }

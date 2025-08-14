@@ -2,14 +2,15 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Footer from "../Footer/index";
+import dogImage from "../../assets/img/Dig_Defence.jpeg";
 import dog2Image from "../../assets/img/dog.png";
-import { Stethoscope, Syringe, Hospital, Scissors, Users, Heart } from "lucide-react";
+import { Users, Heart, Stethoscope, Syringe, Hospital, Scissors } from "lucide-react";
+import Footer from "../Footer";
 
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const isGuest = !!user && user.role === "guest";
+  const isGuest = !user || user.email === "guest@example.com";
 
   const handleGuestClick = (e) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ const Home = () => {
   };
 
   return (
-    <div className="container" style={{ position: "relative" }}>
+    <div style={{ position: "relative" }}>
       {isGuest && (
         <div
           style={{
@@ -35,98 +36,65 @@ const Home = () => {
       )}
 
       {/* Hero Section */}
-      <section className="hero-section py-5">
-        <div className="row align-items-center">
-          <div className="col-lg-6">
-            <h1 className="display-4 fw-bold mb-4">
-              Welcome to PawCare Clinic
-              <span className="d-block h4 text-muted mt-2">Hello there!</span>
-            </h1>
-            <p className="lead mb-4">
-              Your trusted partner in pet healthcare. We provide comprehensive veterinary
-              services to keep your furry friends happy and healthy.
-            </p>
-            <div className="d-flex gap-3">
-              <Link to={isGuest ? "/login" : "/appointments"} className="btn btn-primary">
-                Book an Appointment
-              </Link>
-              <Link to={isGuest ? "/login" : "/services"} className="btn btn-outline">
-                Our Services
-              </Link>
-            </div>
+      <section className="py-5 bg-primary text-white text-center">
+        <div className="container">
+          <h1 className="display-4 fw-bold">
+            Caring for Your <span className="text-warning">Beloved Pets</span>
+          </h1>
+          <p className="lead mt-3">
+            Experience compassionate veterinary care with our team of expert veterinarians. 
+            We provide comprehensive health services to keep your pets healthy and happy.
+          </p>
+          <div className="mt-4" >
+            {isGuest?null:<a href="#about" className="btn btn-warning me-3">
+              About Us
+            </a>}
+            
+            
+            <Link to={isGuest ? "/login" : "/services"} className="btn btn-outline-light">
+              View Services
+            </Link>
           </div>
-          <div className="col-lg-6 d-none d-lg-block">
-            <img
-              src="/pet-hero.jpg"
-              alt="Happy pets"
-              className="img-fluid rounded shadow"
-              style={{ maxHeight: "400px" }}
-              onClick={isGuest ? handleGuestClick : undefined}
-            />
+          <img
+            src={dogImage}
+            alt="Dog" 
+            className="img-fluid rounded shadow mt-4"
+            style={{ maxHeight: "400px" }}
+            onClick={isGuest ? handleGuestClick : undefined}
+          />
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-5 bg-light">
+        <div className="container text-center">
+          <div className="row g-4">
+            <div className="col-6 col-md-3">
+              <h2 className="fw-bold">5000+</h2>
+              <p>Happy Pets Treated</p>
+            </div>
+            <div className="col-6 col-md-3">
+              <h2 className="fw-bold">10+</h2>
+              <p>Years of Experience</p>
+            </div>
+            <div className="col-6 col-md-3">
+              <h2 className="fw-bold">15</h2>
+              <p>Expert Veterinarians</p>
+            </div>
+            <div className="col-6 col-md-3">
+              <h2 className="fw-bold">24/7</h2>
+              <p>Emergency Support</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="services-section py-5 my-5">
-        <h2 className="text-center mb-5">Our Services</h2>
-        <div className="row g-4">
-          {[
-            {
-              title: "Wellness Exams",
-              description: "Regular check-ups to ensure your pet is in top condition.",
-            },
-            {
-              title: "Vaccinations",
-              description: "Keep your pet protected with our vaccination programs.",
-            },
-            {
-              title: "Dental Care",
-              description: "Professional dental cleaning and oral health services.",
-            },
-            {
-              title: "Surgery",
-              description: "Expert surgical procedures performed by our skilled veterinarians.",
-            },
-            {
-              title: "Emergency Care",
-              description: "24/7 emergency services for urgent pet healthcare needs.",
-            },
-            {
-              title: "Grooming",
-              description: "Professional grooming services to keep your pet looking their best.",
-            },
-          ].map((service, index) => (
-            <div key={index} className="col-md-6 col-lg-4">
-              <div
-                className="card h-100 border-0 shadow-sm"
-                onClick={isGuest ? handleGuestClick : undefined}
-                style={{ cursor: isGuest ? "pointer" : "default" }}
-              >
-                <div className="card-body">
-                  <h5 className="card-title">{service.title}</h5>
-                  <p className="card-text text-muted">{service.description}</p>
-                  <div className="mt-2">
-                    <Link
-                      to={isGuest ? "/login" : "/services"}
-                      className="btn btn-sm btn-primary"
-                    >
-                      Learn More
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Veterinary Services Icons */}
+      {/* Our Veterinary Services */}
       <section className="py-5 bg-light">
         <div className="container">
           <h2 className="fw-bold text-center mb-4">Our Veterinary Services</h2>
           <p className="text-center text-muted mb-5">
-            We offer a complete range of veterinary services to keep your pets healthy,
+            We offer a complete range of veterinary services to keep your pets healthy, 
             from routine check-ups to advanced medical treatments.
           </p>
           <div className="row g-4">
@@ -170,8 +138,9 @@ const Home = () => {
         </div>
       </section>
 
+      
       {/* Why Choose Us */}
-      <section className="py-5">
+      <section className="py-5" id="about">
         <div className="container">
           <h2 className="fw-bold text-center mb-5">Why Choose PawCare Clinic?</h2>
           <div className="row g-4">
@@ -198,12 +167,14 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="text-center mt-4">
-            <img
+          {/* Clinic image */}
+          <div className="text-center mt-5">
+            <img 
               src={dog2Image}
-              alt="Clinic overview"
-              className="img-fluid rounded shadow"
+              alt="Clinic overview" 
+              className="img-fluid rounded shadow" 
               style={{ maxHeight: "300px" }}
+              onClick={isGuest ? handleGuestClick : undefined}
             />
           </div>
         </div>
@@ -213,14 +184,26 @@ const Home = () => {
       <section className="py-5 bg-primary text-white text-center">
         <div className="container">
           <h3 className="fw-bold">Ready to Give Your Pet the Best Care?</h3>
-          <p>
+          <p className="mb-4">
             Contact us today to schedule an appointment or learn more about our services.
-            Your pet’s health is our priority.
+            Your pet's health is our priority.
           </p>
           <div className="mt-3">
-            <Link to="/appointments" className="btn btn-warning me-3">
-              Schedule Appointment
-            </Link>
+            <Link
+  to={isGuest ? "/login" : "/contact"}
+  className="btn btn-warning me-3"
+  onClick={() => {
+    if (!isGuest) {
+      // scroll للصفحة كلها للأعلى بعد التنقل
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 50); // بسيط delay بعد التنقل
+    }
+  }}
+>
+  Get in Touch
+</Link>
+
             <a href="tel:+15551234567" className="btn btn-outline-light">
               Call Now
             </a>
