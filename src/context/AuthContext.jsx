@@ -21,8 +21,7 @@ export const AuthProvider = ({ children }) => {
     else localStorage.removeItem("auth_user");
   }, []);
 
-  // Login
-// Login
+
 const login = async (email, password) => {
   setIsLoading(true);
   try {
