@@ -14,10 +14,13 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // هنا السماح للـ frontend
-    credentials: true,
+    origin: [
+      "https://clinic-management-system-d9b4.vercel.app",
+      "http://localhost:3000",
+    ],
   })
 );
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // app.use(express.json());
@@ -31,7 +34,6 @@ app.use("/api/doctors", doctorsRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/reservations", reservationsRoutes);
 app.use("/api/messages", messagesRoutes);
-
 
 const PORT = process.env.PORT || 5000;
 
