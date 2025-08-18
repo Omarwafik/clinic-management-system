@@ -35,7 +35,7 @@ function ReservationForm({ doctorId, doctorName }) {
     };
 
     try {
-      const res = await fetch("http://localhost:4004/reservations", {
+      const res = await fetch("http://localhost:5000/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reservationData),
@@ -43,15 +43,13 @@ function ReservationForm({ doctorId, doctorName }) {
 
       const result = await res.json();
 
-      if (result.id) {
-        // حدث الـ context مباشرة
-        setReservations([...reservations, result]);
-
-        setSuccessMsg("✅ Reservation successful!");
-        setForm({ date: "", time: "", pet: "" });
-      } else {
-        setErrorMsg(result.message || "❌ Server did not confirm success.");
-      }
+      if (result._id) {   // بدل id بخليها _id
+  setReservations([...reservations, result]);
+  setSuccessMsg("✅ Reservation successful!");
+  setForm({ date: "", time: "", pet: "" });
+} else {
+  setErrorMsg(result.message || "❌ Server did not confirm success.");
+}
     } catch (err) {
       console.error("Error submitting reservation:", err);
       setErrorMsg("Error submitting reservation. Please try again.");

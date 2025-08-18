@@ -9,7 +9,7 @@ export default function ServiceDetails() {
   const [doctor, setDoctor] = useState(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:4004/doctors/${doctorId}`)
+      .get(`http://localhost:5000/api/doctors/${doctorId}`)
       .then((res) => setDoctor(res.data))
       .catch((err) => console.error(err));
   }, [doctorId]);
@@ -23,7 +23,17 @@ export default function ServiceDetails() {
       <div className={styles.flexRow}>
         <div className={styles.leftColumn}>
           <div className={styles.card}>
-            <img src={doctor.image} alt={doctor.name} className={styles.img} />
+            <img
+src={
+    doctor.image
+      ? doctor.image.startsWith("http")
+        ? doctor.image
+        : `http://localhost:5000${doctor.image}`
+      : "/path/to/default-image.jpg"
+  }  alt={doctor.name}
+  className={styles.img}
+/>
+
             <div className={styles.details}>
               <h1 className={styles.serviceTitle}>
                 {doctor.services[0] || "No service listed"}

@@ -9,7 +9,7 @@ export default function TableContact() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:4004/ContactUs')
+    axios.get('http://localhost:5000/api/messages')
       .then(res => setMessages(res.data))
       .catch(err => console.log(err));
   }, []);

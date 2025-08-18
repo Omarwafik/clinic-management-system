@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("http://localhost:4004/users");
+    const { data } = await axios.get("http://localhost:5000/api/users");
     const found = data.find(
       u => u.email.toLowerCase() === email.toLowerCase()
     );
@@ -35,7 +35,6 @@ const login = async (email, password) => {
       return { success: false, errors: { email: "Email does not exist" } };
     }
 
-    // enforce same password rules as register
     if (password.length < 8) {
       return { success: false, errors: { password: "Password must be at least 8 characters" } };
     }
@@ -45,16 +44,20 @@ const login = async (email, password) => {
     }
 
     const userData = {
-      id: found.id,
+      id: found._id || found.id, // backend بيرجع _id لو mongo
       name: found.name,
       email: found.email,
       phone: found.phone,
       role: found.role || "patient",
       avatar: found.avatar || null,
     };
+    console.log("Found user:", found);
+
 
     persist(userData);
-    return { success: true, role: userData.role };
+
+    // رجّع اليوزر كله بدل بس role
+    return { success: true, user: userData };
   } catch (error) {
     console.error("Login failed:", error);
     return { success: false, message: "Login failed" };
@@ -63,27 +66,38 @@ const login = async (email, password) => {
   }
 };
 
-  // Register
-  const register = async (name, email, phone, password) => {
-    setIsLoading(true);
-    if (!phoneRegex.test(phone)) return { success: false, message: "Invalid phone number format" };
-
-    try {
-      const { data } = await axios.get("http://localhost:4004/users");
-      if (data.find(u => u.email === email)) return { success: false, message: "Email already registered" };
-
-      const newUser = { name, email, phone, password, role: "patient", avatar: null };
-      const created = await axios.post("http://localhost:4004/users", newUser);
-
-      persist(created.data);
-      return { success: true, message: "Registration successful" };
-    } catch (error) {
-      console.error("Registration failed:", error);
-      return { success: false, message: "Registration failed" };
-    } finally {
-      setIsLoading(false);
-    }
-  };
+// Register
+const register = async (name, email, phone, password) => {
+  setIsLoading(true);
+  if (!phoneRegex.test(phone)) return { success: false, message: "Invalid phone number format" };
+  
+  try {
+    const { data } = await axios.get("http://localhost:5000/api/users");
+    if (data.find(u => u.email === email)) return { success: false, message: "Email already registered" };
+    
+    const newUser = { name, email, phone, password, role: "patient", avatar: null };
+    const { data: created } = await axios.post("http://localhost:5000/api/users", newUser);
+    
+    const userData = {
+      id: created._id || created.id, 
+      name: created.name,
+      email: created.email,
+      phone: created.phone,
+      role: created.role || "patient",
+      avatar: created.avatar || null,
+    };
+    
+    console.log("Created user:", created);
+    persist(userData);
+    
+    return { success: true, user: userData };
+  } catch (error) {
+    console.error("Registration failed:", error);
+    return { success: false, message: "Registration failed" };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   // Login as Guest
   const loginAsGuest = async () => {
@@ -102,36 +116,36 @@ const login = async (email, password) => {
   const logout = () => persist(null);
 
   // Update avatar
-  const updateAvatar = async (dataUrl) => {
-    try {
-      if (!user) throw new Error("No user logged in");
+  const updateAvatar = (avatarUrl) => {
+  if (!user) return { success: false, message: "No user logged in" };
 
-      const updatedUser = { ...user, avatar: dataUrl };
-      await axios.put(`http://localhost:4004/users/${user.id}`, updatedUser);
-
-      persist(updatedUser);
-      return { success: true };
-    } catch (error) {
-      console.error("Failed to update avatar:", error);
-      return { success: false, message: error.message };
-    }
-  };
+  const updatedUser = { ...user, avatar: avatarUrl };
+  persist(updatedUser);
+  return { success: true };
+};
 
   // Remove avatar
-  const removeAvatar = async () => {
-    try {
-      if (!user) throw new Error("No user logged in");
+// AuthContext.jsx
+const removeAvatar = async (userId) => {
+  try {
+    if (!userId) throw new Error("No user logged in");
+   
+    console.log("Requesting remove-avatar for:", userId); // للتأكد
 
-      const updatedUser = { ...user, avatar: null };
-      await axios.put(`http://localhost:4004/users/${user.id}`, updatedUser);
+    const response = await axios.post(
+      `http://localhost:5000/api/users/remove-avatar/${userId}`
+    );
+    if (user) {
+      const updatedUser = { ...user, avatar: null };
+      persist(updatedUser);
+    }
+    return { success: true, user: response.data.user };
+  } catch (error) {
+    console.error("Failed to remove avatar:", error.response?.data || error.message);
+    return { success: false, message: error.message };
+  }
+};
 
-      persist(updatedUser);
-      return { success: true };
-    } catch (error) {
-      console.error("Failed to remove avatar:", error);
-      return { success: false, message: error.message };
-    }
-  };
 
   return (
     <AuthContext.Provider

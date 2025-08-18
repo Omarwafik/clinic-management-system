@@ -42,7 +42,7 @@ export default function Charts() {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:4004/doctors')
+    axios.get('http://localhost:5000/api/doctors')
       .then(res => {
         const data = res.data;
 

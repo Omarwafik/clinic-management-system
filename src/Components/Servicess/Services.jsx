@@ -9,15 +9,13 @@ export default function Services() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4004/doctors")
+      .get("http://localhost:5000/api/doctors")
       .then((res) => setDoc(res.data))
       .catch((err) => console.log(err));
   }, []);
 
   const jobTitles = useMemo(() => {
-    const titles = Array.from(new Set(doc.map((d) => d.jobTitle))).filter(
-      Boolean
-    );
+    const titles = Array.from(new Set(doc.map((d) => d.jobTitle))).filter(Boolean);
     return ["All", ...titles];
   }, [doc]);
 
@@ -39,9 +37,7 @@ export default function Services() {
         {jobTitles.map((title) => (
           <button
             key={title}
-            className={`${styles.tabButton} ${
-              activeFilter === title ? styles.activeTab : ""
-            }`}
+            className={`${styles.tabButton} ${activeFilter === title ? styles.activeTab : ""}`}
             onClick={() => setActiveFilter(title)}
             type="button"
           >
@@ -51,32 +47,36 @@ export default function Services() {
       </div>
 
       <div className="row g-4">
-        {filteredDocs.map((doctor) => (
-          <div className="col-12 col-md-6" key={doctor.id}>
-            <div className={`d-flex ${styles.card}`}>
-              <img
-                src={doctor.image}
-                alt={doctor.name}
-                className={styles.img}
-              />
-              <div className={`${styles.details} flex-grow-1`}>
-                <h2 className={styles.serviceTitle}>
-                  {doctor.services?.[0] || "No services listed"}
-                </h2>
-                <p className={styles.doctorName}>{doctor.name}</p>
-                <p className={styles.meta}>{doctor.jobTitle}</p>
-                <p className={styles.meta}>{doctor.location}</p>
-                <p className={styles.languages}>
-                  Languages: {doctor.languages?.join(", ")}
-                </p>
-                <p className={styles.rating}>Rating: {doctor.rating} ⭐</p>
-                <Link to={`/services/${doctor.id}`} className={styles.btn}>
-                  View Details
-                </Link>
+        {filteredDocs.map((doctor) => {
+          const imageUrl = doctor.image.startsWith("http")
+  ? doctor.image
+  : `http://localhost:5000${doctor.image}`;
+
+const services = Array.isArray(doctor.services) ? doctor.services : ["No services listed"];
+const languages = Array.isArray(doctor.languages) ? doctor.languages : ["No languages"];
+          return (
+            <div className="col-12 col-md-6" key={doctor._id}>
+              <div className={`d-flex ${styles.card}`}>
+                <img src={imageUrl} alt={doctor.name} className={styles.img} />
+                <div className={`${styles.details} flex-grow-1`}>
+                  <h2 className={styles.serviceTitle}>
+                    {services[0] || "No services listed"}
+                  </h2>
+                  <p className={styles.doctorName}>{doctor.name}</p>
+                  <p className={styles.meta}>{doctor.jobTitle}</p>
+                  <p className={styles.meta}>{doctor.location || "No location"}</p>
+                  <p className={styles.languages}>
+                    Languages: {languages.join(", ") || "No languages"}
+                  </p>
+                  <p className={styles.rating}>Rating: {doctor.rating || "N/A"} ⭐</p>
+                  <Link to={`/services/${doctor._id}`} className={styles.btn}>
+                    View Details
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
