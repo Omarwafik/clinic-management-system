@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { Eye, EyeOff, LogIn, UserPlus, PawPrint } from 'lucide-react';
+import { Eye, EyeOff,  PawPrint } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 
