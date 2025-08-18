@@ -25,10 +25,11 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
-    const found = data.find(
-      u => u.email.toLowerCase() === email.toLowerCase()
-    );
+    const { data } = await axios.get("...");
+const found = data.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+    console.log("Received data:", data);
+
 
     if (!found) {
       return { success: false, errors: { email: "Email does not exist" } };
