@@ -9,7 +9,7 @@ export default function TableUsers() {
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://clinic-management-system-d9b4.vercel.app/api/users');
       // أضف رقم متسلسل لكل مستخدم
       const numberedUsers = res.data.map((user, index) => ({
         ...user,

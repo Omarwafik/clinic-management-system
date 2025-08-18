@@ -71,7 +71,7 @@ export default function CreateDoctorModal({ show, onClose, onDoctorAdded }) {
       }
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/doctors",
+        "https://clinic-management-system-d9b4.vercel.app/api/doctors",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

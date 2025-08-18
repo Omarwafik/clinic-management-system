@@ -9,7 +9,7 @@ export default function Services() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/doctors")
+      .get("https://clinic-management-system-d9b4.vercel.app/api/doctors")
       .then((res) => setDoc(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -50,7 +50,7 @@ export default function Services() {
         {filteredDocs.map((doctor) => {
           const imageUrl = doctor.image.startsWith("http")
   ? doctor.image
-  : `http://localhost:5000${doctor.image}`;
+  : `https://clinic-management-system-d9b4.vercel.app${doctor.image}`;
 
 const services = Array.isArray(doctor.services) ? doctor.services : ["No services listed"];
 const languages = Array.isArray(doctor.languages) ? doctor.languages : ["No languages"];

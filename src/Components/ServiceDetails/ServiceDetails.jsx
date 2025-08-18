@@ -9,7 +9,7 @@ export default function ServiceDetails() {
   const [doctor, setDoctor] = useState(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/doctors/${doctorId}`)
+      .get(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${doctorId}`)
       .then((res) => setDoctor(res.data))
       .catch((err) => console.error(err));
   }, [doctorId]);
@@ -28,7 +28,7 @@ src={
     doctor.image
       ? doctor.image.startsWith("http")
         ? doctor.image
-        : `http://localhost:5000${doctor.image}`
+        : `https://clinic-management-system-d9b4.vercel.app${doctor.image}`
       : "/path/to/default-image.jpg"
   }  alt={doctor.name}
   className={styles.img}

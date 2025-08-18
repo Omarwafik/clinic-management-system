@@ -9,7 +9,7 @@ export default function TableContact() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/messages')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/messages')
       .then(res => setMessages(res.data))
       .catch(err => console.log(err));
   }, []);

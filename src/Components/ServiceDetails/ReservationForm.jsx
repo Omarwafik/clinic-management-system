@@ -35,7 +35,7 @@ function ReservationForm({ doctorId, doctorName }) {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/reservations", {
+      const res = await fetch("https://clinic-management-system-d9b4.vercel.app/api/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reservationData),

@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("http://localhost:5000/api/users");
+    const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
     const found = data.find(
       u => u.email.toLowerCase() === email.toLowerCase()
     );
@@ -71,11 +71,11 @@ const register = async (name, email, phone, password) => {
   if (!phoneRegex.test(phone)) return { success: false, message: "Invalid phone number format" };
   
   try {
-    const { data } = await axios.get("http://localhost:5000/api/users");
+    const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
     if (data.find(u => u.email === email)) return { success: false, message: "Email already registered" };
     
     const newUser = { name, email, phone, password, role: "patient", avatar: null };
-    const { data: created } = await axios.post("http://localhost:5000/api/users", newUser);
+    const { data: created } = await axios.post("https://clinic-management-system-d9b4.vercel.app/api/users", newUser);
     
     const userData = {
       id: created._id || created.id, 
@@ -132,7 +132,7 @@ const removeAvatar = async (userId) => {
     console.log("Requesting remove-avatar for:", userId); // للتأكد
 
     const response = await axios.post(
-      `http://localhost:5000/api/users/remove-avatar/${userId}`
+      `https://clinic-management-system-d9b4.vercel.app/api/users/remove-avatar/${userId}`
     );
     if (user) {
       const updatedUser = { ...user, avatar: null };

@@ -42,7 +42,7 @@ export default function Charts() {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/doctors')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/doctors')
       .then(res => {
         const data = res.data;
 

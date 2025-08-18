@@ -26,7 +26,7 @@ export default function EditModal({ show, onClose, onDoctorEdit, doctor }) {
   const handleEdit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`http://localhost:5000/api/doctors/${Values._id}`, Values);
+      const { data } = await axios.put(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${Values._id}`, Values);
       onDoctorEdit(data); // استخدم response من backend
       onClose();
     } catch (err) {

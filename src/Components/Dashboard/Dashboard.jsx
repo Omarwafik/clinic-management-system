@@ -20,16 +20,16 @@ export default function Dashboard() {
   const [Doctors, setDoctors] = useState([]);
   const [Messages, setMessages] = useState([]);
   useEffect(()=>{
-    axios.get('http://localhost:5000/api/reservations')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/reservations')
     .then(res => setReservations(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:5000/api/users')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/users')
     .then( res => setUsers(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:5000/api/doctors')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/doctors')
     .then( res => setDoctors(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:5000/api/messages')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/messages')
     .then( res => setMessages(res.data))
     .catch(err => console.log(err))
   } , [])

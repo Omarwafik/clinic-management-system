@@ -49,7 +49,7 @@ const Navbar = () => {
 
     const userId = user.id || user._id;
 const response = await axios.post(
-  `http://localhost:5000/api/users/upload-avatar/${userId}`,
+  `https://clinic-management-system-d9b4.vercel.app/api/users/upload-avatar/${userId}`,
   formData,
   { headers: { "Content-Type": "multipart/form-data" } }
 );

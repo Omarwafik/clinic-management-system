@@ -13,7 +13,7 @@ export default function TableDoctors() {
 
   const fetchDoctors = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/doctors');
+      const res = await axios.get('https://clinic-management-system-d9b4.vercel.app/api/doctors');
       const numberedDoctors = res.data.map((doc, index) => ({
         ...doc,
         number: index + 1,
@@ -55,7 +55,7 @@ export default function TableDoctors() {
     if (!window.confirm('Do You Want to Delete?')) return;
 
     axios
-      .delete(`http://localhost:5000/api/doctors/${row._id}`)
+      .delete(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${row._id}`)
       .then(() => {
         setDoctors((prev) => prev.filter((doc) => doc._id !== row._id));
         setFilteredDoctors((prev) => prev.filter((doc) => doc._id !== row._id));

@@ -31,7 +31,7 @@ export default function Contact() {
     };
 
     try {
-      await axios.post("http://localhost:5000/api/messages", contactEntry);
+      await axios.post("https://clinic-management-system-d9b4.vercel.app/api/messages", contactEntry);
 
       showToast("Message sent successfully!", "success");
 

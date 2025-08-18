@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component'
 export default function ReservationTable() {
   const [Reserve , setReserve] =useState([])
   useEffect(()=>{
-    axios.get('http://localhost:5000/api/reservations')
+    axios.get('https://clinic-management-system-d9b4.vercel.app/api/reservations')
     .then(res => setReserve(res.data))
     .catch(err => console.log(err))
   },[])
