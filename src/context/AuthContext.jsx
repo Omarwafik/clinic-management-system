@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("...");
+    const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
     // console.log("Received data:", data);
 const found = data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
