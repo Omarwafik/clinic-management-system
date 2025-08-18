@@ -26,8 +26,8 @@ const login = async (email, password) => {
   setIsLoading(true);
   try {
     const { data } = await axios.get("...");
-    console.log("Received data:", data);
-const found = data.find(u => u.email.toLowerCase() === email.toLowerCase());
+    // console.log("Received data:", data);
+const found = data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
 
 
