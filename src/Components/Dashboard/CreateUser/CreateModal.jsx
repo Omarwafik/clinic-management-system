@@ -70,11 +70,10 @@ export default function CreateDoctorModal({ show, onClose, onDoctorAdded }) {
         formData.append("image", values.imageFile);
       }
 
-      const { data } = await axios.post(
-        "https://clinic-management-system-d9b4.vercel.app/api/doctors",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const { data } = await axios.get("/api/users");
+const users = Array.isArray(data) ? data : data.users || []; 
+const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
 
       onDoctorAdded(data);
 
