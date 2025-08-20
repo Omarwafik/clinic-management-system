@@ -5,20 +5,20 @@ import { useAuth } from '../../context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useReservations } from '../../context/ReservationContext';
 import { useToast } from '../../context/ToastContext';
+import axios from 'axios';
 
 const Navbar = () => {
-    const { toasts } = useToast();
-
-
+  const { toasts } = useToast();
   const { user, logout, updateAvatar, removeAvatar } = useAuth();
+  const { reservations } = useReservations(); 
   const location = useLocation();
   const navigate = useNavigate();
-  const { reservations } = useReservations(); // استخدم الـ Context مباشرة
-  const userReservationsCount = reservations.length;
 
+  const userReservationsCount = reservations.length;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
 
   const isActive = (path) => location.pathname === path;
   const isGuest = !!user && user.role === 'guest';
@@ -32,23 +32,42 @@ const Navbar = () => {
   if (user?.role === 'admin') navItems.push({ path: '/dashboard', label: 'Dashboard' });
 
   const handleAvatarUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    if (!file.type.startsWith('image/')) return alert('Please upload an image file');
-    if (file.size > 2 * 1024 * 1024) return alert('Image size should be less than 2MB');
+  if (!user || (!user.id && !user._id)) {
+  console.error("No user logged in or user ID missing");
+  return;
+}
 
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const dataUrl = reader.result;
-      const result = await updateAvatar(dataUrl);
-      if (!result.success) alert('Failed to update avatar. Please try again.');
-    };
-    reader.readAsDataURL(file);
-    e.target.value = '';
-  };
 
-  return (
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  try {
+    setUploading(true);
+
+    const userId = user.id || user._id;
+const response = await axios.post(
+  `https://clinic-management-system-d9b4.vercel.app/api/users/upload-avatar/${userId}`,
+  formData,
+  { headers: { "Content-Type": "multipart/form-data" } }
+);
+
+
+    console.log("Upload successful:", response.data);
+
+    if (response.data.user?.avatar) {
+      updateAvatar(response.data.user.avatar); // بس حدث الـ context
+    }
+  } catch (error) {
+    console.error("Upload error:", error.response || error.message);
+  } finally {
+    setUploading(false);
+  }
+};
+
+return (
       <>
     <header className="sticky-top shadow-sm bg-white">
       <nav className="navbar navbar-expand-md navbar-light bg-white">
@@ -112,8 +131,8 @@ const Navbar = () => {
                           <button
                             onClick={async (e) => {
                               e.stopPropagation();
-                              const result = await removeAvatar();
-                              if (!result.success) alert(result.message || 'Failed to remove avatar');
+                              const result = await removeAvatar(user.id || user._id);
+                                if (!result.success) alert(result.message || 'Failed to remove avatar');
                             }}
                             aria-label="Remove avatar"
                             className="position-absolute top-0 start-0 translate-middle btn btn-sm btn-danger p-0 d-flex align-items-center justify-content-center"

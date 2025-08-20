@@ -21,8 +21,7 @@ export const AuthProvider = ({ children }) => {
     else localStorage.removeItem("auth_user");
   }, []);
 
-  // Login
-// Login
+
 const login = async (email, password) => {
   setIsLoading(true);
   try {
@@ -35,7 +34,6 @@ const login = async (email, password) => {
       return { success: false, errors: { email: "Email does not exist" } };
     }
 
-    // enforce same password rules as register
     if (password.length < 8) {
       return { success: false, errors: { password: "Password must be at least 8 characters" } };
     }
@@ -45,16 +43,20 @@ const login = async (email, password) => {
     }
 
     const userData = {
-      id: found.id,
+      id: found._id || found.id, // backend بيرجع _id لو mongo
       name: found.name,
       email: found.email,
       phone: found.phone,
       role: found.role || "patient",
       avatar: found.avatar || null,
     };
+    console.log("Found user:", found);
+
 
     persist(userData);
-    return { success: true, role: userData.role };
+
+    // رجّع اليوزر كله بدل بس role
+    return { success: true, user: userData };
   } catch (error) {
     console.error("Login failed:", error);
     return { success: false, message: "Login failed" };
@@ -102,9 +104,9 @@ const login = async (email, password) => {
   const logout = () => persist(null);
 
   // Update avatar
-  const updateAvatar = async (dataUrl) => {
+  const updateAvatar = async (avatarUrl) => {
     try {
-      if (!user) throw new Error("No user logged in");
+      if (!user) return { success: false, message: "No user logged in" };
 
       const updatedUser = { ...user, avatar: dataUrl };
       await axios.put(`https://clinic-backend-production-9c79.up.railway.app/users/${user.id}`, updatedUser);

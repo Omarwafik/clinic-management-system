@@ -24,6 +24,7 @@ export default function ServiceDetails() {
         <div className={styles.leftColumn}>
           <div className={styles.card}>
             <img src={doctor.image} alt={doctor.name} className={styles.img} />
+
             <div className={styles.details}>
               <h1 className={styles.serviceTitle}>
                 {doctor.services[0] || "No service listed"}

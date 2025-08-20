@@ -12,45 +12,34 @@ export default function TableDoctors() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   const handleDoctorAdded = (newDoctor) => {
-    setDoctors((prev) => [...prev, newDoctor]);
-    setFilteredDoctors((prev) => [...prev, newDoctor]); // تحديث القائمة المعروضة فوراً
+    const docWithNumber = { ...newDoctor, number: doctors.length + 1 };
+    setDoctors((prev) => [...prev, docWithNumber]);
+    setFilteredDoctors((prev) => [...prev, docWithNumber]);
   };
 
+  // Edit doctor
   const handleDoctorEdited = (updatedDoctor) => {
     setDoctors((prev) =>
-      prev.map((doc) => (doc.id === updatedDoctor.id ? updatedDoctor : doc))
+      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
     );
     setFilteredDoctors((prev) =>
-      prev.map((doc) => (doc.id === updatedDoctor.id ? updatedDoctor : doc))
+      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
     );
   };
 
+
   const columns = [
-    { name: 'ID', selector: (row) => row.id, sortable: true, width: '60px' },
-    { name: 'Name', selector: (row) => row.name, sortable: true ,    minWidth: 'fit-content',
-},
-    { name: 'Email', selector: (row) => row.email,    minWidth: 'fit-content',
- },
-    { name: 'Job Title', selector: (row) => row.jobTitle ,    minWidth: 'fit-content',
-},
-    { name: 'Phone', selector: (row) => row.phone,    minWidth: 'fit-content',
- },
+    { name: 'ID', selector: (row) => row.number, sortable: true, width: '60px' },
+    { name: 'Name', selector: (row) => row.name, sortable: true, minWidth: 'fit-content' },
+    { name: 'Email', selector: (row) => row.email, minWidth: 'fit-content' },
+    { name: 'Job Title', selector: (row) => row.jobTitle, minWidth: 'fit-content' },
+    { name: 'Phone', selector: (row) => row.phone, minWidth: 'fit-content' },
     {
       name: 'Actions',
       cell: (row) => (
         <>
-          <button
-            className="btn btn-sm btn-primary me-2"
-            onClick={() => handleOpenEdit(row)}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-sm btn-danger"
-            onClick={() => handleDelete(row)}
-          >
-            Delete
-          </button>
+          <button className="btn btn-sm btn-primary me-2" onClick={() => handleOpenEdit(row)}>Edit</button>
+          <button className="btn btn-sm btn-danger" onClick={() => handleDelete(row)}>Delete</button>
         </>
       ),
       ignoreRowClick: true,
@@ -125,28 +114,15 @@ export default function TableDoctors() {
               className="p-2 border border-none rounded"
               onChange={handleSearch}
             />
-            <button
-              className="btn btn-sm px-4 py-2 w-50 w-sm-100 btn-success"
-              onClick={() => setAddModal(true)}
-            >
+            <button className="btn btn-sm px-4 py-2 w-50 w-sm-100 btn-success" onClick={() => setAddModal(true)}>
               Add <span>+</span>
             </button>
           </div>
         }
       />
 
-      <CreateModal
-        show={AddModal}
-        onClose={() => setAddModal(false)}
-        onDoctorAdded={handleDoctorAdded}
-      />
-
-      <EditModal
-        show={ShowEditModal}
-        onClose={handleCloseEdit}
-        doctor={selectedDoctor}
-        onDoctorEdit={handleDoctorEdited}
-      />
+      <CreateModal show={AddModal} onClose={() => setAddModal(false)} onDoctorAdded={handleDoctorAdded} />
+      <EditModal show={ShowEditModal} onClose={handleCloseEdit} doctor={selectedDoctor} onDoctorEdit={handleDoctorEdited} />
     </>
   );
 }

@@ -15,9 +15,7 @@ export default function Services() {
   }, []);
 
   const jobTitles = useMemo(() => {
-    const titles = Array.from(new Set(doc.map((d) => d.jobTitle))).filter(
-      Boolean
-    );
+    const titles = Array.from(new Set(doc.map((d) => d.jobTitle))).filter(Boolean);
     return ["All", ...titles];
   }, [doc]);
 
@@ -39,9 +37,7 @@ export default function Services() {
         {jobTitles.map((title) => (
           <button
             key={title}
-            className={`${styles.tabButton} ${
-              activeFilter === title ? styles.activeTab : ""
-            }`}
+            className={`${styles.tabButton} ${activeFilter === title ? styles.activeTab : ""}`}
             onClick={() => setActiveFilter(title)}
             type="button"
           >

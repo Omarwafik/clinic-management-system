@@ -162,8 +162,9 @@ const fetchDoctors = async () => {
                   }}
                 />
             </div>
+          )}
 
-  {Values.preview && (
+{Values.preview && (
     <img
       src={Values.preview}
       alt="preview"

@@ -43,15 +43,13 @@ function ReservationForm({ doctorId, doctorName }) {
 
       const result = await res.json();
 
-      if (result.id) {
-        // حدث الـ context مباشرة
-        setReservations([...reservations, result]);
-
-        setSuccessMsg("✅ Reservation successful!");
-        setForm({ date: "", time: "", pet: "" });
-      } else {
-        setErrorMsg(result.message || "❌ Server did not confirm success.");
-      }
+      if (result._id) {   // بدل id بخليها _id
+  setReservations([...reservations, result]);
+  setSuccessMsg("✅ Reservation successful!");
+  setForm({ date: "", time: "", pet: "" });
+} else {
+  setErrorMsg(result.message || "❌ Server did not confirm success.");
+}
     } catch (err) {
       console.error("Error submitting reservation:", err);
       setErrorMsg("Error submitting reservation. Please try again.");
