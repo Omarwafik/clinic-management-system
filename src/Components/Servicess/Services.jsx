@@ -9,7 +9,7 @@ export default function Services() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4004/doctors")
+      .get("https://clinic-backend-production-9c79.up.railway.app/doctors")
       .then((res) => setDoc(res.data))
       .catch((err) => console.log(err));
   }, []);

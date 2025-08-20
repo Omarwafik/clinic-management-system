@@ -9,7 +9,7 @@ export default function ServiceDetails() {
   const [doctor, setDoctor] = useState(null);
   useEffect(() => {
     axios
-      .get(`http://localhost:4004/doctors/${doctorId}`)
+      .get(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctorId}`)
       .then((res) => setDoctor(res.data))
       .catch((err) => console.error(err));
   }, [doctorId]);

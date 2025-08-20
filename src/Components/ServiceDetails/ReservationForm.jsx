@@ -35,7 +35,7 @@ function ReservationForm({ doctorId, doctorName }) {
     };
 
     try {
-      const res = await fetch("http://localhost:4004/reservations", {
+      const res = await fetch("https://clinic-backend-production-9c79.up.railway.app/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reservationData),

@@ -31,7 +31,7 @@ export default function Contact() {
     };
 
     try {
-      await axios.post("http://localhost:4004/ContactUs", contactEntry);
+      await axios.post("https://clinic-backend-production-9c79.up.railway.app/ContactUs", contactEntry);
 
       showToast("Message sent successfully!", "success");
 

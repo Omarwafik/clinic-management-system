@@ -20,7 +20,7 @@ export default function Charts() {
     }]
   });
 
-  const [LineData, setLineData] = useState({  
+  const [LineData, setLineData] = useState({
     labels: [],
     datasets: [{
       label: 'New Doctors per Month',
@@ -42,7 +42,7 @@ export default function Charts() {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:4004/doctors')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors')
       .then(res => {
         const data = res.data;
 
@@ -50,7 +50,7 @@ export default function Charts() {
         const jobTitles = data.map(item => item.jobTitle);
         const uniqueJobTitles = [...new Set(jobTitles)];
         const barData = {
-          labels: uniqueJobTitles, 
+          labels: uniqueJobTitles,
           datasets: [{
             label: 'Number Of Doctors in Each Category',
             data: uniqueJobTitles.map(title =>
@@ -63,11 +63,11 @@ export default function Charts() {
 
         // --------- Line chart logic ----------
         const createTimes = data.map(item => item.createdAt);
-        const formattedDates = createTimes.map(date => 
+        const formattedDates = createTimes.map(date =>
           new Date(date).toLocaleString("default", { month: "short", year: "numeric" })
         );
         const uniqueCreateTime = [...new Set(formattedDates)];
-        const counts = uniqueCreateTime.map(date => 
+        const counts = uniqueCreateTime.map(date =>
           formattedDates.filter(d => d === date).length
         );
         const lineData = {
@@ -112,7 +112,7 @@ export default function Charts() {
   }, []);
 
 
-  
+
   return (
     <div className="row">
       <div className="col-xl-8 col-lg-7">

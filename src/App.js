@@ -12,7 +12,7 @@ import TableDoctors from "./Components/Dashboard/TableDoctors/TableDoctors";
 import Charts from "./Components/Dashboard/Charts/Charts";
 import Services from "./Components/Servicess/Services";
 import ServiceDetails from "./Components/ServiceDetails/ServiceDetails";
-import Login from "./Components/Login/Login";
+import Login from "./Components/Login/login";
 import Home from "./Components/Home/Home";
 import Navbar from "./Components/Navbar/Navbar";
 import Contact from "./Components/Contact/Contact";

@@ -30,9 +30,9 @@
       email: '',
       jobTitle: 'Pet Specialist',
       phone: '',
-      image: getRandomImage(defaultImages),      
+      image: getRandomImage(defaultImages),
       preview: '',
-      imageFile: null 
+      imageFile: null
     });
     const [doctors, setDoctors] = useState([]);
 
@@ -42,13 +42,13 @@
   }, []);
 
 const fetchDoctors = async () => {
-    const { data } = await axios.get("http://localhost:4004/doctors");
+    const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/doctors");
     setDoctors(data);
   };
     const handleSubmit = async (e) => {
     e.preventDefault();
   try {
-    const response = await axios.get('http://localhost:4004/doctors');
+    const response = await axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors');
     const AllDoctors = response.data;
     const MaxId = AllDoctors.length > 0 ? AllDoctors[AllDoctors.length - 1].id : 0;
 
@@ -58,7 +58,7 @@ const fetchDoctors = async () => {
       email: Values.email,
       jobTitle: Values.jobTitle,
       phone: Values.phone,
-      image: getRandomImage(defaultImages), 
+      image: getRandomImage(defaultImages),
       specialization: 'General Pet Care',
       qualifications: 'DVM, Diploma in Veterinary Medicine',
       experienceYears: 13,
@@ -72,7 +72,7 @@ const fetchDoctors = async () => {
       createdAt: new Date().toISOString().split("T")[0]
     };
 
-    await axios.post('http://localhost:4004/doctors', newDoctor);
+    await axios.post('https://clinic-backend-production-9c79.up.railway.app/doctors', newDoctor);
 
     onDoctorAdded(newDoctor);
     alert("Doctor added successfully");
@@ -155,8 +155,8 @@ const fetchDoctors = async () => {
                       setValues(prev => ({
                         ...prev,
                         imageFile: file,
-                        preview: URL.createObjectURL(file), 
-                        image: `/images/${file.name}` 
+                        preview: URL.createObjectURL(file),
+                        image: `/images/${file.name}`
                       }));
                     }
                   }}

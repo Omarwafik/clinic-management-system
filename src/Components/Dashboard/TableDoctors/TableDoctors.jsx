@@ -61,7 +61,7 @@ export default function TableDoctors() {
   ];
 
   const fetchDoctors = async () => {
-    const res = await axios.get('http://localhost:4004/doctors');
+    const res = await axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors');
     setDoctors(res.data);
     setFilteredDoctors(res.data);
   };
@@ -74,7 +74,7 @@ export default function TableDoctors() {
     const confirm = window.confirm('Do You Want to Delete?');
     if (confirm) {
       axios
-        .delete(`http://localhost:4004/doctors/${row.id}`)
+        .delete(`https://clinic-backend-production-9c79.up.railway.app/doctors/${row.id}`)
         .then(() => {
           setDoctors((prev) => prev.filter((doc) => doc.id !== row.id));
           setFilteredDoctors((prev) =>

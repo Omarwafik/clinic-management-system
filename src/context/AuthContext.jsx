@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("http://localhost:4004/users");
+    const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/users");
     const found = data.find(
       u => u.email.toLowerCase() === email.toLowerCase()
     );
@@ -69,11 +69,11 @@ const login = async (email, password) => {
     if (!phoneRegex.test(phone)) return { success: false, message: "Invalid phone number format" };
 
     try {
-      const { data } = await axios.get("http://localhost:4004/users");
+      const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/users");
       if (data.find(u => u.email === email)) return { success: false, message: "Email already registered" };
 
       const newUser = { name, email, phone, password, role: "patient", avatar: null };
-      const created = await axios.post("http://localhost:4004/users", newUser);
+      const created = await axios.post("https://clinic-backend-production-9c79.up.railway.app/users", newUser);
 
       persist(created.data);
       return { success: true, message: "Registration successful" };
@@ -107,7 +107,7 @@ const login = async (email, password) => {
       if (!user) throw new Error("No user logged in");
 
       const updatedUser = { ...user, avatar: dataUrl };
-      await axios.put(`http://localhost:4004/users/${user.id}`, updatedUser);
+      await axios.put(`https://clinic-backend-production-9c79.up.railway.app/users/${user.id}`, updatedUser);
 
       persist(updatedUser);
       return { success: true };
@@ -123,7 +123,7 @@ const login = async (email, password) => {
       if (!user) throw new Error("No user logged in");
 
       const updatedUser = { ...user, avatar: null };
-      await axios.put(`http://localhost:4004/users/${user.id}`, updatedUser);
+      await axios.put(`https://clinic-backend-production-9c79.up.railway.app/users/${user.id}`, updatedUser);
 
       persist(updatedUser);
       return { success: true };

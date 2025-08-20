@@ -20,16 +20,16 @@ export default function Dashboard() {
   const [Doctors, setDoctors] = useState([]);
   const [Messages, setMessages] = useState([]);
   useEffect(()=>{
-    axios.get('http://localhost:4004/reservations')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/reservations')
     .then(res => setReservations(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:4004/users')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/users')
     .then( res => setUsers(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:4004/doctors')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors')
     .then( res => setDoctors(res.data))
     .catch(err => console.log(err))
-    axios.get('http://localhost:4004/ContactUs')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/ContactUs')
     .then( res => setMessages(res.data))
     .catch(err => console.log(err))
   } , [])
@@ -128,9 +128,9 @@ export default function Dashboard() {
           <button
             className="btn btn-danger d-flex align-items-center"
             onClick={handleLogout}
-            style={{ gap: "0.25rem", padding: "0.375rem 0.25rem" , marginTop:"2rem" }} 
+            style={{ gap: "0.25rem", padding: "0.375rem 0.25rem" , marginTop:"2rem" }}
           >
-            <i className="fas fa-sign-out-alt"></i> 
+            <i className="fas fa-sign-out-alt"></i>
             <span>Log Out</span>
           </button>
         </li>

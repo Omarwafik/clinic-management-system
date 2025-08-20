@@ -15,7 +15,7 @@ export const ReservationProvider = ({ children }) => {
 
     async function fetchReservations() {
       try {
-        const res = await axios.get('http://localhost:4004/reservations');
+        const res = await axios.get('https://clinic-backend-production-9c79.up.railway.app/reservations');
         const userRes = res.data.filter(r => r.email === currentUser.email);
         setReservations(userRes);
       } catch (err) {
@@ -28,7 +28,7 @@ export const ReservationProvider = ({ children }) => {
 
   const deleteReservation = async (id) => {
     try {
-      await axios.delete(`http://localhost:4004/reservations/${id}`);
+      await axios.delete(`https://clinic-backend-production-9c79.up.railway.app/reservations/${id}`);
       setReservations(prev => prev.filter(r => r.id !== id));
     } catch (err) {
       console.error(err);
@@ -37,7 +37,7 @@ export const ReservationProvider = ({ children }) => {
 
   const addReservation = async (reservation) => {
     try {
-      const res = await axios.post('http://localhost:4004/reservations', reservation);
+      const res = await axios.post('https://clinic-backend-production-9c79.up.railway.app/reservations', reservation);
       setReservations(prev => [...prev, res.data]);
     } catch (err) {
       console.error(err);

@@ -23,7 +23,7 @@ const [Values , setValues]=useState({
     const handleEdit= async (e)=>{
     e.preventDefault();
     try{
-       const { data } = await axios.put(`http://localhost:4004/doctors/${doctor.id}`, Values);
+       const { data } = await axios.put(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctor.id}`, Values);
       onDoctorEdit(data);
       alert("doctor Updated Successfully")
       onClose();
