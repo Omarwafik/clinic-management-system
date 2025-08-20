@@ -104,7 +104,7 @@ const login = async (email, password) => {
   const logout = () => persist(null);
 
   // Update avatar
-  const updateAvatar = async (avatarUrl) => {
+  const updateAvatar = async (dataUrl) => {
     try {
       if (!user) return { success: false, message: "No user logged in" };
 
