@@ -4,7 +4,7 @@ import { Eye, EyeOff,  PawPrint } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 
-/* ===== قواعد التحقق ===== */
+/* ===== Regex===== */
 const EMAIL_REGEX = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const STRONG_PWD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,}$/;
 const PHONE_REGEX = /^01[0125][0-9]{8}$/;
