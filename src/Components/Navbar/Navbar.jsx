@@ -10,7 +10,7 @@ import axios from 'axios';
 const Navbar = () => {
   const { toasts } = useToast();
   const { user, logout, updateAvatar, removeAvatar } = useAuth();
-  const { reservations } = useReservations(); 
+  const { reservations } = useReservations();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,35 +36,34 @@ const Navbar = () => {
   if (!file) return;
 
   if (!user || (!user.id && !user._id)) {
-  console.error("No user logged in or user ID missing");
-  return;
-}
-
-
-  const formData = new FormData();
-  formData.append('avatar', file);
-
-  try {
-    setUploading(true);
-
-    const userId = user.id || user._id;
-const response = await axios.post(
-  `https://clinic-management-system-d9b4.vercel.app/api/users/upload-avatar/${userId}`,
-  formData,
-  { headers: { "Content-Type": "multipart/form-data" } }
-);
-
-
-    console.log("Upload successful:", response.data);
-
-    if (response.data.user?.avatar) {
-      updateAvatar(response.data.user.avatar); // بس حدث الـ context
-    }
-  } catch (error) {
-    console.error("Upload error:", error.response || error.message);
-  } finally {
-    setUploading(false);
+    console.error("No user logged in or user ID missing");
+    return;
   }
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onloadend = async () => {
+    const base64String = reader.result;
+    try {
+      setUploading(true);
+
+      const userId = user.id || user._id;
+      const response = await axios.put(
+        `https://clinic-backend-production-9c79.up.railway.app/users/${userId}`,
+        { ...user, avatar: base64String }, // نحدث بيانات اليوزر كلها
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Upload successful:", response.data);
+
+      updateAvatar(response.data.avatar);
+    } catch (error) {
+      console.error("Upload error:", error.response || error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 };
 
 return (

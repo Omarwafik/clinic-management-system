@@ -43,7 +43,7 @@ function ReservationForm({ doctorId, doctorName }) {
 
       const result = await res.json();
 
-      if (result._id) {   // بدل id بخليها _id
+      if (result.id) {   // بدل id بخليها _id
   setReservations([...reservations, result]);
   setSuccessMsg("✅ Reservation successful!");
   setForm({ date: "", time: "", pet: "" });
