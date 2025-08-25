@@ -268,7 +268,7 @@ const handleSubmit = async (e) => {
                   setFormData({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
                   setFormError('');
                 }}
-                className="btn btn-link p-0 text-decoration-underline"
+                className={styles.toggleFormButton}
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>

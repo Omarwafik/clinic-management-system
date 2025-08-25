@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useReservations } from '../../context/ReservationContext';
 import { useToast } from '../../context/ToastContext';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const { toasts } = useToast();
@@ -71,37 +72,60 @@ return (
     <header className="sticky-top shadow-sm bg-white">
       <nav className="navbar navbar-expand-md navbar-light bg-white">
         <div className="container">
-          <Link
-            to={isGuest ? '/login' : '/'}
-            className="navbar-brand d-flex align-items-center gap-2"
-            onClick={() => setIsMobileMenuOpen(false)}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Heart className="text-primary" size={28} />
-            <span className="fw-bold text-dark">PawCare Clinic</span>
-          </Link>
+            <Link
+              to={isGuest ? '/login' : '/'}
+              className="navbar-brand d-flex align-items-center gap-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <Heart className="text-primary" size={28} />
+              </motion.div>
+              <span className="fw-bold text-dark">PawCare Clinic</span>
+            </Link>
+          </motion.div>
 
-          <button
+          <motion.button
             className="navbar-toggler"
             type="button"
             aria-controls="mainNavbar"
             aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <span className="navbar-toggler-icon"></span>
-          </button>
+          </motion.button>
 
           <div className={`collapse navbar-collapse ${isMobileMenuOpen ? 'show' : ''}`} id="mainNavbar">
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
-              {navItems.map((item) => (
-                <li key={item.path} className="nav-item">
-                  <Link
-                    to={isGuest && item.path !== '/' ? '/login' : item.path}
-                    className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+              {navItems.map((item, index) => (
+                <motion.li 
+                  key={item.path} 
+                  className="nav-item"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {item.label}
-                  </Link>
-                </li>
+                    <Link
+                      to={isGuest && item.path !== '/' ? '/login' : item.path}
+                      className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
+                </motion.li>
               ))}
             </ul>
 

@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext"; // افترض عندك auth context
 import axios from "axios";
+import { ScrollStaggerContainer, ScrollFadeIn } from "../Animations/AnimationComponents";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -153,81 +154,92 @@ export default function Dashboard() {
                         {/* <h1 className="h3 mb-0 text-gray-800">Cards</h1> */}
                     </div>
 
-                    <div className="row">
-
-                        {/* <!-- Earnings (Monthly) Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-primary shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total User</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Users.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                            <i className="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Earnings (Annual) Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-success shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Doctors</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Doctors.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                          <i className="fas fa-user-md fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Tasks Card Example --> */}
-                          <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-info shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Total Messages</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Messages.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                            <i className="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Pending Requests Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-warning shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Reservations</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Reservations.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-  <i className="fas fa-user-friends fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+              {/* Add animation wrappers here */}
+              <ScrollStaggerContainer>
+                <div className="row">
+                    {/* <!-- Earnings (Monthly) Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-primary shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                              Total User</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Users.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-calendar fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
                     </div>
-                    <Outlet/>
+
+                    {/* <!-- Earnings (Annual) Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-success shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                              Total Doctors</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Doctors.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                        <i className="fas fa-user-md fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+
+                    {/* <!-- Tasks Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-info shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                              Total Messages</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Messages.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-comments fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+
+                    {/* <!-- Pending Requests Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-warning shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                              Total Reservations</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Reservations.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-user-friends fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+                </div>
+              </ScrollStaggerContainer>
+              {/* ... rest of the page ... */}
+              <Outlet/>
           </div>
           {/* /.container-fluid */}
         </div>

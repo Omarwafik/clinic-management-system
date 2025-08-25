@@ -6,6 +6,18 @@ import dogImage from "../../assets/img/Dig_Defence.jpeg";
 import dog2Image from "../../assets/img/dog.png";
 import { Users, Heart, Stethoscope, Syringe, Hospital, Scissors } from "lucide-react";
 import Footer from "../Footer";
+import ScrollToTop from "../Animations/ScrollToTop";
+import { 
+  ScrollFadeIn, 
+  ScrollSlideInLeft, 
+  ScrollSlideInRight, 
+  ScrollScaleIn, 
+  ScrollStaggerContainer, 
+  ScrollStaggerItem, 
+  HoverCard, 
+  ScrollBounce,
+  Pulse 
+} from "../Animations/AnimationComponents";
 
 const Home = () => {
   const { user } = useAuth();
@@ -20,121 +32,141 @@ const Home = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      {isGuest && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            zIndex: 1000,
-            cursor: "pointer",
-          }}
-          onClick={handleGuestClick}
-        />
-      )}
 
       {/* Hero Section */}
       <section className="py-5 bg-primary text-white text-center">
         <div className="container">
-          <h1 className="display-4 fw-bold">
-            Caring for Your <span className="text-warning">Beloved Pets</span>
-          </h1>
-          <p className="lead mt-3">
-            Experience compassionate veterinary care with our team of expert veterinarians. 
-            We provide comprehensive health services to keep your pets healthy and happy.
-          </p>
-          <div className="mt-4" >
-            {isGuest?null:<a href="#about" className="btn btn-warning me-3">
-              About Us
-            </a>}
-            
-            
-            <Link to={isGuest ? "/login" : "/services"} className="btn btn-outline-light">
-              View Services
-            </Link>
-          </div>
-          <img
-            src={dogImage}
-            alt="Dog" 
-            className="img-fluid rounded shadow mt-4"
-            style={{ maxHeight: "400px" }}
-            onClick={isGuest ? handleGuestClick : undefined}
-          />
+          <ScrollFadeIn delay={0.2}>
+            <h1 className="display-4 fw-bold">
+              Caring for Your <span className="text-warning">Beloved Pets</span>
+            </h1>
+          </ScrollFadeIn>
+          <ScrollFadeIn delay={0.4}>
+            <p className="lead mt-3">
+              Experience compassionate veterinary care with our team of expert veterinarians. 
+              We provide comprehensive health services to keep your pets healthy and happy.
+            </p>
+          </ScrollFadeIn>
+          <ScrollFadeIn delay={0.6}>
+            <div className="mt-4">
+              <a href="#about" className="btn btn-warning me-3">About Us</a>
+              <Link to="/services" className="btn btn-outline-light">View Services</Link>
+            </div>
+          </ScrollFadeIn>
+          <ScrollScaleIn delay={0.8}>
+            <img
+              src={dogImage}
+              alt="Dog" 
+              className="img-fluid rounded shadow mt-4"
+              style={{ maxHeight: "400px" }}
+              onClick={isGuest ? handleGuestClick : undefined}
+            />
+          </ScrollScaleIn>
         </div>
       </section>
 
       {/* Stats Section */}
       <section className="py-5 bg-light">
         <div className="container text-center">
-          <div className="row g-4">
-            <div className="col-6 col-md-3">
-              <h2 className="fw-bold">5000+</h2>
-              <p>Happy Pets Treated</p>
+          <ScrollStaggerContainer>
+            <div className="row g-4">
+              <ScrollStaggerItem className="col-6 col-md-3">
+                <ScrollBounce>
+                  <h2 className="fw-bold text-primary">5000+</h2>
+                  <p>Happy Pets Treated</p>
+                </ScrollBounce>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-6 col-md-3">
+                <ScrollBounce delay={0.1}>
+                  <h2 className="fw-bold text-success">10+</h2>
+                  <p>Years of Experience</p>
+                </ScrollBounce>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-6 col-md-3">
+                <ScrollBounce delay={0.2}>
+                  <h2 className="fw-bold text-warning">15</h2>
+                  <p>Expert Veterinarians</p>
+                </ScrollBounce>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-6 col-md-3">
+                <ScrollBounce delay={0.3}>
+                  <h2 className="fw-bold text-danger">24/7</h2>
+                  <p>Emergency Support</p>
+                </ScrollBounce>
+              </ScrollStaggerItem>
             </div>
-            <div className="col-6 col-md-3">
-              <h2 className="fw-bold">10+</h2>
-              <p>Years of Experience</p>
-            </div>
-            <div className="col-6 col-md-3">
-              <h2 className="fw-bold">15</h2>
-              <p>Expert Veterinarians</p>
-            </div>
-            <div className="col-6 col-md-3">
-              <h2 className="fw-bold">24/7</h2>
-              <p>Emergency Support</p>
-            </div>
-          </div>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
       {/* Our Veterinary Services */}
       <section className="py-5 bg-light">
         <div className="container">
-          <h2 className="fw-bold text-center mb-4">Our Veterinary Services</h2>
-          <p className="text-center text-muted mb-5">
-            We offer a complete range of veterinary services to keep your pets healthy, 
-            from routine check-ups to advanced medical treatments.
-          </p>
-          <div className="row g-4">
-            <div className="col-md-6 col-lg-6">
-              <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
-                <Stethoscope size={48} className="text-primary" />
-                <h5 className="mt-3">General Health Check-ups</h5>
-                <p className="text-muted">
-                  Comprehensive health examinations for your pets to ensure they stay healthy and happy.
-                </p>
-              </div>
+          <ScrollFadeIn>
+            <h2 className="fw-bold text-center mb-4">Our Veterinary Services</h2>
+          </ScrollFadeIn>
+          <ScrollFadeIn delay={0.2}>
+            <p className="text-center text-muted mb-5">
+              We offer a complete range of veterinary services to keep your pets healthy, 
+              from routine check-ups to advanced medical treatments.
+            </p>
+          </ScrollFadeIn>
+          <ScrollStaggerContainer>
+            <div className="row g-4">
+              <ScrollStaggerItem className="col-md-6 col-lg-6">
+                <HoverCard>
+                  <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
+                    <Pulse>
+                      <Stethoscope size={48} className="text-primary" />
+                    </Pulse>
+                    <h5 className="mt-3">General Health Check-ups</h5>
+                    <p className="text-muted">
+                      Comprehensive health examinations for your pets to ensure they stay healthy and happy.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-md-6 col-lg-6">
+                <HoverCard>
+                  <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
+                    <Pulse>
+                      <Syringe size={48} className="text-success" />
+                    </Pulse>
+                    <h5 className="mt-3">Vaccinations</h5>
+                    <p className="text-muted">
+                      Essential vaccinations to protect your pets from serious diseases and infections.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-md-6 col-lg-6">
+                <HoverCard>
+                  <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
+                    <Pulse>
+                      <Hospital size={48} className="text-danger" />
+                    </Pulse>
+                    <h5 className="mt-3">Emergency Care</h5>
+                    <p className="text-muted">
+                      24/7 emergency services for critical situations when every second counts.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-md-6 col-lg-6">
+                <HoverCard>
+                  <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
+                    <Pulse>
+                      <Scissors size={48} className="text-warning" />
+                    </Pulse>
+                    <h5 className="mt-3">Surgery Services</h5>
+                    <p className="text-muted">
+                      Advanced surgical procedures performed by our skilled veterinarians.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
             </div>
-            <div className="col-md-6 col-lg-6">
-              <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
-                <Syringe size={48} className="text-success" />
-                <h5 className="mt-3">Vaccinations</h5>
-                <p className="text-muted">
-                  Essential vaccinations to protect your pets from serious diseases and infections.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-              <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
-                <Hospital size={48} className="text-danger" />
-                <h5 className="mt-3">Emergency Care</h5>
-                <p className="text-muted">
-                  24/7 emergency services for critical situations when every second counts.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-6 col-lg-6">
-              <div className="p-4 border rounded bg-white h-100 shadow-sm text-center">
-                <Scissors size={48} className="text-warning" />
-                <h5 className="mt-3">Surgery Services</h5>
-                <p className="text-muted">
-                  Advanced surgical procedures performed by our skilled veterinarians.
-                </p>
-              </div>
-            </div>
-          </div>
+          </ScrollStaggerContainer>
         </div>
       </section>
 
@@ -142,77 +174,103 @@ const Home = () => {
       {/* Why Choose Us */}
       <section className="py-5" id="about">
         <div className="container">
-          <h2 className="fw-bold text-center mb-5">Why Choose PawCare Clinic?</h2>
-          <div className="row g-4">
-            <div className="col-md-4 text-center">
-              <Users size={56} className="text-primary" />
-              <h5 className="mt-3">Experienced Team</h5>
-              <p className="text-muted">
-                Our team of certified veterinarians has over 10 years of combined experience in animal healthcare.
-              </p>
+          <ScrollFadeIn>
+            <h2 className="fw-bold text-center mb-5">Why Choose PawCare Clinic?</h2>
+          </ScrollFadeIn>
+          <ScrollStaggerContainer>
+            <div className="row g-4">
+              <ScrollStaggerItem className="col-md-4 text-center">
+                <HoverCard>
+                  <div className="p-4">
+                    <Pulse>
+                      <Users size={56} className="text-primary" />
+                    </Pulse>
+                    <h5 className="mt-3">Experienced Team</h5>
+                    <p className="text-muted">
+                      Our team of certified veterinarians has over 10 years of combined experience in animal healthcare.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-md-4 text-center">
+                <HoverCard>
+                  <div className="p-4">
+                    <Pulse>
+                      <Heart size={56} className="text-success" />
+                    </Pulse>
+                    <h5 className="mt-3">Compassionate Care</h5>
+                    <p className="text-muted">
+                      We treat every pet with love and compassion, understanding the special bond between you and your furry friend.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
+              <ScrollStaggerItem className="col-md-4 text-center">
+                <HoverCard>
+                  <div className="p-4">
+                    <Pulse>
+                      <Hospital size={56} className="text-info" />
+                    </Pulse>
+                    <h5 className="mt-3">Modern Equipment</h5>
+                    <p className="text-muted">
+                      State-of-the-art medical equipment and facilities ensure your pets receive the highest quality care.
+                    </p>
+                  </div>
+                </HoverCard>
+              </ScrollStaggerItem>
             </div>
-            <div className="col-md-4 text-center">
-              <Heart size={56} className="text-success" />
-              <h5 className="mt-3">Compassionate Care</h5>
-              <p className="text-muted">
-                We treat every pet with love and compassion, understanding the special bond between you and your furry friend.
-              </p>
-            </div>
-            <div className="col-md-4 text-center">
-              <Hospital size={56} className="text-info" />
-              <h5 className="mt-3">Modern Equipment</h5>
-              <p className="text-muted">
-                State-of-the-art medical equipment and facilities ensure your pets receive the highest quality care.
-              </p>
-            </div>
-          </div>
+          </ScrollStaggerContainer>
 
           {/* Clinic image */}
-          <div className="text-center mt-5">
-            <img 
-              src={dog2Image}
-              alt="Clinic overview" 
-              className="img-fluid rounded shadow" 
-              style={{ maxHeight: "300px" }}
-              onClick={isGuest ? handleGuestClick : undefined}
-            />
-          </div>
+          <ScrollFadeIn delay={0.5}>
+            <div className="text-center mt-5">
+              <img 
+                src={dog2Image}
+                alt="Clinic overview" 
+                className="img-fluid rounded shadow" 
+                style={{ maxHeight: "300px" }}
+                onClick={isGuest ? handleGuestClick : undefined}
+              />
+            </div>
+          </ScrollFadeIn>
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="py-5 bg-primary text-white text-center">
         <div className="container">
-          <h3 className="fw-bold">Ready to Give Your Pet the Best Care?</h3>
-          <p className="mb-4">
-            Contact us today to schedule an appointment or learn more about our services.
-            Your pet's health is our priority.
-          </p>
-          <div className="mt-3">
-            <Link
-  to={isGuest ? "/login" : "/contact"}
-  className="btn btn-warning me-3"
-  onClick={() => {
-    if (!isGuest) {
-      // scroll للصفحة كلها للأعلى بعد التنقل
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 50); // بسيط delay بعد التنقل
-    }
-  }}
->
-  Get in Touch
-</Link>
+          <ScrollFadeIn>
+            <h3 className="fw-bold">Ready to Give Your Pet the Best Care?</h3>
+          </ScrollFadeIn>
+          <ScrollFadeIn delay={0.2}>
+            <p className="mb-4">
+              Contact us today to schedule an appointment or learn more about our services.
+              Your pet's health is our priority.
+            </p>
+          </ScrollFadeIn>
+          <ScrollFadeIn delay={0.4}>
+            <div className="mt-3">
+              <Link
+                to="/contact"
+                className="btn btn-warning me-3"
+                onClick={() => {
+                  setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }, 50);
+                }}
+              >
+                Get in Touch
+              </Link>
 
-            <a href="tel:+15551234567" className="btn btn-outline-light">
-              Call Now
-            </a>
-          </div>
+              <a href="tel:+15551234567" className="btn btn-outline-light">Call Now</a>
+            </div>
+          </ScrollFadeIn>
         </div>
       </section>
 
       {/* Footer */}
       <Footer />
+      <ScrollToTop />
     </div>
   );
 };

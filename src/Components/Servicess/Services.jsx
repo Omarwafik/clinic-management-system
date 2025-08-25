@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./services.module.css";
+import { motion } from "framer-motion";
 
 export default function Services() {
   const [doc, setDoc] = useState([]);
@@ -26,14 +27,26 @@ export default function Services() {
 
   return (
     <div className={`container py-4 ${styles.container}`}>
-      <div className="text-center mb-4">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="text-center mb-4"
+      >
         <h1 className={styles.servicesTitle}>Our Services</h1>
         <p className={styles.servicesIntro}>
           Browse our veterinary services and specialists.
         </p>
-      </div>
+      </motion.div>
 
-      <div className={styles.tabContainer}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+        className={styles.tabContainer}
+      >
         {jobTitles.map((title) => (
           <button
             key={title}
@@ -44,13 +57,23 @@ export default function Services() {
             {title}
           </button>
         ))}
-      </div>
+      </motion.div>
 
       <div className="row g-4">
-        {filteredDocs.map((doctor) => (
+        {filteredDocs.map((doctor, index) => (
           <div className="col-12 col-md-6" key={doctor.id}>
-            <div className={`d-flex ${styles.card}`}>
-              <img
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.05 }}
+              className={`d-flex ${styles.card}`}
+            >
+              <motion.img
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: false, amount: 0.2 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
                 src={doctor.image}
                 alt={doctor.name}
                 className={styles.img}
@@ -70,7 +93,7 @@ export default function Services() {
                   View Details
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         ))}
       </div>
