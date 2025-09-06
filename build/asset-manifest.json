@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/clinic-management-system/static/css/main.22c58b4d.css",
-    "main.js": "/clinic-management-system/static/js/main.bb1edc52.js",
+    "main.js": "/clinic-management-system/static/js/main.3fa86e7c.js",
     "static/js/453.96a2e0cd.chunk.js": "/clinic-management-system/static/js/453.96a2e0cd.chunk.js",
     "static/media/dog.png": "/clinic-management-system/static/media/dog.15dfa699c7cef660dcf5.png",
     "static/media/bootstrap-icons.woff?": "/clinic-management-system/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
@@ -9,11 +9,11 @@
     "static/media/Dig_Defence.jpeg": "/clinic-management-system/static/media/Dig_Defence.847523b998748e58eae9.jpeg",
     "index.html": "/clinic-management-system/index.html",
     "main.22c58b4d.css.map": "/clinic-management-system/static/css/main.22c58b4d.css.map",
-    "main.bb1edc52.js.map": "/clinic-management-system/static/js/main.bb1edc52.js.map",
+    "main.3fa86e7c.js.map": "/clinic-management-system/static/js/main.3fa86e7c.js.map",
     "453.96a2e0cd.chunk.js.map": "/clinic-management-system/static/js/453.96a2e0cd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.22c58b4d.css",
-    "static/js/main.bb1edc52.js"
+    "static/js/main.3fa86e7c.js"
   ]
 }

@@ -7,6 +7,7 @@ import { useReservations } from '../../context/ReservationContext';
 import { useToast } from '../../context/ToastContext';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import imageCompression from "browser-image-compression";
 
 const Navbar = () => {
   const { toasts } = useToast();
@@ -32,40 +33,51 @@ const Navbar = () => {
 
   if (user?.role === 'admin') navItems.push({ path: '/dashboard', label: 'Dashboard' });
 
-  const handleAvatarUpload = async (e) => {
+
+const handleAvatarUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  if (!user || (!user.id && !user._id)) {
-    console.error("No user logged in or user ID missing");
-    return;
+  try {
+    setUploading(true);
+
+    // 📌 ضغط الصورة (لو حابب)
+    const options = {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    };
+    const compressedFile = await imageCompression(file, options);
+
+    // 📌 رفع الصورة إلى Cloudinary
+    const formData = new FormData();
+    formData.append("file", compressedFile);
+    formData.append("upload_preset", "avatars");
+
+    const uploadRes = await axios.post(
+      "https://api.cloudinary.com/v1_1/daq9n7sno/image/upload",
+      formData
+    );
+
+    const imageUrl = uploadRes.data.secure_url;
+
+    // 📌 تحديث اليوزر في الـ backend
+    const userId = user.id || user._id;
+    const response = await axios.put(
+      `https://clinic-backend-production-9c79.up.railway.app/users/${userId}`,
+      { ...user, avatar: imageUrl }
+    );
+
+    updateAvatar(imageUrl);
+    console.log("Upload successful:", imageUrl);
+  } catch (err) {
+    console.error("Upload error:", err);
+  } finally {
+    setUploading(false);
   }
-
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-
-  reader.onloadend = async () => {
-    const base64String = reader.result;
-    try {
-      setUploading(true);
-
-      const userId = user.id || user._id;
-      const response = await axios.put(
-        `https://clinic-backend-production-9c79.up.railway.app/users/${userId}`,
-        { ...user, avatar: base64String }, // نحدث بيانات اليوزر كلها
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      console.log("Upload successful:", response.data);
-
-      updateAvatar(response.data.avatar);
-    } catch (error) {
-      console.error("Upload error:", error.response || error.message);
-    } finally {
-      setUploading(false);
-    }
-  };
 };
+
+
 
 return (
       <>

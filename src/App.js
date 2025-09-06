@@ -34,9 +34,7 @@ const PageLayout = ({ children }) => {
     <div className="app-container">
       <Navbar />
       <main className="main-content">
-        <PageTransition>
-          {children}
-        </PageTransition>
+        <PageTransition>{children}</PageTransition>
       </main>
     </div>
   );
@@ -94,120 +92,123 @@ function AppContent() {
           }
         />
 
-      {/* Home */}
-      <Route
-        path="/"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <PageLayout>
-                <GuestClickCatcher>
-                  <Home />
-                </GuestClickCatcher>
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-      {/* Services */}
-      <Route
-        path="/services"
-        element={
-          user ? (
-            user.role === "admin" || isGuest ? (
-              <Navigate to="/login" replace />
-            ) : (
-              <PageLayout>
-                <Services />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-      <Route
-        path="/services/:doctorId"
-        element={
-          user ? (
-            user.role === "admin" || isGuest ? (
-              <Navigate to="/login" replace />
-            ) : (
-              <PageLayout>
-                <ServiceDetails />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-      {/* Contact */}
-      <Route
-        path="/contact"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <PageLayout>
-                <Contact />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-      {/* User Reservation */}
-      <Route
-        path="/reservations"
-        element={
-          user ? (
-            user.role !== "admin" && user.role !== "guest" ? (
-              <PageLayout>
-                <UserReservation />
-              </PageLayout>
+        {/* Home */}
+        <Route
+          path="/"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <PageLayout>
+                  <GuestClickCatcher>
+                    <Home />
+                  </GuestClickCatcher>
+                </PageLayout>
+              )
             ) : (
               <Navigate to="/login" replace />
             )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+          }
+        />
 
-      {/* Dashboard */}
-      <Route
-        path="/dashboard"
-        element={
-          user?.role === "admin" ? (
-            <Dashboard />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      >
-        <Route index element={<Charts />} />
-        <Route path="users" element={<TableUsers />} />
-        <Route path="doctors" element={<TableDoctors />} />
-        <Route path="reservations" element={<ReservationTable />} />
-        <Route path="messages" element={<TableContact />} />
-      </Route>
+        {/* Services */}
+        <Route
+          path="/services"
+          element={
+            user ? (
+              user.role === "admin" || isGuest ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <PageLayout>
+                  <Services />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/services/:doctorId"
+          element={
+            user ? (
+              user.role === "admin" || isGuest ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <PageLayout>
+                  <ServiceDetails />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* Contact */}
+        <Route
+          path="/contact"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <PageLayout>
+                  <Contact />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* User Reservation */}
+        <Route
+          path="/reservations"
+          element={
+            user ? (
+              user.role !== "admin" && user.role !== "guest" ? (
+                <PageLayout>
+                  <UserReservation />
+                </PageLayout>
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            user?.role === "admin" ? (
+              <Dashboard />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        >
+          <Route index element={<Charts />} />
+          <Route path="users" element={<TableUsers />} />
+          <Route path="doctors" element={<TableDoctors />} />
+          <Route path="reservations" element={<ReservationTable />} />
+          <Route path="messages" element={<TableContact />} />
+        </Route>
 
         {/* Any other path */}
         <Route
           path="*"
           element={
             user ? (
-              <Navigate to={user.role === "admin" ? "/dashboard" : "/"} replace />
+              <Navigate
+                to={user.role === "admin" ? "/dashboard" : "/"}
+                replace
+              />
             ) : (
               <Navigate to="/login" replace />
             )
@@ -220,7 +221,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/clinic-management-system">
       <ToastProvider>
         <ReservationProvider>
           <AppContent />

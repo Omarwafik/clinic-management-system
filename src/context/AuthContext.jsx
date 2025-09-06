@@ -25,45 +25,51 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/users");
+    const { data } = await axios.get(
+      "https://clinic-backend-production-9c79.up.railway.app/users"
+    );
+
     const found = data.find(
-      u => u.email.toLowerCase() === email.toLowerCase()
+      (u) => u.email.toLowerCase() === email.toLowerCase()
     );
 
     if (!found) {
-      return { success: false, errors: { email: "Email does not exist" } };
+      return { success: false, message: "Email does not exist" };
     }
 
     if (password.length < 8) {
-      return { success: false, errors: { password: "Password must be at least 8 characters" } };
+      return {
+        success: false,
+        message: "Password must be at least 8 characters",
+      };
     }
 
     if (found.password !== password) {
-      return { success: false, errors: { password: "Password is incorrect" } };
+      return { success: false, message: "Password is incorrect" };
     }
 
     const userData = {
-      id: found._id || found.id, // backend بيرجع _id لو mongo
+      id: found._id || found.id,
       name: found.name,
       email: found.email,
       phone: found.phone,
       role: found.role || "patient",
       avatar: found.avatar || null,
     };
-    console.log("Found user:", found);
-
 
     persist(userData);
-
-    // رجّع اليوزر كله بدل بس role
     return { success: true, user: userData };
   } catch (error) {
     console.error("Login failed:", error);
-    return { success: false, message: "Login failed" };
+    return {
+      success: false,
+      message: error.response?.data?.message || "Login failed",
+    };
   } finally {
     setIsLoading(false);
   }
 };
+
 
   // Register
   const register = async (name, email, phone, password) => {
