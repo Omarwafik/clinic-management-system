@@ -1,33 +1,30 @@
 import { Modal, Button } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
-export default function EditModal({ show, onClose, onDoctorEdit, doctor }) {
-  const [Values, setValues] = useState({
-    _id: '',
-    name: '',
-    email: '',
-    jobTitle: '',
-    phone: '',
+// import { useParams } from 'react-router-dom';
+export default function EditModal({show , onClose ,onDoctorEdit , doctor }) {
+const [Values , setValues]=useState({
+      id:'',
+      name:'',
+      email:'',
+      jobTitle:'',
+      phone:'',
   });
-
+  // const {id} =useParams()
   useEffect(() => {
-    if (doctor) {
-      setValues({
-        _id: doctor._id,
-        name: doctor.name || '',
-        email: doctor.email || '',
-        jobTitle: doctor.jobTitle || '',
-        phone: doctor.phone || '',
-      });
-    }
-  }, [doctor]);
+  if (doctor) {
+    setValues(doctor);
+  } else if (show) { // مثلاً لما المودال مفتوح
+    alert("Doctor data not found!");
+  }
+}, [doctor, show]);
 
   const handleEdit = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.put(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${Values._id}`, Values);
-      onDoctorEdit(data); // استخدم response من backend
+    try{
+       const { data } = await axios.put(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctor.id}`, Values);
+      onDoctorEdit(data);
+      alert("doctor Updated Successfully")
       onClose();
     } catch (err) {
       console.log(err);

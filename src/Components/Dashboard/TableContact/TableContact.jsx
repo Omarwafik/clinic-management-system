@@ -9,7 +9,7 @@ export default function TableContact() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    axios.get('https://clinic-management-system-d9b4.vercel.app/api/messages')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/ContactUs')
       .then(res => setMessages(res.data))
       .catch(err => console.log(err));
   }, []);
@@ -26,9 +26,9 @@ export default function TableContact() {
           minWidth: 'fit-content',
 
      },
-    { name: 'Email', 
+    { name: 'Email',
       selector: row => row.email,
-      sortable: true 
+      sortable: true
       ,    minWidth: 'fit-content',
 
     },

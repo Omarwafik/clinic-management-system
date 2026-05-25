@@ -19,17 +19,23 @@ import Contact from "./Components/Contact/Contact";
 import UserReservation from "./Components/UserReservation/UserReservation";
 import { useEffect, useState } from "react";
 import "./App.css";
+import "./Styles/animations.css";
 import { ReservationProvider } from "./context/ReservationContext";
 import { ToastProvider } from "./context/ToastContext";
 import ReservationTable from "./Components/Dashboard/ReservationTable/ReservationTable";
 import TableContact from "./Components/Dashboard/TableContact/TableContact";
+import { AnimatePresence } from "framer-motion";
+import { PageTransition } from "./Components/Animations/AnimationComponents";
+import LoadingAnimation from "./Components/Animations/LoadingAnimation";
 
 // Wrapper بسيط للصفحات اللي فيها Navbar
 const PageLayout = ({ children }) => {
   return (
     <div className="app-container">
       <Navbar />
-      <main className="main-content">{children}</main>
+      <main className="main-content">
+        <PageTransition>{children}</PageTransition>
+      </main>
     </div>
   );
 };
@@ -59,7 +65,7 @@ function AppContent() {
   }, []);
 
   if (initialLoad) {
-    return <div className="app-loading">Loading...</div>;
+    return <LoadingAnimation />;
   }
 
   const getAfterLoginPath = () => {
@@ -70,139 +76,146 @@ function AppContent() {
   const isGuest = user?.role === "guest";
 
   return (
-    <Routes>
-      {/* Login */}
-      <Route
-        path="/login"
-        element={
-          !user || isGuest ? (
-            <Login />
-          ) : (
-            <Navigate to={getAfterLoginPath()} replace />
-          )
-        }
-      />
-
-      {/* Home */}
-      <Route
-        path="/"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/dashboard" replace />
+    <AnimatePresence mode="wait">
+      <Routes>
+        {/* Login */}
+        <Route
+          path="/login"
+          element={
+            !user || isGuest ? (
+              <PageTransition key="login">
+                <Login />
+              </PageTransition>
             ) : (
-              <PageLayout>
-                <GuestClickCatcher>
-                  <Home />
-                </GuestClickCatcher>
-              </PageLayout>
+              <Navigate to={getAfterLoginPath()} replace />
             )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+          }
+        />
 
-      {/* Services */}
-      <Route
-        path="/services"
-        element={
-          user ? (
-            user.role === "admin" || isGuest ? (
-              <Navigate to="/login" replace />
-            ) : (
-              <PageLayout>
-                <Services />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-      <Route
-        path="/services/:doctorId"
-        element={
-          user ? (
-            user.role === "admin" || isGuest ? (
-              <Navigate to="/login" replace />
-            ) : (
-              <PageLayout>
-                <ServiceDetails />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-      {/* Contact */}
-      <Route
-        path="/contact"
-        element={
-          user ? (
-            user.role === "admin" ? (
-              <Navigate to="/dashboard" replace />
-            ) : (
-              <PageLayout>
-                <Contact />
-              </PageLayout>
-            )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-
-      {/* User Reservation */}
-      <Route
-        path="/reservations"
-        element={
-          user ? (
-            user.role !== "admin" && user.role !== "guest" ? (
-              <PageLayout>
-                <UserReservation />
-              </PageLayout>
+        {/* Home */}
+        <Route
+          path="/"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <PageLayout>
+                  <GuestClickCatcher>
+                    <Home />
+                  </GuestClickCatcher>
+                </PageLayout>
+              )
             ) : (
               <Navigate to="/login" replace />
             )
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
+          }
+        />
 
-      {/* Dashboard */}
-      <Route
-        path="/dashboard"
-        element={
-          user?.role === "admin" ? (
-            <Dashboard />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      >
-        <Route index element={<Charts />} />
-        <Route path="users" element={<TableUsers />} />
-        <Route path="doctors" element={<TableDoctors />} />
-        <Route path="reservations" element={<ReservationTable />} />
-        <Route path="messages" element={<TableContact />} />
-      </Route>
+        {/* Services */}
+        <Route
+          path="/services"
+          element={
+            user ? (
+              user.role === "admin" || isGuest ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <PageLayout>
+                  <Services />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/services/:doctorId"
+          element={
+            user ? (
+              user.role === "admin" || isGuest ? (
+                <Navigate to="/login" replace />
+              ) : (
+                <PageLayout>
+                  <ServiceDetails />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
 
-      {/* Any other path */}
-      <Route
-        path="*"
-        element={
-          user ? (
-            <Navigate to={user.role === "admin" ? "/dashboard" : "/"} replace />
-          ) : (
-            <Navigate to="/login" replace />
-          )
-        }
-      />
-    </Routes>
+        {/* Contact */}
+        <Route
+          path="/contact"
+          element={
+            user ? (
+              user.role === "admin" ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <PageLayout>
+                  <Contact />
+                </PageLayout>
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* User Reservation */}
+        <Route
+          path="/reservations"
+          element={
+            user ? (
+              user.role !== "admin" && user.role !== "guest" ? (
+                <PageLayout>
+                  <UserReservation />
+                </PageLayout>
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            user?.role === "admin" ? (
+              <Dashboard />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        >
+          <Route index element={<Charts />} />
+          <Route path="users" element={<TableUsers />} />
+          <Route path="doctors" element={<TableDoctors />} />
+          <Route path="reservations" element={<ReservationTable />} />
+          <Route path="messages" element={<TableContact />} />
+        </Route>
+
+        {/* Any other path */}
+        <Route
+          path="*"
+          element={
+            user ? (
+              <Navigate
+                to={user.role === "admin" ? "/dashboard" : "/"}
+                replace
+              />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   );
 }
 

@@ -4,7 +4,7 @@ import { Eye, EyeOff,  PawPrint } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './login.module.css';
 
-/* ===== قواعد التحقق ===== */
+/* ===== Regex===== */
 const EMAIL_REGEX = /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 const STRONG_PWD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])\S{8,}$/;
 const PHONE_REGEX = /^01[0125][0-9]{8}$/;
@@ -69,49 +69,62 @@ if (!formData.password) {
     return newErrors;
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setErrors({});
-  setFormError('');
-
-  const validationErrors = validateForm();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
-
-  try {
-    if (isLogin) {
+const handleSubmit = async (e) => { 
+    e.preventDefault();
+     setErrors({});
+      setFormError(''); 
+      const validationErrors = validateForm(); 
+      if (Object.keys(validationErrors).length > 0) 
+        { 
+          setErrors(validationErrors);
+           return; 
+          } try 
+          {
+            if (isLogin) { 
   const result = await login(formData.email, formData.password);
+
   if (!result.success) {
-    if (result.errors) {
-      setErrors(prev => ({ ...prev, ...result.errors }));
+    const newErrors = {};
+    if (result.message === "Email does not exist") {
+      newErrors.email = result.message;
+    } else if (
+      result.message === "Password is incorrect" ||
+      result.message === "Password must be at least 8 characters"
+    ) {
+      newErrors.password = result.message;
     } else {
-      setFormError(result.message || 'Login failed');
+      setFormError(result.message || "Login failed");
     }
+    setErrors(newErrors);
     return;
   }
   const redirectPath = result.user?.role === 'admin' ? '/dashboard' : '/';
   navigate(redirectPath, { replace: true, state: { fromLogin: true } });
+
 } else {
-      const result = await register(formData.name, formData.email, formData.phone, formData.password);
-      if (!result.success) {
-        if (result.errors) {
-          setErrors(prev => ({ ...prev, ...result.errors }));
-        } else {
-          setFormError(result.message || 'Registration failed');
-        }
-        return;
-      }
-      setFormError('Registration successful! Please sign in.');
-      setIsLogin(true);
-      setFormData({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
-    }
-  } catch (err) {
-    console.error(err);
-    setFormError('An unexpected error occurred. Please try again.');
+  // Sign Up code
+  const result = await register(
+    formData.name,
+    formData.email,
+    formData.phone,
+    formData.password
+  );
+
+  if (!result.success) {
+    const newErrors = {};
+    if (result.message.includes("Email")) newErrors.email = result.message;
+    else if (result.message.includes("Phone")) newErrors.phone = result.message;
+    else if (result.message.includes("Password")) newErrors.password = result.message;
+    else setFormError(result.message || "Registration failed");
+    setErrors(newErrors);
+    return;
   }
-};
+
+  // لو التسجيل نجح
+  navigate("/", { replace: true, state: { fromLogin: true } });
+}
+ } 
+    catch (err) { console.error(err); setFormError("An unexpected error occurred. Please try again."); } };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -268,7 +281,7 @@ const handleSubmit = async (e) => {
                   setFormData({ name: '', email: '', phone: '', password: '', confirmPassword: '' });
                   setFormError('');
                 }}
-                className="btn btn-link p-0 text-decoration-underline"
+                className={styles.toggleFormButton}
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>

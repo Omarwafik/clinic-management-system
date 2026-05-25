@@ -3,6 +3,7 @@ import "../../assets/css/sb-admin-2.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"; // افترض عندك auth context
 import axios from "axios";
+import { ScrollStaggerContainer, ScrollFadeIn } from "../Animations/AnimationComponents";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -19,16 +20,16 @@ export default function Dashboard() {
   const [Doctors, setDoctors] = useState([]);
   const [Messages, setMessages] = useState([]);
   useEffect(()=>{
-    axios.get('https://clinic-management-system-d9b4.vercel.app/api/reservations')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/reservations')
     .then(res => setReservations(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-management-system-d9b4.vercel.app/api/users')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/users')
     .then( res => setUsers(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-management-system-d9b4.vercel.app/api/doctors')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors')
     .then( res => setDoctors(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-management-system-d9b4.vercel.app/api/messages')
+    axios.get('https://clinic-backend-production-9c79.up.railway.app/ContactUs')
     .then( res => setMessages(res.data))
     .catch(err => console.log(err))
   } , [])
@@ -117,9 +118,9 @@ export default function Dashboard() {
           <button
             className="btn btn-danger d-flex align-items-center"
             onClick={handleLogout}
-            style={{ gap: "0.25rem", padding: "0.375rem 0.25rem" , marginTop:"2rem" }} 
+            style={{ gap: "0.25rem", padding: "0.375rem 0.25rem" , marginTop:"2rem" }}
           >
-            <i className="fas fa-sign-out-alt"></i> 
+            <i className="fas fa-sign-out-alt"></i>
             <span>Log Out</span>
           </button>
         </li>
@@ -142,81 +143,92 @@ export default function Dashboard() {
                         {/* <h1 className="h3 mb-0 text-gray-800">Cards</h1> */}
                     </div>
 
-                    <div className="row">
-
-                        {/* <!-- Earnings (Monthly) Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-primary shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total User</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Users.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                            <i className="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Earnings (Annual) Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-success shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Doctors</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Doctors.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                          <i className="fas fa-user-md fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Tasks Card Example --> */}
-                          <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-info shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Total Messages</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Messages.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-                                            <i className="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* <!-- Pending Requests Card Example --> */}
-                        <div className="col-xl-3 col-md-6 mb-4">
-                            <div className="card border-left-warning shadow h-100 py-2">
-                                <div className="card-body">
-                                    <div className="row no-gutters align-items-center px-2">
-                                        <div className="col mr-2">
-                                            <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Total Reservations</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{Reservations.length}</div>
-                                        </div>
-                                        <div className="col-auto">
-  <i className="fas fa-user-friends fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+              {/* Add animation wrappers here */}
+              <ScrollStaggerContainer>
+                <div className="row">
+                    {/* <!-- Earnings (Monthly) Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-primary shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                              Total User</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Users.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-calendar fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
                     </div>
-                    <Outlet/>
+
+                    {/* <!-- Earnings (Annual) Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-success shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                              Total Doctors</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Doctors.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                        <i className="fas fa-user-md fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+
+                    {/* <!-- Tasks Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-info shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                              Total Messages</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Messages.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-comments fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+
+                    {/* <!-- Pending Requests Card Example --> */}
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <ScrollFadeIn>
+                          <div className="card border-left-warning shadow h-100 py-2">
+                              <div className="card-body">
+                                  <div className="row no-gutters align-items-center px-2">
+                                      <div className="col mr-2">
+                                          <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                              Total Reservations</div>
+                                          <div className="h5 mb-0 font-weight-bold text-gray-800">{Reservations.length}</div>
+                                      </div>
+                                      <div className="col-auto">
+                                          <i className="fas fa-user-friends fa-2x text-gray-300"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        </ScrollFadeIn>
+                    </div>
+                </div>
+              </ScrollStaggerContainer>
+              {/* ... rest of the page ... */}
+              <Outlet/>
           </div>
           {/* /.container-fluid */}
         </div>

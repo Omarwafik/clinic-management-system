@@ -11,25 +11,6 @@ export default function TableDoctors() {
   const [ShowEditModal, setShowEditModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
-  const fetchDoctors = async () => {
-    try {
-      const res = await axios.get('https://clinic-management-system-d9b4.vercel.app/api/doctors');
-      const numberedDoctors = res.data.map((doc, index) => ({
-        ...doc,
-        number: index + 1,
-      }));
-      setDoctors(numberedDoctors);
-      setFilteredDoctors(numberedDoctors);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
-  // Add doctor
   const handleDoctorAdded = (newDoctor) => {
     const docWithNumber = { ...newDoctor, number: doctors.length + 1 };
     setDoctors((prev) => [...prev, docWithNumber]);
@@ -38,48 +19,14 @@ export default function TableDoctors() {
 
   // Edit doctor
   const handleDoctorEdited = (updatedDoctor) => {
-    const updatedWithNumber = {
-      ...updatedDoctor,
-      number: doctors.findIndex((d) => d._id === updatedDoctor._id) + 1,
-    };
     setDoctors((prev) =>
-      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedWithNumber : doc))
+      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
     );
     setFilteredDoctors((prev) =>
-      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedWithNumber : doc))
+      prev.map((doc) => (doc._id === updatedDoctor._id ? updatedDoctor : doc))
     );
   };
 
-  // Delete doctor
-  const handleDelete = (row) => {
-    if (!window.confirm('Do You Want to Delete?')) return;
-
-    axios
-      .delete(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${row._id}`)
-      .then(() => {
-        setDoctors((prev) => prev.filter((doc) => doc._id !== row._id));
-        setFilteredDoctors((prev) => prev.filter((doc) => doc._id !== row._id));
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const handleOpenEdit = (doctor) => {
-    setSelectedDoctor({ ...doctor });
-    setShowEditModal(true);
-  };
-
-  const handleCloseEdit = () => setShowEditModal(false);
-
-  const handleSearch = (e) => {
-    const inputVal = e.target.value.toLowerCase();
-    if (!inputVal.trim()) {
-      setFilteredDoctors(doctors);
-    } else {
-      setFilteredDoctors(doctors.filter((doc) =>
-        doc.name.toLowerCase().includes(inputVal)
-      ));
-    }
-  };
 
   const columns = [
     { name: 'ID', selector: (row) => row.number, sortable: true, width: '60px' },
@@ -101,6 +48,52 @@ export default function TableDoctors() {
       width: '180px',
     },
   ];
+
+  const fetchDoctors = async () => {
+    const res = await axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors');
+    setDoctors(res.data);
+    setFilteredDoctors(res.data);
+  };
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  const handleDelete = (row) => {
+    const confirm = window.confirm('Do You Want to Delete?');
+    if (confirm) {
+      axios
+        .delete(`https://clinic-backend-production-9c79.up.railway.app/doctors/${row.id}`)
+        .then(() => {
+          setDoctors((prev) => prev.filter((doc) => doc.id !== row.id));
+          setFilteredDoctors((prev) =>
+            prev.filter((doc) => doc.id !== row.id)
+          );
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const handleOpenEdit = (doctor) => {
+    setSelectedDoctor(doctor);
+    setShowEditModal(true);
+  };
+
+  const handleCloseEdit = () => {
+    setShowEditModal(false);
+  };
+
+  const handleSearch = (e) => {
+    const inputVal = e.target.value.toLowerCase();
+    if (inputVal.trim() === '') {
+      setFilteredDoctors(doctors);
+    } else {
+      const filtered = doctors.filter((doc) =>
+        doc.name.toLowerCase().includes(inputVal)
+      );
+      setFilteredDoctors(filtered);
+    }
+  };
 
   return (
     <>

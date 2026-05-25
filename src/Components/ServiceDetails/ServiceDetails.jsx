@@ -3,13 +3,14 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import styles from "./servicedetails.module.css";
 import ReservationForm from "./ReservationForm";
+import { motion } from "framer-motion";
 
 export default function ServiceDetails() {
   const { doctorId } = useParams();
   const [doctor, setDoctor] = useState(null);
   useEffect(() => {
     axios
-      .get(`https://clinic-management-system-d9b4.vercel.app/api/doctors/${doctorId}`)
+      .get(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctorId}`)
       .then((res) => setDoctor(res.data))
       .catch((err) => console.error(err));
   }, [doctorId]);
@@ -21,20 +22,37 @@ export default function ServiceDetails() {
   return (
     <div className={styles.container}>
       <div className={styles.flexRow}>
-        <div className={styles.leftColumn}>
-          <div className={styles.card}>
-            <img
-src={
-    doctor.image
-      ? doctor.image.startsWith("http")
-        ? doctor.image
-        : `https://clinic-management-system-d9b4.vercel.app${doctor.image}`
-      : "/path/to/default-image.jpg"
-  }  alt={doctor.name}
-  className={styles.img}
-/>
+        <motion.div
+          className={styles.leftColumn}
+          initial={{ opacity: 0, x: -60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.div
+            className={styles.card}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <motion.img
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              src={doctor.image}
+              alt={doctor.name}
+              className={styles.img}
+            />
 
-            <div className={styles.details}>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+              className={styles.details}
+            >
               <h1 className={styles.serviceTitle}>
                 {doctor.services[0] || "No service listed"}
               </h1>
@@ -70,13 +88,19 @@ src={
               <Link to="/services" className={styles.backBtn}>
                 ← Back to Services
               </Link>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
-        <div className={styles.rightColumn}>
+        <motion.div
+          className={styles.rightColumn}
+          initial={{ opacity: 0, x: 60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <ReservationForm doctorId={doctorId} doctorName={doctor.name} />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

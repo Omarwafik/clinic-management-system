@@ -6,11 +6,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useReservations } from '../../context/ReservationContext';
 import { useToast } from '../../context/ToastContext';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import imageCompression from "browser-image-compression";
 
 const Navbar = () => {
   const { toasts } = useToast();
   const { user, logout, updateAvatar, removeAvatar } = useAuth();
-  const { reservations } = useReservations(); 
+  const { reservations } = useReservations();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -31,78 +33,111 @@ const Navbar = () => {
 
   if (user?.role === 'admin') navItems.push({ path: '/dashboard', label: 'Dashboard' });
 
-  const handleAvatarUpload = async (e) => {
+
+const handleAvatarUpload = async (e) => {
   const file = e.target.files[0];
   if (!file) return;
-
-  if (!user || (!user.id && !user._id)) {
-  console.error("No user logged in or user ID missing");
-  return;
-}
-
-
-  const formData = new FormData();
-  formData.append('avatar', file);
 
   try {
     setUploading(true);
 
+    // 📌 ضغط الصورة (لو حابب)
+    const options = {
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    };
+    const compressedFile = await imageCompression(file, options);
+
+    // 📌 رفع الصورة إلى Cloudinary
+    const formData = new FormData();
+    formData.append("file", compressedFile);
+    formData.append("upload_preset", "avatars");
+
+    const uploadRes = await axios.post(
+      "https://api.cloudinary.com/v1_1/daq9n7sno/image/upload",
+      formData
+    );
+
+    const imageUrl = uploadRes.data.secure_url;
+
+    // 📌 تحديث اليوزر في الـ backend
     const userId = user.id || user._id;
-const response = await axios.post(
-  `https://clinic-management-system-d9b4.vercel.app/api/users/upload-avatar/${userId}`,
-  formData,
-  { headers: { "Content-Type": "multipart/form-data" } }
-);
+    await axios.put(
+      `https://clinic-backend-production-9c79.up.railway.app/users/${userId}`,
+      { ...user, avatar: imageUrl }
+    );
 
-
-    console.log("Upload successful:", response.data);
-
-    if (response.data.user?.avatar) {
-      updateAvatar(response.data.user.avatar); // بس حدث الـ context
-    }
-  } catch (error) {
-    console.error("Upload error:", error.response || error.message);
+    updateAvatar(imageUrl);
+    console.log("Upload successful:", imageUrl);
+  } catch (err) {
+    console.error("Upload error:", err);
   } finally {
     setUploading(false);
   }
 };
+
+
 
 return (
       <>
     <header className="sticky-top shadow-sm bg-white">
       <nav className="navbar navbar-expand-md navbar-light bg-white">
         <div className="container">
-          <Link
-            to={isGuest ? '/login' : '/'}
-            className="navbar-brand d-flex align-items-center gap-2"
-            onClick={() => setIsMobileMenuOpen(false)}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <Heart className="text-primary" size={28} />
-            <span className="fw-bold text-dark">PawCare Clinic</span>
-          </Link>
+            <Link
+              to={isGuest ? '/login' : '/'}
+              className="navbar-brand d-flex align-items-center gap-2"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <motion.div
+                animate={{ rotate: [0, 10, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+              >
+                <Heart className="text-primary" size={28} />
+              </motion.div>
+              <span className="fw-bold text-dark">PawCare Clinic</span>
+            </Link>
+          </motion.div>
 
-          <button
+          <motion.button
             className="navbar-toggler"
             type="button"
             aria-controls="mainNavbar"
             aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <span className="navbar-toggler-icon"></span>
-          </button>
+          </motion.button>
 
           <div className={`collapse navbar-collapse ${isMobileMenuOpen ? 'show' : ''}`} id="mainNavbar">
             <ul className="navbar-nav me-auto mb-2 mb-md-0">
-              {navItems.map((item) => (
-                <li key={item.path} className="nav-item">
-                  <Link
-                    to={isGuest && item.path !== '/' ? '/login' : item.path}
-                    className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
-                    onClick={() => setIsMobileMenuOpen(false)}
+              {navItems.map((item, index) => (
+                <motion.li 
+                  key={item.path} 
+                  className="nav-item"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {item.label}
-                  </Link>
-                </li>
+                    <Link
+                      to={isGuest && item.path !== '/' ? '/login' : item.path}
+                      className={`nav-link ${isActive(item.path) ? 'active text-primary fw-semibold' : ''}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
+                </motion.li>
               ))}
             </ul>
 
