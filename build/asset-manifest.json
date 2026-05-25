@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/clinic-management-system/static/css/main.ffa86f7f.css",
-    "main.js": "/clinic-management-system/static/js/main.78010b8a.js",
-    "static/js/453.96a2e0cd.chunk.js": "/clinic-management-system/static/js/453.96a2e0cd.chunk.js",
-    "static/media/dog.png": "/clinic-management-system/static/media/dog.15dfa699c7cef660dcf5.png",
-    "static/media/bootstrap-icons.woff?": "/clinic-management-system/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
-    "static/media/bootstrap-icons.woff2?": "/clinic-management-system/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
-    "static/media/Dig_Defence.jpeg": "/clinic-management-system/static/media/Dig_Defence.847523b998748e58eae9.jpeg",
-    "index.html": "/clinic-management-system/index.html",
-    "main.ffa86f7f.css.map": "/clinic-management-system/static/css/main.ffa86f7f.css.map",
-    "main.78010b8a.js.map": "/clinic-management-system/static/js/main.78010b8a.js.map",
-    "453.96a2e0cd.chunk.js.map": "/clinic-management-system/static/js/453.96a2e0cd.chunk.js.map"
+    "main.css": "./static/css/main.bfc0f131.css",
+    "main.js": "./static/js/main.1dd04af1.js",
+    "static/js/453.96a2e0cd.chunk.js": "./static/js/453.96a2e0cd.chunk.js",
+    "static/media/dog.png": "./static/media/dog.15dfa699c7cef660dcf5.png",
+    "static/media/bootstrap-icons.woff?": "./static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
+    "static/media/bootstrap-icons.woff2?": "./static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
+    "static/media/Dig_Defence.jpeg": "./static/media/Dig_Defence.847523b998748e58eae9.jpeg",
+    "index.html": "./index.html",
+    "main.bfc0f131.css.map": "./static/css/main.bfc0f131.css.map",
+    "main.1dd04af1.js.map": "./static/js/main.1dd04af1.js.map",
+    "453.96a2e0cd.chunk.js.map": "./static/js/453.96a2e0cd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ffa86f7f.css",
-    "static/js/main.78010b8a.js"
+    "static/css/main.bfc0f131.css",
+    "static/js/main.1dd04af1.js"
   ]
 }
