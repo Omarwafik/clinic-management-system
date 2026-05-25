@@ -26,8 +26,8 @@ const login = async (email, password) => {
   setIsLoading(true);
   try {
     const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
-    // console.log("Received data:", data);
-const found = data.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+    const users = Array.isArray(data) ? data : (data.users || []);
+    const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
 
 
@@ -68,12 +68,13 @@ const found = data.users.find(u => u.email.toLowerCase() === email.toLowerCase()
 
 // Register
 const register = async (name, email, phone, password) => {
-  setIsLoading(true);
   if (!phoneRegex.test(phone)) return { success: false, message: "Invalid phone number format" };
+  setIsLoading(true);
   
   try {
     const { data } = await axios.get("https://clinic-management-system-d9b4.vercel.app/api/users");
-    if (data.find(u => u.email === email)) return { success: false, message: "Email already registered" };
+    const allUsers = Array.isArray(data) ? data : (data.users || []);
+    if (allUsers.find(u => u.email === email)) return { success: false, message: "Email already registered" };
     
     const newUser = { name, email, phone, password, role: "patient", avatar: null };
     const { data: created } = await axios.post("https://clinic-management-system-d9b4.vercel.app/api/users", newUser);

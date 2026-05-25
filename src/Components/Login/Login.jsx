@@ -48,7 +48,7 @@ useEffect(() => {
     // Password
 if (!formData.password) {
   newErrors.password = 'Password is required';
-} else if (!STRONG_PWD.test(formData.password)) {
+} else if (!isLogin && !STRONG_PWD.test(formData.password)) {
   newErrors.password = 'Password must be 8+ chars & include upper, lower, number, and symbol (no spaces)';
 }
 
@@ -91,7 +91,7 @@ const handleSubmit = async (e) => {
     }
     return;
   }
-  const redirectPath = result.role === 'admin' ? '/dashboard' : '/';
+  const redirectPath = result.user?.role === 'admin' ? '/dashboard' : '/';
   navigate(redirectPath, { replace: true, state: { fromLogin: true } });
 } else {
       const result = await register(formData.name, formData.email, formData.phone, formData.password);

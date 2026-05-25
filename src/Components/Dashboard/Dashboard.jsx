@@ -1,7 +1,6 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../assets/css/sb-admin-2.css";
 import { Outlet, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext"; // افترض عندك auth context
 import axios from "axios";
 
@@ -97,32 +96,22 @@ export default function Dashboard() {
         </li>
          {/* hena el user reservation Table */}
         <li className="nav-item">
-          <a
+          <button
             className="nav-link collapsed btn"
-            // href=""
-            data-toggle="collapse"
-            data-target="#collapseTwo"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
             onClick={()=>navigate('/dashboard/reservations')}
           >
             <i className="fas fa-fw fa-cog"></i>
             <span>Reservations</span>
-          </a>
+          </button>
         </li>
         <li className="nav-item">
-          <a
+          <button
             className="nav-link collapsed btn"
-            // href=""
-            data-toggle="collapse"
-            data-target="#collapseTwo"
-            aria-expanded="true"
-            aria-controls="collapseTwo"
             onClick={()=>navigate('/dashboard/messages')}
           >
             <i className="fas fa-fw fa-cog"></i>
             <span>Messages</span>
-          </a>
+          </button>
         </li>
         <li className="nav-item">
           <button

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Clock, Mail, MapPin, Phone, PhoneCall } from "lucide-react";
+import { Mail, PhoneCall } from "lucide-react";
 import Footer from "../Footer";
 import { useToast } from "../../context/ToastContext"; // تأكد المسار
 

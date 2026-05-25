@@ -40,7 +40,6 @@ export default function TableContact() {
     {
       name: 'Message',
       selector: row => row.message,
-      minWidth: 'fit-content',
       cell: row => (
         <div style={{ whiteSpace: 'pre-wrap', maxHeight: '80px', overflow: 'hidden' }}>
           {row.message.length > 25 ? (

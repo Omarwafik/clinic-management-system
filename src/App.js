@@ -1,5 +1,5 @@
 import {
-  BrowserRouter,
+  HashRouter as BrowserRouter,
   Routes,
   Route,
   Navigate,
@@ -51,14 +51,14 @@ const GuestClickCatcher = ({ children }) => {
 };
 
 function AppContent() {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
     setInitialLoad(false);
   }, []);
 
-  if (isLoading || initialLoad) {
+  if (initialLoad) {
     return <div className="app-loading">Loading...</div>;
   }
 

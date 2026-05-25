@@ -18,7 +18,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
 
   const isActive = (path) => location.pathname === path;
   const isGuest = !!user && user.role === 'guest';
@@ -153,6 +153,7 @@ return (
 
                     {/* Dropdown */}
                     <div className="nav-item dropdown">
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                       <a
                         className="nav-link dropdown-toggle ms-0 me-1"
                         href="#"

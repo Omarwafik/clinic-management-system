@@ -70,10 +70,9 @@ export default function CreateDoctorModal({ show, onClose, onDoctorAdded }) {
         formData.append("image", values.imageFile);
       }
 
-      const { data } = await axios.get("/api/users");
-const users = Array.isArray(data) ? data : data.users || []; 
-const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
-
+      const { data } = await axios.post("/api/doctors", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       onDoctorAdded(data);
 
