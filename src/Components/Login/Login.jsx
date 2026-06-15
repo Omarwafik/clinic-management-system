@@ -148,7 +148,7 @@ const handleSubmit = async (e) => {
           <h2 className={styles.formTitle}>{isLogin ? 'Sign In' : 'Create Account'}</h2>
           {formError && <div className={styles.errorMessage}>{formError}</div>}
             <p className="text-center">
-              as admin : admin@example.com / admin123
+              as admin : admin@example.com / Admin@123
             </p>
           <form onSubmit={handleSubmit} className={styles.form} noValidate>
             {!isLogin && (
