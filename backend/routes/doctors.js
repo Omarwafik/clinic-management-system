@@ -3,6 +3,12 @@ const Doctor = require("../models/Doctor");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+
+const doctorUploadDir = "uploads/doctors";
+if (!fs.existsSync(doctorUploadDir)) {
+  fs.mkdirSync(doctorUploadDir, { recursive: true });
+}
 
 // Get all doctors
 router.get("/", async (req, res) => {

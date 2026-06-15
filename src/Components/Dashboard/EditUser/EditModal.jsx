@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import { Modal, Button } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -22,7 +23,7 @@ const [Values , setValues]=useState({
   const handleEdit = async (e) => {
     e.preventDefault();
     try{
-       const { data } = await axios.put(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctor.id}`, Values);
+       const { data } = await axios.put(`${API_BASE}/doctors/${doctor._id}`, Values);
       onDoctorEdit(data);
       alert("doctor Updated Successfully")
       onClose();

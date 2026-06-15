@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useEffect, useState } from "react";
 import "../../assets/css/sb-admin-2.css";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -20,16 +21,16 @@ export default function Dashboard() {
   const [Doctors, setDoctors] = useState([]);
   const [Messages, setMessages] = useState([]);
   useEffect(()=>{
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/reservations')
+    axios.get(`${API_BASE}/reservations`)
     .then(res => setReservations(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/users')
+    axios.get(`${API_BASE}/users`)
     .then( res => setUsers(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors')
+    axios.get(`${API_BASE}/doctors`)
     .then( res => setDoctors(res.data))
     .catch(err => console.log(err))
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/ContactUs')
+    axios.get(`${API_BASE}/messages`)
     .then( res => setMessages(res.data))
     .catch(err => console.log(err))
   } , [])

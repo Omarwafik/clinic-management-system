@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +11,7 @@ export default function ServiceDetails() {
   const [doctor, setDoctor] = useState(null);
   useEffect(() => {
     axios
-      .get(`https://clinic-backend-production-9c79.up.railway.app/doctors/${doctorId}`)
+      .get(`${API_BASE}/doctors/${doctorId}`)
       .then((res) => setDoctor(res.data))
       .catch((err) => console.error(err));
   }, [doctorId]);

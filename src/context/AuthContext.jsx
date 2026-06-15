@@ -1,3 +1,4 @@
+import API_BASE from '../config/api';
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 const login = async (email, password) => {
   setIsLoading(true);
   try {
-    const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/users");
+    const { data } = await axios.get(`${API_BASE}/users`);
     const users = Array.isArray(data) ? data : (data.users || []);
     const found = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
@@ -72,12 +73,12 @@ const register = async (name, email, phone, password) => {
   setIsLoading(true);
 
   try {
-    const { data } = await axios.get("https://clinic-backend-production-9c79.up.railway.app/users");
+    const { data } = await axios.get(`${API_BASE}/users`);
     const allUsers = Array.isArray(data) ? data : (data.users || []);
     if (allUsers.find(u => u.email === email)) return { success: false, message: "Email already registered" };
 
     const newUser = { name, email, phone, password, role: "patient", avatar: null };
-    const { data: created } = await axios.post("https://clinic-backend-production-9c79.up.railway.app/users", newUser);
+    const { data: created } = await axios.post(`${API_BASE}/users`, newUser);
 
     const userData = {
       id: created._id || created.id,
@@ -120,7 +121,7 @@ const register = async (name, email, phone, password) => {
       if (!user) return { success: false, message: "No user logged in" };
 
       const updatedUser = { ...user, avatar: dataUrl };
-      await axios.put(`https://clinic-backend-production-9c79.up.railway.app/users/${user.id}`, updatedUser);
+      await axios.put(`${API_BASE}/users/${user.id}`, updatedUser);
 
       persist(updatedUser);
       return { success: true };
@@ -136,7 +137,7 @@ const register = async (name, email, phone, password) => {
       if (!user) throw new Error("No user logged in");
 
       const updatedUser = { ...user, avatar: null };
-      await axios.put(`https://clinic-backend-production-9c79.up.railway.app/users/${user.id}`, updatedUser);
+      await axios.put(`${API_BASE}/users/${user.id}`, updatedUser);
 
       persist(updatedUser);
       return { success: true };

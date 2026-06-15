@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useState } from "react";
 import styles from "./servicedetails.module.css";
 import { useReservations } from "../../context/ReservationContext"; // استورد الـ context
@@ -35,7 +36,7 @@ function ReservationForm({ doctorId, doctorName }) {
     };
 
     try {
-      const res = await fetch("https://clinic-backend-production-9c79.up.railway.app/reservations", {
+      const res = await fetch(`${API_BASE}/reservations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(reservationData),
@@ -43,7 +44,7 @@ function ReservationForm({ doctorId, doctorName }) {
 
       const result = await res.json();
 
-      if (result.id) {   // بدل id بخليها _id
+      if (result._id) {   // الباك إند بيرجع _id
   setReservations([...reservations, result]);
   setSuccessMsg("✅ Reservation successful!");
   setForm({ date: "", time: "", pet: "" });

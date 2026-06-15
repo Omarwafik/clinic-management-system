@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useState } from "react";
 import axios from "axios";
 import { Mail, PhoneCall, Phone, MapPin } from "lucide-react";
@@ -42,7 +43,7 @@ export default function Contact() {
     };
 
     try {
-      await axios.post("https://clinic-backend-production-9c79.up.railway.app/ContactUs", contactEntry);
+      await axios.post(`${API_BASE}/messages`, contactEntry);
 
       showToast("✅ Message sent successfully!", "success");
 

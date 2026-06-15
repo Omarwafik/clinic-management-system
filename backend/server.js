@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
-const serverless = require("serverless-http");
 
 const doctorsRoutes = require("./routes/doctors");
 const usersRoutes = require("./routes/users");
@@ -16,11 +15,19 @@ const app = express();
 // ✅ CORS
 app.use(
   cors({
-    origin: [
-      "https://clinic-management-system-d9b4.vercel.app",
-      "https://clinic-management-system.vercel.app",
-      "http://localhost:3000",
-    ],
+    origin: (origin, callback) => {
+      const allowed = [
+        "https://clinic-management-system-d9b4.vercel.app",
+        "https://omarwafik.github.io",
+        "http://localhost:3000",
+      ];
+      // allow Vercel preview URLs and requests with no origin (Postman, curl)
+      if (!origin || allowed.includes(origin) || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -42,6 +49,8 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.log(err));
 
-// ✅ Export app for Vercel
+// ✅ Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
 module.exports = app;
-module.exports.handler = serverless(app);

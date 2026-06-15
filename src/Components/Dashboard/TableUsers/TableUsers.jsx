@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -9,7 +10,7 @@ export default function TableUsers() {
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('https://clinic-backend-production-9c79.up.railway.app/users');
+      const res = await axios.get(`${API_BASE}/users`);
       // أضف رقم متسلسل لكل مستخدم
       const numberedUsers = res.data.map((user, index) => ({
         ...user,

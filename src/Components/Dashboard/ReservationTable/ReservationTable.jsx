@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
@@ -5,7 +6,7 @@ import DataTable from 'react-data-table-component'
 export default function ReservationTable() {
   const [Reserve , setReserve] =useState([])
   useEffect(()=>{
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/reservations')
+    axios.get(`${API_BASE}/reservations`)
     .then(res => setReserve(res.data))
     .catch(err => console.log(err))
   },[])

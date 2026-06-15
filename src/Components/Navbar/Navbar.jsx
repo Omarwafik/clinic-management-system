@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Heart, User, Camera } from 'lucide-react';
@@ -64,7 +65,7 @@ const handleAvatarUpload = async (e) => {
     // 📌 تحديث اليوزر في الـ backend
     const userId = user.id || user._id;
     await axios.put(
-      `https://clinic-backend-production-9c79.up.railway.app/users/${userId}`,
+      `${API_BASE}/users/${userId}`,
       { ...user, avatar: imageUrl }
     );
 

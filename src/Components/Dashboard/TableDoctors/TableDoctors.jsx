@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -50,7 +51,7 @@ export default function TableDoctors() {
   ];
 
   const fetchDoctors = async () => {
-    const res = await axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors');
+    const res = await axios.get(`${API_BASE}/doctors`);
     setDoctors(res.data);
     setFilteredDoctors(res.data);
   };
@@ -63,11 +64,11 @@ export default function TableDoctors() {
     const confirm = window.confirm('Do You Want to Delete?');
     if (confirm) {
       axios
-        .delete(`https://clinic-backend-production-9c79.up.railway.app/doctors/${row.id}`)
+        .delete(`${API_BASE}/doctors/${row._id}`)
         .then(() => {
-          setDoctors((prev) => prev.filter((doc) => doc.id !== row.id));
+          setDoctors((prev) => prev.filter((doc) => doc._id !== row._id));
           setFilteredDoctors((prev) =>
-            prev.filter((doc) => doc.id !== row.id)
+            prev.filter((doc) => doc._id !== row._id)
           );
         })
         .catch((err) => console.log(err));

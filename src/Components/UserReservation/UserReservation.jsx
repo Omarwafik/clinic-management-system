@@ -47,7 +47,7 @@ export default function UserReservation() {
             <tbody>
               {reservations.map((r, idx) => (
                 <motion.tr
-                  key={r.id}
+                  key={r._id}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: false, amount: 0.2 }}
@@ -63,7 +63,7 @@ export default function UserReservation() {
                     <button
                       className="btn btn-sm btn-danger"
                       style={{ minWidth: '70px' }}
-                      onClick={() => deleteReservation(r.id)}
+                      onClick={() => deleteReservation(r._id)}
                     >
                       Delete
                     </button>

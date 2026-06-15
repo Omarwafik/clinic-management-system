@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { useEffect, useState } from 'react';
@@ -42,7 +43,7 @@ export default function Charts() {
   });
 
   useEffect(() => {
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors')
+    axios.get(`${API_BASE}/doctors`)
       .then(res => {
         const data = res.data;
 

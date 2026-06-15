@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import { Modal, Button } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -39,7 +40,7 @@ export default function CreateModal({ show, onClose, onDoctorAdded }) {
 
   const fetchDoctors = async () => {
     try {
-      await axios.get("https://clinic-backend-production-9c79.up.railway.app/doctors");
+      await axios.get(`${API_BASE}/doctors`);
     } catch (err) {
       console.error(err);
     }
@@ -48,7 +49,7 @@ export default function CreateModal({ show, onClose, onDoctorAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get('https://clinic-backend-production-9c79.up.railway.app/doctors');
+      const response = await axios.get(`${API_BASE}/doctors`);
       const AllDoctors = response.data;
       const MaxId = AllDoctors.length > 0 ? AllDoctors[AllDoctors.length - 1].id : 0;
 
@@ -72,7 +73,7 @@ export default function CreateModal({ show, onClose, onDoctorAdded }) {
         createdAt: new Date().toISOString().split("T")[0]
       };
 
-      await axios.post('https://clinic-backend-production-9c79.up.railway.app/doctors', newDoctor);
+      await axios.post(`${API_BASE}/doctors`, newDoctor);
 
       onDoctorAdded(newDoctor);
       alert("Doctor added successfully");

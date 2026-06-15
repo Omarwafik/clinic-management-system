@@ -1,3 +1,4 @@
+import API_BASE from '../../config/api';
 import React, { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +11,7 @@ export default function Services() {
 
   useEffect(() => {
     axios
-      .get("https://clinic-backend-production-9c79.up.railway.app/doctors")
+      .get(`${API_BASE}/doctors`)
       .then((res) => setDoc(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -61,7 +62,7 @@ export default function Services() {
 
       <div className="row g-4">
         {filteredDocs.map((doctor, index) => (
-          <div className="col-12 col-md-6" key={doctor.id}>
+          <div className="col-12 col-md-6" key={doctor._id}>
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -89,7 +90,7 @@ export default function Services() {
                   Languages: {doctor.languages?.join(", ")}
                 </p>
                 <p className={styles.rating}>Rating: {doctor.rating} ⭐</p>
-                <Link to={`/services/${doctor.id}`} className={styles.btn}>
+                <Link to={`/services/${doctor._id}`} className={styles.btn}>
                   View Details
                 </Link>
               </div>

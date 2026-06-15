@@ -1,3 +1,4 @@
+import API_BASE from '../../../config/api';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -9,7 +10,7 @@ export default function TableContact() {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    axios.get('https://clinic-backend-production-9c79.up.railway.app/ContactUs')
+    axios.get(`${API_BASE}/messages`)
       .then(res => setMessages(res.data))
       .catch(err => console.log(err));
   }, []);
